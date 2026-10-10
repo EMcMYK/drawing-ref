@@ -8,6 +8,7 @@ const lastCall = new Map();
 const MIN_GAP_MS = {
   'api.inaturalist.org': 1100,
   'commons.wikimedia.org': 250,
+  'query.wikidata.org': 1000,
   'api.artic.edu': 1000,
   'collectionapi.metmuseum.org': 200,
   'images-api.nasa.gov': 250,

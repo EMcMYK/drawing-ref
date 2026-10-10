@@ -1,6 +1,6 @@
 // Wikimedia Commons API (no key). Files from hand-picked categories only (no
 // live search proxying). License and author read per file from extmetadata.
-import { getJson } from '../http.mjs';
+import { getJson, seededShuffle } from '../http.mjs';
 import { normalizeLicense, stripHtml } from '../filters.mjs';
 
 const BASE = 'https://commons.wikimedia.org/w/api.php';
@@ -37,47 +37,72 @@ function toRecord(page, category) {
   };
 }
 
-// query: { categories: ['Category:...'] } or { search: ['violin', ...] }.
-// A search only looks inside Commons' "Quality images", photos the community
-// has reviewed for sharpness and lighting, needs the word in the file name,
-// and skips photos of people (concerts and portraits with an instrument).
+// Museum objects listed on Wikidata as a kind of `wikidata` (e.g. Q34379,
+// musical instrument) that belong to a collection and have a photo.
+async function wikidataFiles(classId, limit) {
+  const sparql = `SELECT DISTINCT ?img WHERE {
+    ?item wdt:P31/wdt:P279* wd:${classId}; wdt:P195 ?collection; wdt:P18 ?img.
+  } LIMIT ${limit}`;
+  const res = await getJson(`https://query.wikidata.org/sparql?format=json&query=${encodeURIComponent(sparql)}`, {
+    headers: { Accept: 'application/sparql-results+json' },
+  });
+  return (res.results?.bindings ?? []).map((b) => `File:${decodeURIComponent(b.img.value.split('/').pop()).replace(/_/g, ' ')}`);
+}
+
+// query: { categories: ['Category:...'] } or { wikidata: 'Q...' }
 export async function fetchRecords(query, { want, accept, category, log, maxPages = 6 }) {
   const picked = [];
   const seenIds = new Set();
-  const lists = query.search
-    ? query.search.map((q) => ({ label: `search "${q}"`, gen: { generator: 'search', gsrnamespace: '6', gsrlimit: '50', gsrsearch: `incategory:Quality_images filetype:bitmap intitle:"${q}"` } }))
-    : query.categories.map((cat) => ({ label: cat, gen: { generator: 'categorymembers', gcmtitle: cat, gcmtype: 'file', gcmlimit: '50' } }));
-  const perList = Math.ceil(want / lists.length);
-  for (const { label, gen } of lists) {
-    const start = picked.length;
+  const take = (pages) => {
+    for (const p of pages) {
+      if (picked.length >= want) return;
+      if (seenIds.has(p.pageid)) continue;
+      seenIds.add(p.pageid);
+      const r = toRecord(p, category);
+      if (r && accept(r)) picked.push(r);
+    }
+  };
+  const info = {
+    action: 'query',
+    format: 'json',
+    formatversion: '2',
+    prop: 'imageinfo',
+    iiprop: 'url|size|extmetadata',
+    iiurlwidth: '1024',
+    iiextmetadatafilter: 'LicenseShortName|LicenseUrl|Artist|ObjectName|DateTimeOriginal',
+  };
+
+  if (query.wikidata) {
+    const titles = seededShuffle(await wikidataFiles(query.wikidata, want * 4), 3);
+    log(`wikidata ${query.wikidata}: ${titles.length} files`);
+    for (let i = 0; i < titles.length && picked.length < want; i += 50) {
+      const params = new URLSearchParams({ ...info, titles: titles.slice(i, i + 50).join('|') });
+      const res = await getJson(`${BASE}?${params}`);
+      take(res.query?.pages ?? []);
+    }
+    return picked;
+  }
+
+  for (const cat of query.categories) {
     let cont = {};
     let seen = 0;
-    for (let page = 0; page < maxPages && picked.length < want && picked.length - start < perList * 2; page++) {
+    for (let page = 0; page < maxPages && picked.length < want; page++) {
       const params = new URLSearchParams({
-        action: 'query',
-        format: 'json',
-        formatversion: '2',
-        ...gen,
-        prop: 'imageinfo',
-        iiprop: 'url|size|extmetadata',
-        iiurlwidth: '1024',
-        iiextmetadatafilter: 'LicenseShortName|LicenseUrl|Artist|ObjectName|DateTimeOriginal',
+        ...info,
+        generator: 'categorymembers',
+        gcmtitle: cat,
+        gcmtype: 'file',
+        gcmlimit: '50',
         ...cont,
       });
       const res = await getJson(`${BASE}?${params}`);
       const pages = res.query?.pages ?? [];
       seen += pages.length;
-      for (const p of pages) {
-        if (seenIds.has(p.pageid)) continue;
-        seenIds.add(p.pageid);
-        const r = toRecord(p, category);
-        if (r && accept(r, { blockPeople: Boolean(query.search) })) picked.push(r);
-        if (picked.length >= want) break;
-      }
+      take(pages);
       if (!res.continue) break;
       cont = { ...res.continue };
     }
-    log(`wikimedia ${label}: ${seen} files seen, ${picked.length - start} kept`);
+    log(`wikimedia ${cat}: ${seen} files seen`);
     if (picked.length >= want) break;
   }
   return picked;

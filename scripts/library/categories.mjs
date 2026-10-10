@@ -2,6 +2,7 @@
 // no API key for now (Smithsonian and Openverse come later).
 // Not used for now: Met search (HTTP 410) and Museums Victoria (HTTP 403 from
 // GitHub's runners). Both adapters stay in sources/ for a later retry.
+// Wikidata Q34379 = musical instrument.
 // Met department IDs: 4 = Arms and Armor, 18 = Musical Instruments.
 // iNaturalist taxa: 1 Animalia, 40151 mammals, 3 birds, 26036 reptiles,
 // 20978 amphibians, 47158 insects, 47126 Plantae, 47125 flowering plants.
@@ -78,7 +79,7 @@ export const CATEGORIES = [
     sources: [
       ['met', { departmentId: 18 }, 500],
       ['cleveland', { type: 'Musical Instrument' }, 80],
-      ['wikimedia', { search: ['violin', 'cello', 'guitar', 'lute', 'harp', 'piano', 'accordion', 'trumpet', 'trombone', 'french horn', 'saxophone', 'clarinet', 'flute', 'bagpipes', 'drum', 'banjo', 'mandolin', 'sitar', 'xylophone', 'tuba'] }, 600],
+      ['wikimedia', { wikidata: 'Q34379' }, 600],
     ],
   },
 ];
