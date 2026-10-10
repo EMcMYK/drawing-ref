@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Free drawing reference: a 3D still-life you can arrange and light, and free reference images." />
+    <title>Drawing Reference</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Drawing Reference</h1>
+      <nav role="tablist" aria-label="Modes">
+        <button role="tab" id="tab-still-life" aria-controls="mode-still-life" aria-selected="true">3D still life</button>
+        <button role="tab" id="tab-references" aria-controls="mode-references" aria-selected="false">References</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="mode-still-life" class="mode still-life" role="tabpanel" aria-labelledby="tab-still-life">
+        <div id="viewport" class="viewport"></div>
+        <aside id="panel" class="panel" aria-label="Scene controls"></aside>
+      </section>
+
+      <section id="mode-references" class="mode placeholder" role="tabpanel" aria-labelledby="tab-references" hidden>
+        <p>The reference library is coming next.</p>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
