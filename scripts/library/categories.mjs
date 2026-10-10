@@ -1,5 +1,7 @@
 // What each launch category pulls, from which source. Only sources that need
 // no API key for now (Smithsonian and Openverse come later).
+// Not used for now: Met search (HTTP 410) and Museums Victoria (HTTP 403 from
+// GitHub's runners). Both adapters stay in sources/ for a later retry.
 // Met department IDs: 4 = Arms and Armor, 18 = Musical Instruments.
 // iNaturalist taxa: 1 Animalia, 40151 mammals, 3 birds, 26036 reptiles,
 // 20978 amphibians, 47158 insects, 47126 Plantae, 47125 flowering plants.
@@ -32,7 +34,6 @@ export const CATEGORIES = [
     sources: [
       ['cleveland', { type: 'Sculpture' }, 350],
       ['aic', { type: 'Sculpture' }, 350],
-      ['met', { search: 'sculpture', classification: /sculpture/i }, 300],
     ],
   },
   {
@@ -41,11 +42,6 @@ export const CATEGORIES = [
     sources: [
       ['cleveland', { type: 'Ceramic' }, 250],
       ['aic', { type: 'Vessel' }, 200],
-      ['museums-victoria', { query: 'bottle' }, 100],
-      ['museums-victoria', { query: 'teapot' }, 80],
-      ['museums-victoria', { query: 'tool' }, 120],
-      ['museums-victoria', { query: 'lamp' }, 80],
-      ['met', { search: 'vase', classification: /ceramic|glass|vase|vessel/i }, 150],
     ],
   },
   {
@@ -56,8 +52,6 @@ export const CATEGORIES = [
       ['nasa', { q: 'spacecraft' }, 150],
       ['nasa', { q: 'rocket launch' }, 100],
       ['nasa', { q: 'rover' }, 80],
-      ['museums-victoria', { query: 'engine' }, 100],
-      ['museums-victoria', { query: 'locomotive' }, 60],
       ['wikimedia', { categories: ['Category:Featured pictures of aircraft', 'Category:Featured pictures of vehicles'] }, 200],
     ],
   },
@@ -66,7 +60,6 @@ export const CATEGORIES = [
     label: 'Architecture',
     sources: [
       ['wikimedia', { categories: ['Category:Featured pictures of architecture', 'Category:Featured pictures of buildings', 'Category:Featured pictures of churches', 'Category:Featured pictures of bridges'] }, 800],
-      ['museums-victoria', { query: 'building' }, 150],
     ],
   },
   {
@@ -85,7 +78,7 @@ export const CATEGORIES = [
     sources: [
       ['met', { departmentId: 18 }, 500],
       ['cleveland', { type: 'Musical Instrument' }, 80],
-      ['museums-victoria', { query: 'musical instrument' }, 200],
+      ['wikimedia', { search: ['violin', 'cello', 'guitar', 'lute', 'harp', 'piano', 'accordion', 'trumpet', 'trombone', 'french horn', 'saxophone', 'clarinet', 'flute', 'bagpipes', 'drum', 'banjo', 'mandolin', 'sitar', 'xylophone', 'tuba'] }, 600],
     ],
   },
 ];

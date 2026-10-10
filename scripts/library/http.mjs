@@ -9,7 +9,7 @@ const MIN_GAP_MS = {
   'api.inaturalist.org': 1100,
   'commons.wikimedia.org': 250,
   'api.artic.edu': 1000,
-  'collectionapi.metmuseum.org': 60,
+  'collectionapi.metmuseum.org': 200,
   'images-api.nasa.gov': 250,
   'collections.museumsvictoria.com.au': 300,
   'openaccess-api.clevelandart.org': 300,

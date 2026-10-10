@@ -37,21 +37,26 @@ function toRecord(page, category) {
   };
 }
 
-// query: { categories: ['Category:...'] }
+// query: { categories: ['Category:...'] } or { search: ['violin', ...] }.
+// A search only looks inside Commons' "Quality images", photos the community
+// has reviewed for sharpness and lighting.
 export async function fetchRecords(query, { want, accept, category, log, maxPages = 6 }) {
   const picked = [];
-  for (const cat of query.categories) {
+  const seenIds = new Set();
+  const lists = query.search
+    ? query.search.map((q) => ({ label: `search "${q}"`, gen: { generator: 'search', gsrnamespace: '6', gsrlimit: '50', gsrsearch: `incategory:Quality_images filetype:bitmap ${q}` } }))
+    : query.categories.map((cat) => ({ label: cat, gen: { generator: 'categorymembers', gcmtitle: cat, gcmtype: 'file', gcmlimit: '50' } }));
+  const perList = Math.ceil(want / lists.length);
+  for (const { label, gen } of lists) {
+    const start = picked.length;
     let cont = {};
     let seen = 0;
-    for (let page = 0; page < maxPages && picked.length < want; page++) {
+    for (let page = 0; page < maxPages && picked.length < want && picked.length - start < perList * 2; page++) {
       const params = new URLSearchParams({
         action: 'query',
         format: 'json',
         formatversion: '2',
-        generator: 'categorymembers',
-        gcmtitle: cat,
-        gcmtype: 'file',
-        gcmlimit: '50',
+        ...gen,
         prop: 'imageinfo',
         iiprop: 'url|size|extmetadata',
         iiurlwidth: '1024',
@@ -62,14 +67,16 @@ export async function fetchRecords(query, { want, accept, category, log, maxPage
       const pages = res.query?.pages ?? [];
       seen += pages.length;
       for (const p of pages) {
+        if (seenIds.has(p.pageid)) continue;
+        seenIds.add(p.pageid);
         const r = toRecord(p, category);
         if (r && accept(r)) picked.push(r);
         if (picked.length >= want) break;
       }
       if (!res.continue) break;
-      cont = { gcmcontinue: res.continue.gcmcontinue, continue: res.continue.continue };
+      cont = { ...res.continue };
     }
-    log(`wikimedia ${cat}: ${seen} files seen`);
+    log(`wikimedia ${label}: ${seen} files seen, ${picked.length - start} kept`);
     if (picked.length >= want) break;
   }
   return picked;
