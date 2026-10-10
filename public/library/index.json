@@ -9,7 +9,7 @@
     {
       "id": "plants",
       "label": "Plants and flowers",
-      "count": 758
+      "count": 759
     },
     {
       "id": "sculpture",
@@ -34,12 +34,12 @@
     {
       "id": "weapons-armor",
       "label": "Weapons and armor",
-      "count": 641
+      "count": 643
     },
     {
       "id": "instruments",
       "label": "Musical instruments",
-      "count": 663
+      "count": 143
     }
   ]
 }
