@@ -64,6 +64,11 @@ describe('rejectReason', () => {
     expect(rejectReason(astro)).toBeNull();
     expect(rejectReason(astro, { blockPeople: true })).toMatch(/^people/);
   });
+
+  it('treats concert photos as photos of people', () => {
+    const gig = { ...ok, title: 'Violin player, Bardentreffen festival 2014' };
+    expect(rejectReason(gig, { blockPeople: true })).toMatch(/^people/);
+  });
 });
 
 describe('mixAndCap', () => {

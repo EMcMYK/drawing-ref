@@ -40,6 +40,7 @@ const BLOCKED_WORDS = [
 const PEOPLE_WORDS = [
   'portrait', 'headshot', 'astronaut', 'crew', 'ceremony', 'meeting', 'briefing', 'conference',
   'press', 'award', 'visit', 'employees', 'staff', 'team photo', 'group photo', 'selfie',
+  'concert', 'festival', 'performance', 'performing', 'musician', 'orchestra', 'singer', 'busker',
 ];
 
 function wordMatch(text, words) {
