@@ -13,38 +13,28 @@ import {
 import { geometryFor, shadeColor, tipAngle } from './shapes.js';
 
 const LIGHT_RADIUS = 4.5;
-// Where the camera may go. The backdrop's curve starts rising about 1.5
-// behind the table, so the camera stops before it.
-const ROOM = { halfX: 12, minY: 0.05, maxY: 10, minZ: -(TABLE.halfZ + 1.5), maxZ: 14 };
+// Where the camera may go: within a circle round the middle of the table,
+// the same distance from every side, and between the table top and the
+// ceiling. The studio wall stands a little outside that circle.
+const ROOM = { radius: 12, minY: 0.05, maxY: 14 };
+const STUDIO_RADIUS = 16;
 const LIGHT_TARGET = new THREE.Vector3(0, 0.5, 0);
 const ACCENT = 0xe8833a;
 const deg = THREE.MathUtils.degToRad;
 
-// A curved studio backdrop: flat floor that sweeps up into a back wall.
-function sweepGeometry() {
-  const profile = [];
+// A round studio: a flat floor that curves up into a wall all the way
+// round, so every camera angle has a plain backdrop behind the table.
+function studioGeometry() {
   const floorY = -0.9;
-  const radius = 2.5;
-  const backZ = -TABLE.halfZ - 2.5;
-  profile.push([10, floorY], [backZ + radius, floorY]);
+  const curve = 2.5;
+  const wall = STUDIO_RADIUS;
+  const points = [new THREE.Vector2(0, floorY), new THREE.Vector2(wall - curve, floorY)];
   for (let i = 1; i <= 16; i++) {
     const t = (i / 16) * (Math.PI / 2);
-    profile.push([backZ + radius - Math.sin(t) * radius, floorY + radius - Math.cos(t) * radius]);
+    points.push(new THREE.Vector2(wall - curve + Math.sin(t) * curve, floorY + curve - Math.cos(t) * curve));
   }
-  profile.push([backZ, 12]);
-  const width = 40;
-  const positions = [];
-  const indices = [];
-  profile.forEach(([z, y]) => positions.push(-width / 2, y, z, width / 2, y, z));
-  for (let i = 0; i < profile.length - 1; i++) {
-    const a = i * 2;
-    indices.push(a, a + 2, a + 1, a + 1, a + 2, a + 3);
-  }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-  geo.setIndex(indices);
-  geo.computeVertexNormals();
-  return geo;
+  points.push(new THREE.Vector2(wall, 16));
+  return new THREE.LatheGeometry(points, 96);
 }
 
 export class StillLife {
@@ -108,22 +98,23 @@ export class StillLife {
       const clamped = new THREE.Vector3(
         THREE.MathUtils.clamp(t.x, -TABLE.halfX, TABLE.halfX),
         THREE.MathUtils.clamp(t.y, 0, 2.5),
-        // Far enough from the back of the room that the camera can still
-        // look from behind at its closest distance.
-        THREE.MathUtils.clamp(t.z, ROOM.minZ + VIEW_LIMITS.distance[0], TABLE.halfZ)
+        THREE.MathUtils.clamp(t.z, -TABLE.halfZ, TABLE.halfZ)
       );
-      if (!clamped.equals(t)) {
+      const moved = !clamped.equals(t);
+      if (moved) {
         this.camera.position.add(clamped.clone().sub(t));
         t.copy(clamped);
       }
-      this.#keepCameraInRoom();
+      if (this.#keepCameraInRoom() || moved) this.camera.lookAt(t);
       this.onView();
     });
     this.controls.addEventListener('end', () => this.#changed());
 
     const sweep = new THREE.Mesh(
-      sweepGeometry(),
-      new THREE.MeshStandardMaterial({ color: 0x9a9894, roughness: 1 })
+      studioGeometry(),
+      // Both sides, so the inside is lit correctly whichever way the
+      // lathe's faces point.
+      new THREE.MeshStandardMaterial({ color: 0x9a9894, roughness: 1, side: THREE.DoubleSide })
     );
     sweep.receiveShadow = true;
     scene.add(sweep);
@@ -258,23 +249,25 @@ export class StillLife {
     });
   }
 
-  // The camera may circle the table but not leave the room: not behind the
-  // backdrop, below the table top, past the sides, or up through the ceiling.
-  // If it would, slide it in toward the point it looks at.
+  // Keep the camera inside the room (see ROOM). If it would leave, slide it
+  // in toward the point it looks at. Returns true if it moved.
   #keepCameraInRoom() {
     const pos = this.camera.position;
     const t = this.controls.target;
-    const lo = new THREE.Vector3(-ROOM.halfX, ROOM.minY, ROOM.minZ);
-    const hi = new THREE.Vector3(ROOM.halfX, ROOM.maxY, ROOM.maxZ);
-    if (pos.x >= lo.x && pos.x <= hi.x && pos.y >= lo.y && pos.y <= hi.y && pos.z >= lo.z && pos.z <= hi.z) return;
-    // Largest fraction of the way from target to camera that stays inside.
+    const d = pos.clone().sub(t);
     let f = 1;
-    for (const k of ['x', 'y', 'z']) {
-      const d = pos[k] - t[k];
-      if (d > 0 && pos[k] > hi[k]) f = Math.min(f, (hi[k] - t[k]) / d);
-      if (d < 0 && pos[k] < lo[k]) f = Math.min(f, (lo[k] - t[k]) / d);
+    // Circle: the largest f with |t.xz + f·d.xz| <= radius.
+    const a = d.x * d.x + d.z * d.z;
+    if (a > 0 && Math.hypot(pos.x, pos.z) > ROOM.radius) {
+      const b = 2 * (t.x * d.x + t.z * d.z);
+      const c = t.x * t.x + t.z * t.z - ROOM.radius * ROOM.radius;
+      f = Math.min(f, (-b + Math.sqrt(Math.max(0, b * b - 4 * a * c))) / (2 * a));
     }
-    pos.sub(t).multiplyScalar(Math.max(f, 0)).add(t);
+    if (d.y > 0 && pos.y > ROOM.maxY) f = Math.min(f, (ROOM.maxY - t.y) / d.y);
+    if (d.y < 0 && pos.y < ROOM.minY) f = Math.min(f, (ROOM.minY - t.y) / d.y);
+    if (f >= 1) return false;
+    pos.copy(t).addScaledVector(d, Math.max(f, 0));
+    return true;
   }
 
   #resize() {
