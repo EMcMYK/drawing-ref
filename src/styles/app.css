@@ -389,10 +389,26 @@ button.danger {
   flex: 1;
   min-height: 0;
   display: grid;
+  /* One cell that can shrink, so the image never pushes past the screen. */
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
   place-items: center;
   padding: 16px;
+  overflow: hidden;
 }
 
+.viewer-stage img[hidden],
+.viewer-error[hidden] {
+  display: none;
+}
+
+.viewer-error {
+  max-width: 32em;
+  text-align: center;
+  color: #cfccc6;
+}
+
+/* The picture keeps its own shape (no letterboxing inside the element), so
+   the drawing-aid grid can sit exactly over it. */
 .viewer-stage img {
   max-width: 100%;
   max-height: 100%;

@@ -1,19 +1,13 @@
 // The References tab: browse the library by category, search, filter by
 // license, and open an image large with its credit.
-import {
-  creditLine,
-  filterImages,
-  loadBroken,
-  loadCategory,
-  loadIndex,
-  needsCredit,
-  pickRandom,
-  saveBroken,
-} from './library.js';
+import { byLine, createBrokenTracker, creditLine, filterImages, loadCategory, loadIndex, needsCredit, pickRandom } from './library.js';
 import { CUSTOM_LIMITS, DURATIONS, createSession, durationMs, formatTime } from './session.js';
 import { gridSvg, mountOverlayToolbar, overlayKey, pictureStyle } from '../overlays/overlays.js';
 
 const PAGE = 60;
+// When an image fails in the viewer it moves on to the next one, but only
+// this many times in a row, so a blocked source can't spin through the list.
+const MAX_SKIPS = 3;
 const TIMER_KEY = 'drawing-ref:timer:v1';
 
 function loadTimer() {
@@ -64,7 +58,7 @@ export function mountReferences(root) {
     <div class="refs-grid"></div>
     <button type="button" class="refs-more" hidden>Show more</button>
     <div class="viewer" hidden role="dialog" aria-modal="true" aria-label="Reference image">
-      <div class="viewer-stage"><img alt="" /><div class="grid-layer"></div></div>
+      <div class="viewer-stage"><img alt="" /><div class="grid-layer"></div><p class="viewer-error" hidden></p></div>
       <div class="viewer-info">
         <div class="viewer-text">
           <h2 class="viewer-title"></h2>
@@ -99,10 +93,10 @@ export function mountReferences(root) {
   const timerSelect = $('.refs-timer');
   const customField = $('.refs-custom');
   const customInput = customField.querySelector('input');
-  const broken = loadBroken();
+  const error = stage.querySelector('.viewer-error');
+  const broken = createBrokenTracker();
   let session = null;
   let ticker = null;
-  let failures = 0;
 
   // The grid sits exactly over the picture, wherever it lands in the stage.
   const placeGrid = () => {
@@ -131,26 +125,33 @@ export function mountReferences(root) {
   };
   timerSelect.addEventListener('change', rememberTimer);
   customInput.addEventListener('change', rememberTimer);
-  const state = { categories: [], category: null, images: [], filtered: [], shown: 0, current: null, query: '', license: 'all' };
+  const state = { categories: [], category: null, images: [], filtered: [], shown: 0, current: null, query: '', license: 'all', skips: 0, pos: 0 };
+  const BLOCKED_NOTE = " Some images aren't loading: an ad blocker or the image site may be the cause.";
 
-  // Only remember a broken link when we're online; offline, everything fails.
-  const markBroken = (id) => {
-    state.filtered = state.filtered.filter((i) => i.id !== id);
-    if (state.filtered.length) status.textContent = `${state.filtered.length} images`;
-    if (!navigator.onLine) return;
-    broken.set(id, Date.now());
-    saveBroken(broken);
+  function showCount() {
+    status.textContent = state.filtered.length
+      ? `${state.filtered.length} images${broken.anyDown ? `.${BLOCKED_NOTE}` : ''}`
+      : state.images.length
+        ? `No images match. Try another word or license setting.${broken.anyDown ? BLOCKED_NOTE : ''}`
+        : 'No images in this category yet.';
+    // The chip shows what this category can actually show right now.
+    const chip = chips.querySelector(`[data-cat="${CSS.escape(state.category ?? '')}"] span`);
+    if (chip && state.images.length) chip.textContent = state.images.filter((i) => !broken.has(i.id)).length;
+  }
+
+  const findImage = (id) => state.images.find((i) => i.id === id) ?? { id, source: '' };
+
+  const markBroken = (img) => {
+    broken.fail(img);
+    state.filtered = state.filtered.filter((i) => i.id !== img.id);
+    if (!session) showCount();
   };
 
   function applyFilters() {
     state.filtered = filterImages(state.images, { query: state.query, license: state.license, broken });
     state.shown = 0;
     grid.innerHTML = '';
-    status.textContent = state.filtered.length
-      ? `${state.filtered.length} images`
-      : state.images.length
-        ? 'No images match. Try another word or license setting.'
-        : 'No images in this category yet.';
+    showCount();
     showMore();
   }
 
@@ -168,9 +169,10 @@ export function mountReferences(root) {
     );
     grid.querySelectorAll('img:not([data-wired])').forEach((el) => {
       el.dataset.wired = '1';
+      const btn = el.closest('.thumb');
+      el.addEventListener('load', () => broken.ok(findImage(btn.dataset.id)));
       el.addEventListener('error', () => {
-        const btn = el.closest('.thumb');
-        markBroken(btn.dataset.id);
+        markBroken(findImage(btn.dataset.id));
         btn.remove();
       });
     });
@@ -187,27 +189,53 @@ export function mountReferences(root) {
     if (state.category === id) applyFilters();
   }
 
-  function open(img) {
+  // delta: which way to move on if this image fails (+1, -1, or 0 for random).
+  function open(img, { delta = 0, auto = false } = {}) {
     if (!img) return;
+    if (!auto) state.skips = 0;
     state.current = img;
-    pic.src = safeUrl(img.image.display);
-    pic.alt = img.title;
-    pic.onload = () => (failures = 0);
+    const at = state.filtered.findIndex((x) => x.id === img.id);
+    if (at >= 0) state.pos = at;
+    pic.hidden = false;
+    error.hidden = true;
+    pic.onload = () => {
+      state.skips = 0;
+      broken.ok(img);
+    };
     pic.onerror = () => {
-      markBroken(img.id);
-      if (!session) return open(pickRandom(state.filtered, img.id));
-      // Several broken links in a row: stop rather than flash through them.
-      if (++failures > 5) {
-        endSession('Session stopped: images aren’t loading. Check your connection.');
-        viewer.hidden = true;
+      if (state.current !== img) return;
+      markBroken(img);
+      if (session) {
+        // Several broken links in a row: stop rather than flash through them.
+        if (++state.skips > MAX_SKIPS) {
+          endSession(
+            broken.anyDown
+              ? "Session stopped: images aren't loading. An ad blocker or the image site may be blocking them."
+              : "Session stopped: images aren't loading. Check your connection."
+          );
+          viewer.hidden = true;
+          return;
+        }
+        session.next(performance.now());
+        open(session.current, { auto: true });
         return;
       }
-      session.next(performance.now());
-      open(session.current);
+      if (state.skips < MAX_SKIPS && state.filtered.length) {
+        state.skips++;
+        open(delta ? neighbour(delta) : pickRandom(state.filtered, img.id), { delta, auto: true });
+      } else {
+        pic.hidden = true;
+        error.hidden = false;
+        error.textContent = broken.anyDown
+          ? "This image couldn't load. An ad blocker or the image site may be blocking it."
+          : "This image couldn't load. Try the arrows or Random.";
+      }
     };
+    pic.src = safeUrl(img.image.display);
+    pic.alt = img.title;
     if (session?.upcoming) new Image().src = safeUrl(session.upcoming.image.display);
     viewer.querySelector('.viewer-title').textContent = img.title;
-    const by = [img.creator, img.date].filter(Boolean).join(', ');
+    const by = byLine(img);
     viewer.querySelector('.viewer-credit').innerHTML = [
       by && esc(by),
       esc(img.credit),
@@ -236,7 +264,6 @@ export function mountReferences(root) {
     }
     if (!state.filtered.length) return;
     session = createSession(state.filtered, ms, { now: performance.now() });
-    failures = 0;
     viewer.querySelector('[data-browse]').hidden = true;
     viewer.querySelector('[data-session]').hidden = false;
     viewer.querySelector('[data-v="pause"]').textContent = 'Pause';
@@ -273,11 +300,19 @@ export function mountReferences(root) {
     status.textContent = message ?? `Session ended after ${count} ${count === 1 ? 'image' : 'images'}.`;
   }
 
-  function step(delta) {
+  // The image next to the current one. If the current one has just been
+  // dropped (it failed to load), its old place in the list is used.
+  function neighbour(delta) {
     const list = state.filtered;
+    const n = list.length;
+    if (!n) return null;
     const i = list.findIndex((x) => x.id === state.current?.id);
-    if (i < 0 || !list.length) return;
-    open(list[(i + delta + list.length) % list.length]);
+    const target = i >= 0 ? i + delta : delta > 0 ? state.pos : state.pos - 1;
+    return list[((target % n) + n) % n];
+  }
+
+  function step(delta) {
+    if (state.current) open(neighbour(delta), { delta });
   }
 
   const close = () => {

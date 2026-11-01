@@ -1,7 +1,7 @@
 // Wikimedia Commons API (no key). Files from hand-picked categories only (no
 // live search proxying). License and author read per file from extmetadata.
 import { getJson, seededShuffle } from '../http.mjs';
-import { normalizeLicense, stripHtml } from '../filters.mjs';
+import { cleanCreator, cleanDate, normalizeLicense, stripHtml, wikimediaCredit } from '../filters.mjs';
 
 const BASE = 'https://commons.wikimedia.org/w/api.php';
 
@@ -14,7 +14,7 @@ function toRecord(page, category) {
   const v = (k) => meta[k]?.value ?? '';
   const license = normalizeLicense(v('LicenseShortName'), v('LicenseUrl'));
   const title = stripHtml(v('ObjectName')) || page.title.replace(/^File:/, '').replace(/\.[a-z]+$/i, '');
-  const artist = stripHtml(v('Artist'));
+  const artist = cleanCreator(v('Artist'), { title });
   return {
     id: `wmc:${page.pageid}`,
     source: 'wmc',
@@ -22,11 +22,11 @@ function toRecord(page, category) {
     category,
     title,
     creator: artist,
-    date: stripHtml(v('DateTimeOriginal')).slice(0, 10),
+    date: cleanDate(v('DateTimeOriginal')),
     objectType: '',
     tags: [],
     license,
-    credit: [artist, 'Wikimedia Commons'].filter(Boolean).join(' · '),
+    credit: wikimediaCredit(artist),
     pageUrl: info.descriptionurl,
     image: {
       display: info.thumburl,

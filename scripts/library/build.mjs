@@ -24,6 +24,9 @@ const today = new Date().toISOString().slice(0, 10);
 
 const log = (...m) => console.log(...m);
 
+// An image may only live in one category (the first that picks it).
+const taken = new Set();
+
 async function buildCategory(cat) {
   const lists = [];
   const rejected = {};
@@ -53,7 +56,10 @@ async function buildCategory(cat) {
       perSource[source.name] = perSource[source.name] ?? 0;
     }
   }
-  const images = mixAndCap(lists, Math.round(CAP_PER_CATEGORY * scale)).map((r) => ({
+  const fresh = lists.map((l) => l.filter((r) => !taken.has(r.id) && !taken.has(r.image.full ?? r.image.display)));
+  const picked = mixAndCap(fresh, Math.round(CAP_PER_CATEGORY * scale));
+  picked.forEach((r) => [r.id, r.image.full ?? r.image.display].forEach((k) => taken.add(k)));
+  const images = picked.map((r) => ({
     id: r.id,
     source: r.source,
     sourceName: r.sourceName,

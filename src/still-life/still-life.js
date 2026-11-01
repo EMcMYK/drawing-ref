@@ -4,6 +4,7 @@ import { TABLE, clampToTable, findFreeSpot, moveTo, settle } from './layout.js';
 import {
   CAMERA_PRESETS,
   LIGHT_PRESETS,
+  LIGHT_RADIUS,
   LIMITS,
   VIEW_LIMITS,
   defaultLight,
@@ -12,7 +13,6 @@ import {
 } from './model.js';
 import { geometryFor, shadeColor, tipAngle } from './shapes.js';
 
-const LIGHT_RADIUS = 4.5;
 // Where the camera may go: within a circle round the middle of the table,
 // the same distance from every side, and between the table top and the
 // ceiling. The studio wall stands a little outside that circle.
