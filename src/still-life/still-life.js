@@ -350,6 +350,8 @@ export class StillLife {
     const round = !obj.tipped && (obj.shape === 'sphere' || obj.shape === 'egg');
     const spread = round || (obj.tipped && ['cylinder', 'cone', 'egg', 'sphere'].includes(obj.shape)) ? 0.8 : 1.15;
     contact.scale.set(size.x * spread, 1, size.z * spread);
+    // Only on the table: on top of another shape it could float in the air.
+    contact.visible = obj.y < 0.001;
     group.position.set(obj.x, obj.y, obj.z);
     return { id: obj.id, x: obj.x, z: obj.z, y: obj.y, halfX: size.x / 2, halfZ: size.z / 2, height: size.y };
   }
