@@ -73,3 +73,27 @@ describe('tipAngle', () => {
     expect(tipAngle('cone', 1, 2)).toBeLessThan(tipAngle('cone'));
   });
 });
+
+describe('default view', () => {
+  it('keeps the light ball inside the frame at eye level', async () => {
+    const THREE = await import('three');
+    const { CAMERA_PRESETS, LIGHT_RADIUS, defaultLight } = await import('../src/still-life/model.js');
+    const { azimuth, elevation } = defaultLight();
+    const el = THREE.MathUtils.degToRad(elevation);
+    const az = THREE.MathUtils.degToRad(azimuth);
+    const ball = new THREE.Vector3(Math.cos(el) * Math.sin(az), Math.sin(el), Math.cos(el) * Math.cos(az)).multiplyScalar(
+      LIGHT_RADIUS
+    );
+    // Wide desktop and narrower laptop shapes of the scene panel.
+    for (const aspect of [1.25, 1.6, 2]) {
+      const camera = new THREE.PerspectiveCamera(40, aspect, 0.1, 100);
+      camera.position.fromArray(CAMERA_PRESETS.eye.position);
+      camera.lookAt(new THREE.Vector3().fromArray(CAMERA_PRESETS.eye.target));
+      camera.updateMatrixWorld();
+      // The ball's top edge (radius 0.22) must sit below the top of the frame.
+      const top = ball.clone().add(new THREE.Vector3(0, 0.22, 0)).project(camera);
+      expect(top.y).toBeLessThan(0.95);
+      expect(Math.abs(ball.clone().project(camera).x)).toBeLessThan(0.95);
+    }
+  });
+});

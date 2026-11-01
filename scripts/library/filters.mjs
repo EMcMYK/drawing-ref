@@ -89,16 +89,80 @@ export function mixAndCap(lists, cap) {
 }
 
 export function stripHtml(html) {
-  return String(html ?? '')
+  const decoded = String(html ?? '')
     .replace(/<[^>]*>/g, ' ')
     .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
     .replace(/&#0?39;/g, "'")
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+  // Escaped tags (e.g. "&lt;/gallery&gt;") only show up after decoding.
+  return decoded
+    .replace(/<\/?[a-z][^>]*>/gi, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+const URL_RE = /\b(?:https?:\/\/|www\.)\S+/gi;
+const NOISE_PARENS = /\(\s*(?:talk|website|flickr|category|contribs|telegram[^)]*)\s*\)/gi;
+const MAX_CREATOR = 80;
+
+// Wikimedia "Artist" fields are free text: names, but also link labels,
+// "Creator:" template prefixes, usage notes and gallery markup. Returns a
+// short, plain name, or '' when no name can be found.
+export function cleanCreator(raw, { title = '' } = {}) {
+  let s = stripHtml(raw);
+  if (!s) return '';
+  // "Creator:A Creator:B" (museum templates) -> "A, B"
+  if (/creator:/i.test(s)) s = s.split(/\s*creator:\s*/i).filter(Boolean).join(', ');
+  s = s.replace(/\bFile:.+?\.(?:jpe?g|png|tiff?|gif|webp)\s*:?\s*/gi, '');
+  // Gallery markup that lists the image's sibling files.
+  const stem = title.slice(0, 20);
+  if (stem.length >= 12 && s.indexOf(stem) > 0) s = s.slice(0, s.indexOf(stem));
+  s = s.replace(/\s*Camera location\b.*$/i, '');
+  // "Photo by and (c)2008 Name ( user ). Co-attribution ..." -> "Name ( user )"
+  const by = s.match(
+    /(?:taken by|photo(?:graph)?(?:ed)? by(?: and)?(?:\s*\(c\)\s*\d{4})?)\s+(.+?)(?=\s+and released|\s+released|\s*\.\s|\s*\.?$)/i
+  );
+  if (by) s = by[1];
+  else if (/feel free|please|you are free|released under/i.test(s)) s = '';
+  s = s
+    .replace(NOISE_PARENS, ' ')
+    .replace(/\(\s*[^()]*?(?:https?:\/\/|www\.)[^()]*\)/gi, ' ')
+    .replace(URL_RE, (u) => (s.trim() === u ? u.replace(/\/+$/, '').split('/').pop() : ' '))
+    .replace(/\(\s+/g, '(')
+    .replace(/\s+\)/g, ')')
+    .replace(/\s+/g, ' ')
+    .replace(/\s+([,.])/g, '$1')
+    .replace(/^[\s,.:;-]+|[\s,:;-]+$/g, '')
+    // A full stop after a word, not after an initial or "Jr".
+    .replace(/(\p{L}{3,})\.$/u, (m, w) => (/^jr$/i.test(w) ? m : w));
+  // "Unknown author Unknown author" -> "Unknown author"
+  s = s.replace(/^(.+?)\s+\1$/i, '$1');
+  if (s.length > MAX_CREATOR) s = `${s.slice(0, MAX_CREATOR).replace(/\s+\S*$/, '')}…`;
+  return s;
+}
+
+// Wikimedia dates are free text too: "Taken on 1 March 2012, 10:22",
+// "1598 date QS:P571,...", "Unknown date". Keeps a short readable date.
+export function cleanDate(raw) {
+  let s = stripHtml(raw)
+    .replace(/^(?:taken on|date taken|original:?)\s*/i, '')
+    .replace(/\s+date\b.*$/i, '')
+    .replace(/\s*\(.*$/, '')
+    .replace(/,?\s*\d{1,2}:\d\d(?::\d\d)?.*$/, '')
+    .trim();
+  if (!s || /^unknown/i.test(s)) return '';
+  const iso = s.match(/^(\d{4}-\d\d(?:-\d\d)?)(?:[T ]|$)/);
+  if (iso) return iso[1];
+  if (s.length > 40) s = s.slice(0, 40).replace(/\s+\S*$/, '');
+  return s;
+}
+
+// The credit line stored with a Commons image.
+export function wikimediaCredit(creator) {
+  return creator ? `${creator} · Wikimedia Commons` : 'Wikimedia Commons (author named on the source page)';
 }
 
 // Tag sculpture of hands so they can be found as "hands".

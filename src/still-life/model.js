@@ -23,8 +23,12 @@ export const VIEW_LIMITS = {
   distance: [2.5, 12],
 };
 
+// How far the light (and its draggable ball) sits from the table's middle.
+export const LIGHT_RADIUS = 4.5;
+
+// The eye-level view keeps the light ball for the default light in frame.
 export const CAMERA_PRESETS = {
-  eye: { label: 'Eye level', position: [0, 3.4, 8], target: [0, 0.4, 0] },
+  eye: { label: 'Eye level', position: [0, 3.6, 9], target: [0, 0.8, 0] },
   high: { label: 'High', position: [0, 8, 6.5], target: [0, 0.3, 0] },
   low: { label: 'Low', position: [0, 0.6, 7.5], target: [0, 1, 0] },
 };

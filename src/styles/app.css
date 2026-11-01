@@ -390,6 +390,17 @@ button.danger {
   padding: 16px;
 }
 
+.viewer-stage img[hidden],
+.viewer-error[hidden] {
+  display: none;
+}
+
+.viewer-error {
+  max-width: 32em;
+  text-align: center;
+  color: #cfccc6;
+}
+
 .viewer-stage img {
   max-width: 100%;
   max-height: 100%;

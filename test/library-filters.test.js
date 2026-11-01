@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { autoTags, mixAndCap, normalizeLicense, rejectReason } from '../scripts/library/filters.mjs';
+import {
+  autoTags,
+  cleanCreator,
+  cleanDate,
+  mixAndCap,
+  normalizeLicense,
+  rejectReason,
+  stripHtml,
+  wikimediaCredit,
+} from '../scripts/library/filters.mjs';
 
 describe('normalizeLicense', () => {
   it.each([
@@ -83,5 +92,60 @@ describe('autoTags', () => {
   it('tags hands', () => {
     expect(autoTags({ title: 'Study of Hands', tags: [] })).toContain('hands');
     expect(autoTags({ title: 'Handle of a jug', tags: [] })).not.toContain('hands');
+  });
+});
+
+describe('cleanCreator', () => {
+  it('drops "Creator:" template prefixes', () => {
+    expect(cleanCreator('Creator:Joseph Bradbury')).toBe('Joseph Bradbury');
+    expect(cleanCreator('Creator:Lorenz Hauslaib Creator:Steffan Cuntz')).toBe('Lorenz Hauslaib, Steffan Cuntz');
+  });
+
+  it('removes markup, links and usage notes', () => {
+    expect(cleanCreator('<a href="//commons.wikimedia.org/wiki/User:X">Jebulon</a>')).toBe('Jebulon');
+    expect(cleanCreator('JJ Harrison ( https://www.jjharrison.com.au/ )')).toBe('JJ Harrison');
+    expect(cleanCreator('Julian Herzog ( Website )')).toBe('Julian Herzog');
+    expect(cleanCreator('Photo by and (c)2008 Derek Ramsey ( Ram-Man ). Co-attribution must be given.')).toBe(
+      'Derek Ramsey (Ram-Man)'
+    );
+    expect(cleanCreator('This Photo was taken by Wolfgang Moroder . Feel free to use my photos, but please...')).toBe(
+      'Wolfgang Moroder'
+    );
+    expect(cleanCreator('Feel free to use my photos, but please mention me as the author')).toBe('');
+  });
+
+  it('cuts gallery markup listing other files', () => {
+    expect(
+      cleanCreator('Agnes Monkelbaan Staande geranium wit. (actm.) 03.jpg Staande geranium wit. (actm.) 04.jpg &lt;/gallery&gt;', {
+        title: 'Staande geranium wit. (actm.) 02',
+      })
+    ).toBe('Agnes Monkelbaan');
+  });
+
+  it('keeps initials and repeated names tidy', () => {
+    expect(cleanCreator('A.-K. D.')).toBe('A.-K. D.');
+    expect(cleanCreator('Dominicus Johannes Bergsma.')).toBe('Dominicus Johannes Bergsma');
+    expect(cleanCreator('Unknown author Unknown author')).toBe('Unknown author');
+  });
+
+  it('always leaves a credit line', () => {
+    expect(wikimediaCredit('Jebulon')).toBe('Jebulon · Wikimedia Commons');
+    expect(wikimediaCredit('')).toMatch(/Wikimedia Commons/);
+  });
+});
+
+describe('cleanDate', () => {
+  it('keeps whole dates instead of cutting them off', () => {
+    expect(cleanDate('Taken on 1 March 2012, 10:22:33')).toBe('1 March 2012');
+    expect(cleanDate('between 1700 and 1750')).toBe('between 1700 and 1750');
+    expect(cleanDate('2012-03-01 10:22:33')).toBe('2012-03-01');
+    expect(cleanDate('1598 date QS:P571,+1598-00-00T00:00:00Z/9')).toBe('1598');
+    expect(cleanDate('Unknown date')).toBe('');
+  });
+});
+
+describe('stripHtml', () => {
+  it('removes escaped tags too', () => {
+    expect(stripHtml('a &lt;/gallery&gt; b')).toBe('a b');
   });
 });
