@@ -1,0 +1,78 @@
+name: Build reference library
+
+# Pulls images from the approved sources' APIs, filters them, and writes
+# public/library/*.json. On pull requests it runs a small sample as a check;
+# run it by hand ("Run workflow") for the full build, which commits the
+# result to the branch it ran on.
+on:
+  pull_request:
+    paths:
+      - 'scripts/library/**'
+      - '.github/workflows/build-library.yml'
+  workflow_dispatch:
+    inputs:
+      only:
+        description: 'Only these categories (comma-separated ids), blank for all'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-library-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build library (sample)
+        if: github.event_name == 'pull_request'
+        run: node scripts/library/build.mjs --scale 0.05 --out sample-library
+
+      - name: Build library (full)
+        if: github.event_name == 'workflow_dispatch'
+        run: node scripts/library/build.mjs ${{ inputs.only && format('--only {0}', inputs.only) || '' }}
+
+      - name: Summary
+        if: always()
+        run: cat library-summary.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: library
+          path: |
+            sample-library/
+            public/library/
+            library-summary.md
+          if-no-files-found: ignore
+
+      - name: Commit the library
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/library
+          if git diff --cached --quiet; then
+            echo "No changes to the library."
+          else
+            git commit -m "Update reference library index"
+            git push
+          fi
