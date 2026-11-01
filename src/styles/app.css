@@ -317,7 +317,9 @@ button.danger {
 }
 
 .refs-controls input,
-.refs-controls select {
+.refs-controls select,
+.refs-session input,
+.refs-session select {
   font: inherit;
   color: var(--text);
   background: var(--surface);
@@ -332,7 +334,8 @@ button.danger {
   min-width: 160px;
 }
 
-.refs-controls .primary {
+.refs-controls .primary,
+.refs-session .primary {
   width: auto;
 }
 
@@ -404,9 +407,11 @@ button.danger {
   color: #cfccc6;
 }
 
+/* The picture keeps its own shape (no letterboxing inside the element), so
+   the drawing-aid grid can sit exactly over it. */
 .viewer-stage img {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
 }
 
@@ -443,4 +448,104 @@ button.danger {
   background: #2c2b29;
   border-color: #46443f;
   color: #efede9;
+}
+
+/* ---- Drawing aids (grid, grayscale, flip) ---- */
+
+.overlay-tools {
+  display: flex;
+  gap: 6px;
+}
+
+.overlay-tools button[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.grid-layer {
+  position: absolute;
+  pointer-events: none;
+}
+
+.grid-layer svg {
+  display: block;
+}
+
+.viewport .grid-layer {
+  inset: 0;
+}
+
+.viewport .overlay-tools {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.viewport .overlay-tools button {
+  background: rgba(255, 255, 255, 0.88);
+  color: #1f1e1c;
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.viewport .overlay-tools button[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.viewer-stage {
+  position: relative;
+}
+
+.viewer-tools .overlay-tools button {
+  background: #2c2b29;
+  border-color: #46443f;
+  color: #efede9;
+}
+
+.viewer-tools .overlay-tools button[aria-pressed='true'] {
+  background: #e8833a;
+  border-color: #e8833a;
+  color: #1b1a19;
+}
+
+/* ---- Timed sessions ---- */
+
+.refs-session {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.refs-custom {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+}
+
+.refs-custom[hidden] {
+  display: none;
+}
+
+.refs-custom input {
+  width: 4.5em;
+}
+
+.viewer-actions[hidden] {
+  display: none;
+}
+
+.countdown {
+  min-width: 3.5em;
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+  align-self: center;
+  text-align: center;
+}
+
+.countdown.ending {
+  color: #f0b27a;
 }
