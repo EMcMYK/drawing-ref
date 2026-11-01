@@ -84,9 +84,15 @@ export function settle(boxes) {
 
 // Move one object to (x, z): it stacks on whatever is under that point,
 // otherwise it slides clear of its neighbours. Returns all boxes, settled.
-export function moveTo(boxes, id, x, z) {
+// With `overlap` on, shapes pass through each other: the moved object just
+// sits on the table where it's put, and nothing else moves.
+export function moveTo(boxes, id, x, z, { overlap = false } = {}) {
   const target = boxes.find((b) => b.id === id);
   if (!target) return boxes;
+  if (overlap) {
+    const next = { ...clampToTable({ ...target, x, z }), y: 0 };
+    return boxes.map((b) => (b.id === id ? next : b));
+  }
   const above = new Set(stackedOn(boxes, id));
   const others = boxes.filter((b) => b.id !== id && !above.has(b.id));
   let next = clampToTable({ ...target, x, z });

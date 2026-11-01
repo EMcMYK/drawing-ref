@@ -205,6 +205,21 @@ button.danger {
   accent-color: var(--accent);
 }
 
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
 .swatches {
   display: flex;
   gap: 8px;

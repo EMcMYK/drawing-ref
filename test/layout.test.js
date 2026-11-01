@@ -80,3 +80,17 @@ describe('findFreeSpot', () => {
     expect(clear).toBe(true);
   });
 });
+
+describe('moveTo with overlap on', () => {
+  it('lets a shape pass into another instead of pushing or stacking', () => {
+    const boxes = [box('a', 0, 0), box('b', 2, 0)];
+    const b = moveTo(boxes, 'b', 0.2, 0, { overlap: true }).find((x) => x.id === 'b');
+    expect(b.x).toBeCloseTo(0.2);
+    expect(b.y).toBe(0);
+  });
+
+  it('still keeps the shape on the table', () => {
+    const b = moveTo([box('b', 0, 0)], 'b', 99, 0, { overlap: true })[0];
+    expect(b.x).toBeLessThanOrEqual(TABLE.halfX);
+  });
+});

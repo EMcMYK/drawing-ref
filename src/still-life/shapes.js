@@ -21,7 +21,13 @@ const BUILDERS = {
   sphere: () => new THREE.SphereGeometry(0.5, 48, 32).translate(0, 0.5, 0),
   cylinder: () => new THREE.CylinderGeometry(0.4, 0.4, 1, 48).translate(0, 0.5, 0),
   cone: () => new THREE.ConeGeometry(0.5, 1.2, 48).translate(0, 0.6, 0),
-  pyramid: () => new THREE.ConeGeometry(0.6, 1, 4).rotateY(Math.PI / 4).translate(0, 0.5, 0),
+  // Flat faces: split the shared corners so each face gets its own normal,
+  // otherwise the four sides are shaded as if they were a smooth cone.
+  pyramid: () => {
+    const geo = new THREE.ConeGeometry(0.6, 1, 4).rotateY(Math.PI / 4).translate(0, 0.5, 0).toNonIndexed();
+    geo.computeVertexNormals();
+    return geo;
+  },
   egg,
 };
 
@@ -47,6 +53,25 @@ export function geometryFor(shape) {
   if (!BUILDERS[shape]) throw new Error(`Unknown shape: ${shape}`);
   if (!geometryCache.has(shape)) geometryCache.set(shape, BUILDERS[shape]());
   return geometryCache.get(shape);
+}
+
+// How far to roll a shape (about its local Z axis) so that it lies on its
+// side. Cones and pyramids roll past 90° until a sloping face is flat on the
+// table; everything else rolls a quarter turn. `size` and `height` are the
+// object's scale factors, since they change the slope.
+const SLOPED = {
+  cone: { radius: 0.5, height: 1.2 },
+  // Four-sided cone turned 45°, so its faces point along X and Z: the
+  // distance from the centre to a face is the radius times cos 45°.
+  pyramid: { radius: 0.6 * Math.SQRT1_2, height: 1 },
+};
+
+export function tipAngle(shape, size = 1, height = 1) {
+  const s = SLOPED[shape];
+  if (!s) return Math.PI / 2;
+  const r = s.radius * size;
+  const h = s.height * size * height;
+  return Math.PI - Math.atan2(h, r);
 }
 
 export function shadeColor(shade) {

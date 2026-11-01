@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { LIMITS, randomScene, sanitizeScene } from '../src/still-life/model.js';
+import { LIMITS, randomScene, sanitizeScene, singleShape } from '../src/still-life/model.js';
+import { tipAngle } from '../src/still-life/shapes.js';
 import { pngFilename } from '../src/still-life/persist.js';
 
 describe('sanitizeScene', () => {
@@ -44,5 +45,31 @@ describe('randomScene', () => {
 describe('pngFilename', () => {
   it('stamps date and time', () => {
     expect(pngFilename(new Date(2026, 9, 10, 9, 5))).toBe('still-life-2026-10-10-0905.png');
+  });
+});
+
+describe('one-shape starters and overlap setting', () => {
+  it('builds a single shape of any kind', () => {
+    for (const shape of ['cube', 'sphere', 'cylinder', 'cone', 'pyramid', 'egg']) {
+      const objs = singleShape(shape);
+      expect(objs).toHaveLength(1);
+      expect(objs[0].shape).toBe(shape);
+    }
+  });
+
+  it('keeps the overlap setting only when it is exactly true', () => {
+    expect(sanitizeScene({ overlap: true }).overlap).toBe(true);
+    expect(sanitizeScene({ overlap: 'yes' }).overlap).toBe(false);
+  });
+});
+
+describe('tipAngle', () => {
+  it('rolls cones and pyramids onto a sloping face, others a quarter turn', () => {
+    expect(tipAngle('cube')).toBeCloseTo(Math.PI / 2);
+    // Cone: radius 0.5, height 1.2, so the side is 67.4° from the base.
+    expect((tipAngle('cone') * 180) / Math.PI).toBeCloseTo(112.6, 1);
+    expect((tipAngle('pyramid') * 180) / Math.PI).toBeCloseTo(113.0, 1);
+    // A taller cone has a steeper side, so it rolls less far.
+    expect(tipAngle('cone', 1, 2)).toBeLessThan(tipAngle('cone'));
   });
 });
