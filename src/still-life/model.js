@@ -16,6 +16,13 @@ export const LIGHT_PRESETS = {
   top: { label: 'Top', azimuth: 0, elevation: 85 },
 };
 
+// Camera slider ranges: angle around the table, angle above it, distance.
+export const VIEW_LIMITS = {
+  azimuth: [-180, 180],
+  elevation: [2, 88],
+  distance: [2.5, 12],
+};
+
 export const CAMERA_PRESETS = {
   eye: { label: 'Eye level', position: [0, 3.4, 8], target: [0, 0.4, 0] },
   high: { label: 'High', position: [0, 8, 6.5], target: [0, 0.3, 0] },
@@ -80,14 +87,15 @@ export function sanitizeScene(raw) {
   const c = raw.camera;
   const vec = (v) => Array.isArray(v) && v.length === 3 && v.every(Number.isFinite);
   const camera = c && vec(c.position) && vec(c.target) ? { position: c.position, target: c.target } : null;
-  return { objects, light, camera };
+  return { objects, light, camera, overlap: raw.overlap === true };
+}
+
+// One shape on its own, turned a little so you see more than one face.
+export function singleShape(shape) {
+  return [newObject(shape, { rotY: 30 })];
 }
 
 export const STARTER_SCENES = {
-  cube: {
-    label: 'Single cube',
-    build: () => [newObject('cube', { rotY: 30 })],
-  },
   pair: {
     label: 'Sphere and cube',
     build: () => [

@@ -20,14 +20,16 @@ tabs.forEach((tab) =>
   })
 );
 
-let refresh = () => {};
+let panel = { refresh() {}, refreshView() {} };
 const stillLife = new StillLife(document.getElementById('viewport'), {
   onChange: (s) => {
-    refresh();
+    panel.refresh();
     saveSoon(s.toJSON());
   },
+  onView: () => panel.refreshView(),
 });
-refresh = buildPanel(document.getElementById('panel'), stillLife);
+panel = buildPanel(document.getElementById('panel'), stillLife);
+const { refresh } = panel;
 
 const saved = loadSaved();
 if (saved && saved.objects.length) stillLife.loadScene(saved);

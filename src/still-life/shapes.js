@@ -49,6 +49,25 @@ export function geometryFor(shape) {
   return geometryCache.get(shape);
 }
 
+// How far to roll a shape (about its local Z axis) so that it lies on its
+// side. Cones and pyramids roll past 90° until a sloping face is flat on the
+// table; everything else rolls a quarter turn. `size` and `height` are the
+// object's scale factors, since they change the slope.
+const SLOPED = {
+  cone: { radius: 0.5, height: 1.2 },
+  // Four-sided cone turned 45°, so its faces point along X and Z: the
+  // distance from the centre to a face is the radius times cos 45°.
+  pyramid: { radius: 0.6 * Math.SQRT1_2, height: 1 },
+};
+
+export function tipAngle(shape, size = 1, height = 1) {
+  const s = SLOPED[shape];
+  if (!s) return Math.PI / 2;
+  const r = s.radius * size;
+  const h = s.height * size * height;
+  return Math.PI - Math.atan2(h, r);
+}
+
 export function shadeColor(shade) {
   return (SHADES.find((s) => s.id === shade) ?? SHADES[0]).color;
 }

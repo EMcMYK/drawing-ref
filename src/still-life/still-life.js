@@ -1,15 +1,16 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { TABLE, findFreeSpot, moveTo, settle } from './layout.js';
+import { TABLE, clampToTable, findFreeSpot, moveTo, settle } from './layout.js';
 import {
   CAMERA_PRESETS,
   LIGHT_PRESETS,
   LIMITS,
+  VIEW_LIMITS,
   defaultLight,
   newObject,
   randomScene,
 } from './model.js';
-import { geometryFor, shadeColor } from './shapes.js';
+import { geometryFor, shadeColor, tipAngle } from './shapes.js';
 
 const LIGHT_RADIUS = 4.5;
 const LIGHT_TARGET = new THREE.Vector3(0, 0.5, 0);
@@ -43,14 +44,36 @@ function sweepGeometry() {
   return geo;
 }
 
+// A soft dark disc that sits under each shape, standing in for the occlusion
+// shadow where a form meets the table. Without it the table right under a
+// sphere or egg stays as bright as the open table, which reads as a glowing
+// ring at the point of contact.
+function contactTexture() {
+  const size = 128;
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  g.addColorStop(0, 'rgba(0,0,0,1)');
+  g.addColorStop(0.35, 'rgba(0,0,0,0.6)');
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, size, size);
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
 export class StillLife {
-  constructor(container, { onChange } = {}) {
+  constructor(container, { onChange, onView } = {}) {
     this.container = container;
     this.onChange = onChange ?? (() => {});
+    this.onView = onView ?? (() => {});
     this.objects = []; // plain data, see model.js
     this.views = new Map(); // id -> { group, pivot, mesh }
     this.selectedId = null;
     this.light = defaultLight();
+    this.overlap = false; // let shapes pass through each other
     this.coarse = window.matchMedia('(pointer: coarse)').matches;
 
     this.#initRenderer();
@@ -90,9 +113,26 @@ export class StillLife {
     this.camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100); // fixed, normal lens
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
-    this.controls.minDistance = 2.5;
-    this.controls.maxDistance = 16;
-    this.controls.maxPolarAngle = deg(88);
+    this.controls.minDistance = VIEW_LIMITS.distance[0];
+    this.controls.maxDistance = VIEW_LIMITS.distance[1];
+    this.controls.minPolarAngle = deg(90 - VIEW_LIMITS.elevation[1]);
+    this.controls.maxPolarAngle = deg(90 - VIEW_LIMITS.elevation[0]);
+    // Panning moves the point the camera circles. Keep that point over the
+    // table and above its top, so the camera can't sink into the table or
+    // drift away from the scene.
+    this.controls.addEventListener('change', () => {
+      const t = this.controls.target;
+      const clamped = new THREE.Vector3(
+        THREE.MathUtils.clamp(t.x, -TABLE.halfX, TABLE.halfX),
+        THREE.MathUtils.clamp(t.y, 0, 2.5),
+        THREE.MathUtils.clamp(t.z, -TABLE.halfZ, TABLE.halfZ)
+      );
+      if (!clamped.equals(t)) {
+        this.camera.position.add(clamped.clone().sub(t));
+        t.copy(clamped);
+      }
+      this.onView();
+    });
     this.controls.addEventListener('end', () => this.#changed());
 
     const sweep = new THREE.Mesh(
@@ -118,8 +158,8 @@ export class StillLife {
     spot.shadow.mapSize.set(this.coarse ? 1024 : 2048, this.coarse ? 1024 : 2048);
     spot.shadow.camera.near = 1;
     spot.shadow.camera.far = 20;
-    spot.shadow.bias = -0.0004;
-    spot.shadow.normalBias = 0.02;
+    spot.shadow.bias = -0.0002;
+    spot.shadow.normalBias = 0.005;
     spot.target.position.copy(LIGHT_TARGET);
     scene.add(spot, spot.target);
     this.spot = spot;
@@ -137,6 +177,14 @@ export class StillLife {
     );
     scene.add(this.beam);
     this.helpers = [this.handle, this.beam];
+
+    this.contactMaterial = new THREE.MeshBasicMaterial({
+      map: contactTexture(),
+      transparent: true,
+      opacity: 0.55,
+      depthWrite: false,
+      toneMapped: false,
+    });
   }
 
   #initPointer() {
@@ -267,10 +315,14 @@ export class StillLife {
     mesh.add(outline);
     const pivot = new THREE.Group(); // rotation + centring
     pivot.add(mesh);
+    const contact = new THREE.Mesh(new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2), this.contactMaterial);
+    contact.position.y = 0.003;
+    contact.renderOrder = 1;
+    contact.raycast = () => {};
     const group = new THREE.Group(); // position on the table
-    group.add(pivot);
+    group.add(pivot, contact);
     this.scene.add(group);
-    const view = { group, pivot, mesh, outline };
+    const view = { group, pivot, mesh, outline, contact };
     this.views.set(obj.id, view);
     return view;
   }
@@ -278,11 +330,12 @@ export class StillLife {
   // Apply an object's data to its 3D view and return its footprint box.
   #syncView(obj) {
     const view = this.views.get(obj.id) ?? this.#buildView(obj);
-    const { group, pivot, mesh, outline } = view;
+    const { group, pivot, mesh, outline, contact } = view;
     mesh.scale.set(obj.size, obj.size * obj.height, obj.size);
     mesh.material.color.setHex(shadeColor(obj.shade));
     outline.visible = obj.id === this.selectedId;
-    pivot.rotation.set(0, deg(obj.rotY), obj.tipped ? Math.PI / 2 : 0, 'YXZ');
+    const tip = obj.tipped ? tipAngle(obj.shape, obj.size, obj.height) : 0;
+    pivot.rotation.set(0, deg(obj.rotY), tip, 'YXZ');
     pivot.position.set(0, 0, 0);
     group.position.set(0, 0, 0);
     mesh.remove(outline); // measure the shape itself, not its outline
@@ -292,6 +345,11 @@ export class StillLife {
     const center = box.getCenter(new THREE.Vector3());
     pivot.position.set(-center.x, -box.min.y, -center.z);
     const size = box.getSize(new THREE.Vector3());
+    // Round-bottomed shapes touch the table at a point, so their contact
+    // shadow is a small soft spot; flat bases get one just past the edges.
+    const round = !obj.tipped && (obj.shape === 'sphere' || obj.shape === 'egg');
+    const spread = round || (obj.tipped && ['cylinder', 'cone', 'egg', 'sphere'].includes(obj.shape)) ? 0.8 : 1.15;
+    contact.scale.set(size.x * spread, 1, size.z * spread);
     group.position.set(obj.x, obj.y, obj.z);
     return { id: obj.id, x: obj.x, z: obj.z, y: obj.y, halfX: size.x / 2, halfZ: size.z / 2, height: size.y };
   }
@@ -306,7 +364,22 @@ export class StillLife {
   }
 
   #moveObject(id, x, z) {
-    this.#applyBoxes(moveTo(this.#boxes(), id, x, z));
+    this.#applyBoxes(moveTo(this.#boxes(), id, x, z, { overlap: this.overlap }));
+  }
+
+  // Let shapes pass through each other, or push them apart and restack them.
+  setOverlap(on) {
+    this.overlap = !!on;
+    if (!this.overlap) this.#separateAll();
+    this.#changed();
+  }
+
+  // Keep every object on the table and apart, then let stacks settle.
+  #separateAll() {
+    let boxes = this.#boxes();
+    if (this.overlap) boxes = boxes.map((b) => ({ ...clampToTable(b), y: b.y }));
+    else for (const o of this.objects) boxes = moveTo(boxes, o.id, o.x, o.z);
+    this.#applyBoxes(boxes);
   }
 
   // Re-place one object where it stands, e.g. after it changed size.
@@ -348,7 +421,12 @@ export class StillLife {
 
   rotateSelected(degrees) {
     const o = this.selected;
-    if (o) this.updateSelected({ rotY: (((o.rotY + degrees) % 360) + 360) % 360 });
+    if (o) this.setTurn(o.rotY + degrees);
+  }
+
+  // Turn the selected shape to an angle in degrees, 0–359.
+  setTurn(degrees) {
+    this.updateSelected({ rotY: ((Math.round(degrees) % 360) + 360) % 360 });
   }
 
   tipSelected() {
@@ -374,7 +452,7 @@ export class StillLife {
     this.#removeView(o.id);
     this.objects = this.objects.filter((x) => x.id !== o.id);
     this.selectedId = null;
-    this.#applyBoxes(settle(this.#boxes())); // anything on top falls
+    if (!this.overlap) this.#applyBoxes(settle(this.#boxes())); // anything on top falls
     this.#changed();
   }
 
@@ -384,6 +462,7 @@ export class StillLife {
     this.scene.remove(view.group);
     view.mesh.material.dispose();
     view.outline.material.dispose();
+    view.contact.geometry.dispose();
     this.views.delete(id);
   }
 
@@ -393,13 +472,11 @@ export class StillLife {
     this.selectedId = null;
   }
 
-  loadScene({ objects = [], light, camera } = {}) {
+  loadScene({ objects = [], light, camera, overlap } = {}) {
     this.clear();
+    if (overlap !== undefined) this.overlap = overlap === true;
     this.objects = objects.slice(0, LIMITS.maxObjects).map((o) => ({ ...o }));
-    // Keep objects on the table and apart, then let stacks settle.
-    let boxes = this.#boxes();
-    for (const o of this.objects) boxes = moveTo(boxes, o.id, o.x, o.z);
-    this.#applyBoxes(boxes);
+    this.#separateAll();
     if (light) this.setLight(light, { silent: true });
     if (camera) {
       this.camera.position.fromArray(camera.position);
@@ -446,6 +523,29 @@ export class StillLife {
     this.beam.computeLineDistances();
   }
 
+  // The camera as three slider values: degrees around the table, degrees
+  // above it, and distance from the point it looks at.
+  get view() {
+    return {
+      azimuth: THREE.MathUtils.radToDeg(this.controls.getAzimuthalAngle()),
+      elevation: 90 - THREE.MathUtils.radToDeg(this.controls.getPolarAngle()),
+      distance: this.controls.getDistance(),
+    };
+  }
+
+  setView(patch) {
+    const next = { ...this.view, ...patch };
+    const clamp = (v, [lo, hi]) => THREE.MathUtils.clamp(v, lo, hi);
+    const offset = new THREE.Vector3().setFromSphericalCoords(
+      clamp(next.distance, VIEW_LIMITS.distance),
+      deg(90 - clamp(next.elevation, VIEW_LIMITS.elevation)),
+      deg(next.azimuth)
+    );
+    this.camera.position.copy(this.controls.target).add(offset);
+    this.controls.update();
+    this.#changed();
+  }
+
   setCameraPreset(key) {
     const p = CAMERA_PRESETS[key];
     if (!p) return;
@@ -462,6 +562,7 @@ export class StillLife {
       version: 1,
       objects: this.objects.map(({ id, ...rest }) => rest),
       light: this.light,
+      overlap: this.overlap,
       camera: {
         position: this.camera.position.toArray(),
         target: this.controls.target.toArray(),
