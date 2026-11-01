@@ -13,6 +13,9 @@ import {
 import { geometryFor, shadeColor, tipAngle } from './shapes.js';
 
 const LIGHT_RADIUS = 4.5;
+// Where the camera may go. The backdrop's curve starts rising about 1.5
+// behind the table, so the camera stops before it.
+const ROOM = { halfX: 12, minY: 0.05, maxY: 10, minZ: -(TABLE.halfZ + 1.5), maxZ: 14 };
 const LIGHT_TARGET = new THREE.Vector3(0, 0.5, 0);
 const ACCENT = 0xe8833a;
 const deg = THREE.MathUtils.degToRad;
@@ -105,12 +108,15 @@ export class StillLife {
       const clamped = new THREE.Vector3(
         THREE.MathUtils.clamp(t.x, -TABLE.halfX, TABLE.halfX),
         THREE.MathUtils.clamp(t.y, 0, 2.5),
-        THREE.MathUtils.clamp(t.z, -TABLE.halfZ, TABLE.halfZ)
+        // Far enough from the back of the room that the camera can still
+        // look from behind at its closest distance.
+        THREE.MathUtils.clamp(t.z, ROOM.minZ + VIEW_LIMITS.distance[0], TABLE.halfZ)
       );
       if (!clamped.equals(t)) {
         this.camera.position.add(clamped.clone().sub(t));
         t.copy(clamped);
       }
+      this.#keepCameraInRoom();
       this.onView();
     });
     this.controls.addEventListener('end', () => this.#changed());
@@ -138,8 +144,11 @@ export class StillLife {
     spot.shadow.mapSize.set(this.coarse ? 1024 : 2048, this.coarse ? 1024 : 2048);
     spot.shadow.camera.near = 1;
     spot.shadow.camera.far = 20;
-    spot.shadow.bias = -0.0004;
-    spot.shadow.normalBias = 0.02;
+    // Shadows are cast from light-facing sides (see #buildView), which
+    // needs a little more bias to avoid speckle. Phones get a smaller shadow
+    // map and less depth precision, so they need more.
+    spot.shadow.bias = this.coarse ? -0.0015 : -0.0005;
+    spot.shadow.normalBias = this.coarse ? 0.05 : 0.025;
     spot.target.position.copy(LIGHT_TARGET);
     scene.add(spot, spot.target);
     this.spot = spot;
@@ -249,9 +258,33 @@ export class StillLife {
     });
   }
 
+  // The camera may circle the table but not leave the room: not behind the
+  // backdrop, below the table top, past the sides, or up through the ceiling.
+  // If it would, slide it in toward the point it looks at.
+  #keepCameraInRoom() {
+    const pos = this.camera.position;
+    const t = this.controls.target;
+    const lo = new THREE.Vector3(-ROOM.halfX, ROOM.minY, ROOM.minZ);
+    const hi = new THREE.Vector3(ROOM.halfX, ROOM.maxY, ROOM.maxZ);
+    if (pos.x >= lo.x && pos.x <= hi.x && pos.y >= lo.y && pos.y <= hi.y && pos.z >= lo.z && pos.z <= hi.z) return;
+    // Largest fraction of the way from target to camera that stays inside.
+    let f = 1;
+    for (const k of ['x', 'y', 'z']) {
+      const d = pos[k] - t[k];
+      if (d > 0 && pos[k] > hi[k]) f = Math.min(f, (hi[k] - t[k]) / d);
+      if (d < 0 && pos[k] < lo[k]) f = Math.min(f, (lo[k] - t[k]) / d);
+    }
+    pos.sub(t).multiplyScalar(Math.max(f, 0)).add(t);
+  }
+
   #resize() {
     const { clientWidth: w, clientHeight: h } = this.container;
     if (!w || !h) return;
+    // Setting a canvas's size clears it, even to the same size, which shows
+    // as a flash. Phones fire resizes while scrolling, so skip no-op ones.
+    const ratio = this.renderer.getPixelRatio();
+    const canvas = this.renderer.domElement;
+    if (canvas.width === Math.floor(w * ratio) && canvas.height === Math.floor(h * ratio)) return;
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();

@@ -135,8 +135,19 @@ export function buildPanel(root, stillLife) {
     else if (['azimuth', 'elevation', 'intensity'].includes(name)) stillLife.setLight({ [name]: v });
   });
 
-  // Keep the camera sliders in step with dragging in the scene.
+  // Keep the camera sliders in step with dragging in the scene, at most once
+  // a frame however often the camera reports a change.
+  let viewQueued = false;
   function refreshView() {
+    if (viewQueued) return;
+    viewQueued = true;
+    requestAnimationFrame(() => {
+      viewQueued = false;
+      writeView();
+    });
+  }
+
+  function writeView() {
     const { azimuth, elevation, distance } = stillLife.view;
     input('camAzimuth').value = azimuth;
     out('camAzimuth').textContent = `${Math.round(azimuth)}°`;
@@ -172,7 +183,7 @@ export function buildPanel(root, stillLife) {
     q('[data-count]').textContent = `${n} of ${LIMITS.maxObjects} shapes. Click a shape to select it; drag to move or stack.`;
     root.querySelectorAll('[data-add]').forEach((b) => (b.disabled = n >= LIMITS.maxObjects));
     input('overlap').checked = stillLife.overlap;
-    refreshView();
+    writeView();
   }
   return { refresh, refreshView };
 }
