@@ -10,7 +10,6 @@ v1 is **Reference mode**: no accounts, everything runs in the browser.
 - Six drawing-class shapes: cube, sphere, cylinder, cone, pyramid, egg (up to 12 at once).
 - Click to select, drag to move; drop a shape on another to stack it. Turn slider (or Q / E), tip over (cones and pyramids land on a flat side), resize, change height.
 - Optional: let shapes pass through each other instead of pushing apart and stacking.
-- Soft contact shadows where each shape meets the table.
 - Shade each shape white, light, mid or dark gray for value studies.
 - One spotlight: drag the yellow ball, or use the sliders and presets. A fixed, dim fill keeps shadows from going black.
 - Eye level, high and low views, plus sliders for angle around, height and distance; one fixed, normal lens. The camera stays above the table and on the scene.

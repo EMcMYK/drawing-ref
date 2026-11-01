@@ -44,26 +44,6 @@ function sweepGeometry() {
   return geo;
 }
 
-// A soft dark disc that sits under each shape, standing in for the occlusion
-// shadow where a form meets the table. Without it the table right under a
-// sphere or egg stays as bright as the open table, which reads as a glowing
-// ring at the point of contact.
-function contactTexture() {
-  const size = 128;
-  const canvas = document.createElement('canvas');
-  canvas.width = canvas.height = size;
-  const ctx = canvas.getContext('2d');
-  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-  g.addColorStop(0, 'rgba(0,0,0,1)');
-  g.addColorStop(0.35, 'rgba(0,0,0,0.6)');
-  g.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = g;
-  ctx.fillRect(0, 0, size, size);
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.colorSpace = THREE.SRGBColorSpace;
-  return tex;
-}
-
 export class StillLife {
   constructor(container, { onChange, onView } = {}) {
     this.container = container;
@@ -158,8 +138,8 @@ export class StillLife {
     spot.shadow.mapSize.set(this.coarse ? 1024 : 2048, this.coarse ? 1024 : 2048);
     spot.shadow.camera.near = 1;
     spot.shadow.camera.far = 20;
-    spot.shadow.bias = -0.0002;
-    spot.shadow.normalBias = 0.005;
+    spot.shadow.bias = -0.0004;
+    spot.shadow.normalBias = 0.02;
     spot.target.position.copy(LIGHT_TARGET);
     scene.add(spot, spot.target);
     this.spot = spot;
@@ -177,14 +157,6 @@ export class StillLife {
     );
     scene.add(this.beam);
     this.helpers = [this.handle, this.beam];
-
-    this.contactMaterial = new THREE.MeshBasicMaterial({
-      map: contactTexture(),
-      transparent: true,
-      opacity: 0.55,
-      depthWrite: false,
-      toneMapped: false,
-    });
   }
 
   #initPointer() {
@@ -299,7 +271,11 @@ export class StillLife {
   #buildView(obj) {
     const mesh = new THREE.Mesh(
       geometryFor(obj.shape),
-      new THREE.MeshStandardMaterial({ roughness: 0.92, metalness: 0 })
+      // Shadows come from the faces that point at the light. three.js
+      // defaults to the far faces, which lets light leak under round
+      // shapes where they touch the table, and where shapes pass through
+      // each other.
+      new THREE.MeshStandardMaterial({ roughness: 0.92, metalness: 0, shadowSide: THREE.FrontSide })
     );
     mesh.castShadow = true;
     mesh.receiveShadow = true;
@@ -315,14 +291,10 @@ export class StillLife {
     mesh.add(outline);
     const pivot = new THREE.Group(); // rotation + centring
     pivot.add(mesh);
-    const contact = new THREE.Mesh(new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2), this.contactMaterial);
-    contact.position.y = 0.003;
-    contact.renderOrder = 1;
-    contact.raycast = () => {};
     const group = new THREE.Group(); // position on the table
-    group.add(pivot, contact);
+    group.add(pivot);
     this.scene.add(group);
-    const view = { group, pivot, mesh, outline, contact };
+    const view = { group, pivot, mesh, outline };
     this.views.set(obj.id, view);
     return view;
   }
@@ -330,7 +302,7 @@ export class StillLife {
   // Apply an object's data to its 3D view and return its footprint box.
   #syncView(obj) {
     const view = this.views.get(obj.id) ?? this.#buildView(obj);
-    const { group, pivot, mesh, outline, contact } = view;
+    const { group, pivot, mesh, outline } = view;
     mesh.scale.set(obj.size, obj.size * obj.height, obj.size);
     mesh.material.color.setHex(shadeColor(obj.shade));
     outline.visible = obj.id === this.selectedId;
@@ -345,13 +317,6 @@ export class StillLife {
     const center = box.getCenter(new THREE.Vector3());
     pivot.position.set(-center.x, -box.min.y, -center.z);
     const size = box.getSize(new THREE.Vector3());
-    // Round-bottomed shapes touch the table at a point, so their contact
-    // shadow is a small soft spot; flat bases get one just past the edges.
-    const round = !obj.tipped && (obj.shape === 'sphere' || obj.shape === 'egg');
-    const spread = round || (obj.tipped && ['cylinder', 'cone', 'egg', 'sphere'].includes(obj.shape)) ? 0.8 : 1.15;
-    contact.scale.set(size.x * spread, 1, size.z * spread);
-    // Only on the table: on top of another shape it could float in the air.
-    contact.visible = obj.y < 0.001;
     group.position.set(obj.x, obj.y, obj.z);
     return { id: obj.id, x: obj.x, z: obj.z, y: obj.y, halfX: size.x / 2, halfZ: size.z / 2, height: size.y };
   }
@@ -464,7 +429,6 @@ export class StillLife {
     this.scene.remove(view.group);
     view.mesh.material.dispose();
     view.outline.material.dispose();
-    view.contact.geometry.dispose();
     this.views.delete(id);
   }
 

@@ -21,7 +21,13 @@ const BUILDERS = {
   sphere: () => new THREE.SphereGeometry(0.5, 48, 32).translate(0, 0.5, 0),
   cylinder: () => new THREE.CylinderGeometry(0.4, 0.4, 1, 48).translate(0, 0.5, 0),
   cone: () => new THREE.ConeGeometry(0.5, 1.2, 48).translate(0, 0.6, 0),
-  pyramid: () => new THREE.ConeGeometry(0.6, 1, 4).rotateY(Math.PI / 4).translate(0, 0.5, 0),
+  // Flat faces: split the shared corners so each face gets its own normal,
+  // otherwise the four sides are shaded as if they were a smooth cone.
+  pyramid: () => {
+    const geo = new THREE.ConeGeometry(0.6, 1, 4).rotateY(Math.PI / 4).translate(0, 0.5, 0).toNonIndexed();
+    geo.computeVertexNormals();
+    return geo;
+  },
   egg,
 };
 
