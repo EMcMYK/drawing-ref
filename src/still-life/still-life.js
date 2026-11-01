@@ -52,6 +52,7 @@ export class StillLife {
     this.selectedId = null;
     this.light = defaultLight();
     this.coarse = window.matchMedia('(pointer: coarse)').matches;
+    this.mirrored = false;
 
     this.#initRenderer();
     this.#initScene();
@@ -94,6 +95,14 @@ export class StillLife {
     this.controls.maxDistance = 16;
     this.controls.maxPolarAngle = deg(88);
     this.controls.addEventListener('end', () => this.#changed());
+    // When the view is shown mirrored (the Flip drawing aid), turn sideways
+    // drags around too so the scene still follows the pointer. These are
+    // OrbitControls internals; three.js is pinned in package.json.
+    const controls = this.controls;
+    for (const name of ['_rotateLeft', '_panLeft']) {
+      const original = controls[name].bind(controls);
+      controls[name] = (amount, ...rest) => original(this.mirrored ? -amount : amount, ...rest);
+    }
 
     const sweep = new THREE.Mesh(
       sweepGeometry(),
@@ -150,7 +159,8 @@ export class StillLife {
 
     const aim = (e) => {
       const r = el.getBoundingClientRect();
-      ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+      const x = ((e.clientX - r.left) / r.width) * 2 - 1;
+      ndc.set(this.mirrored ? -x : x, -((e.clientY - r.top) / r.height) * 2 + 1);
       raycaster.setFromCamera(ndc, this.camera);
     };
 
@@ -467,6 +477,13 @@ export class StillLife {
         target: this.controls.target.toArray(),
       },
     };
+  }
+
+  // Show the view mirrored left to right. Only the screen is flipped; saved
+  // images stay the right way round.
+  setMirrored(on) {
+    this.mirrored = on;
+    this.renderer.domElement.style.transform = on ? 'scaleX(-1)' : '';
   }
 
   // Render the current view without the light handle or selection outline,

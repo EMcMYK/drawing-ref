@@ -4,6 +4,7 @@ import { buildPanel } from './still-life/panel.js';
 import { loadSaved, saveSoon } from './still-life/persist.js';
 import { STARTER_SCENES } from './still-life/model.js';
 import { mountReferences } from './references/references.js';
+import { gridSvg, mountOverlayToolbar, overlayKey, pictureStyle } from './overlays/overlays.js';
 
 const startReferences = mountReferences(document.getElementById('mode-references'));
 
@@ -28,6 +29,23 @@ const stillLife = new StillLife(document.getElementById('viewport'), {
   },
 });
 refresh = buildPanel(document.getElementById('panel'), stillLife);
+
+// Drawing aids over the 3D view. Flip mirrors the screen only.
+const viewport = document.getElementById('viewport');
+const grid3d = Object.assign(document.createElement('div'), { className: 'grid-layer' });
+const tools3d = document.createElement('div');
+viewport.append(grid3d, tools3d);
+const aids3d = mountOverlayToolbar(tools3d, 'still-life', (state) => {
+  grid3d.innerHTML = gridSvg(state.grid);
+  stillLife.renderer.domElement.style.filter = pictureStyle(state).filter;
+  stillLife.setMirrored(state.flip);
+});
+window.addEventListener('keydown', (e) => {
+  const what = !document.getElementById('mode-still-life').hidden && overlayKey(e);
+  if (!what) return;
+  aids3d.toggle(what);
+  e.preventDefault();
+});
 
 const saved = loadSaved();
 if (saved && saved.objects.length) stillLife.loadScene(saved);

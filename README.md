@@ -20,6 +20,9 @@ v1 is **Reference mode**: no accounts, everything runs in the browser.
 - Eight categories of free reference images (animals, plants, sculpture, objects and vases, aircraft and machines, architecture, weapons and armor, musical instruments).
 - Search within a category, filter to "no credit needed", Random, and a large viewer with credit, license and a link to the source.
 - Images are hotlinked from the source; only CC0, public domain, CC BY and CC BY-SA are included.
+- Timed sessions: 30 s, 1 min, 5 min or a custom time per image, with pause, skip and end. Images come in a random order without repeats.
+
+Drawing aids, on reference photos and on the 3D view: a 3×3 or 4×4 grid, grayscale, and a mirror flip (keys G, B, F). Flip only changes the screen; saved PNGs stay the right way round.
 
 ## Reference library index
 
@@ -51,3 +54,5 @@ Static site, built for Cloudflare Pages (free tier):
 - `src/still-life/still-life.js`: three.js scene, lights, dragging, PNG export.
 - `src/still-life/panel.js`: the control panel.
 - `src/still-life/persist.js`: browser storage and downloads.
+- `src/overlays/overlays.js`: grid, grayscale and flip, shared by both tabs.
+- `src/references/session.js`: timed-session logic (order, pause, skip). Unit-tested.

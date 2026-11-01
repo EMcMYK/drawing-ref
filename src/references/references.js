@@ -10,8 +10,28 @@ import {
   pickRandom,
   saveBroken,
 } from './library.js';
+import { CUSTOM_LIMITS, DURATIONS, createSession, durationMs, formatTime } from './session.js';
+import { gridSvg, mountOverlayToolbar, overlayKey, pictureStyle } from '../overlays/overlays.js';
 
 const PAGE = 60;
+const TIMER_KEY = 'drawing-ref:timer:v1';
+
+function loadTimer() {
+  try {
+    const t = JSON.parse(localStorage.getItem(TIMER_KEY) ?? '{}');
+    return { id: DURATIONS.some((d) => d.id === t.id) ? t.id : '60', custom: Number(t.custom) || 2 };
+  } catch {
+    return { id: '60', custom: 2 };
+  }
+}
+
+function saveTimer(t) {
+  try {
+    localStorage.setItem(TIMER_KEY, JSON.stringify(t));
+  } catch {
+    // Storage blocked: the choice resets on reload.
+  }
+}
 // Only http(s) links from the index are ever used.
 const safeUrl = (u) => (/^https?:\/\//i.test(String(u ?? '')) ? u : '#');
 const esc = (s) =>
@@ -27,24 +47,41 @@ export function mountReferences(root) {
           <option value="all">All licenses</option>
           <option value="no-credit">No credit needed</option>
         </select>
-        <button type="button" class="primary refs-random">Random</button>
+        <button type="button" class="refs-random">Random</button>
+      </div>
+      <div class="refs-session" role="group" aria-label="Timed session">
+        <select class="refs-timer" aria-label="Time per image">
+          ${DURATIONS.map((d) => `<option value="${d.id}">${d.label}</option>`).join('')}
+        </select>
+        <label class="refs-custom" hidden>
+          <input type="number" min="${CUSTOM_LIMITS.min}" max="${CUSTOM_LIMITS.max}" step="0.5" aria-label="Minutes per image" />
+          min
+        </label>
+        <button type="button" class="primary refs-start">Start session</button>
       </div>
     </div>
     <p class="refs-status" role="status"></p>
     <div class="refs-grid"></div>
     <button type="button" class="refs-more" hidden>Show more</button>
     <div class="viewer" hidden role="dialog" aria-modal="true" aria-label="Reference image">
-      <div class="viewer-stage"><img alt="" /></div>
+      <div class="viewer-stage"><img alt="" /><div class="grid-layer"></div></div>
       <div class="viewer-info">
         <div class="viewer-text">
           <h2 class="viewer-title"></h2>
           <p class="viewer-credit"></p>
         </div>
-        <div class="viewer-actions">
+        <div class="viewer-tools"></div>
+        <div class="viewer-actions" data-browse>
           <button type="button" data-v="prev" aria-label="Previous">←</button>
           <button type="button" data-v="random">Random</button>
           <button type="button" data-v="next" aria-label="Next">→</button>
           <button type="button" data-v="close">Close</button>
+        </div>
+        <div class="viewer-actions" data-session hidden>
+          <span class="countdown" role="timer" aria-label="Time left"></span>
+          <button type="button" data-v="pause">Pause</button>
+          <button type="button" data-v="skip">Skip</button>
+          <button type="button" data-v="close">End</button>
         </div>
       </div>
     </div>`;
@@ -55,7 +92,45 @@ export function mountReferences(root) {
   const status = $('.refs-status');
   const more = $('.refs-more');
   const viewer = $('.viewer');
+  const stage = viewer.querySelector('.viewer-stage');
+  const pic = stage.querySelector('img');
+  const gridLayer = stage.querySelector('.grid-layer');
+  const countdown = viewer.querySelector('.countdown');
+  const timerSelect = $('.refs-timer');
+  const customField = $('.refs-custom');
+  const customInput = customField.querySelector('input');
   const broken = loadBroken();
+  let session = null;
+  let ticker = null;
+  let failures = 0;
+
+  // The grid sits exactly over the picture, wherever it lands in the stage.
+  const placeGrid = () => {
+    Object.assign(gridLayer.style, {
+      left: `${pic.offsetLeft}px`,
+      top: `${pic.offsetTop}px`,
+      width: `${pic.offsetWidth}px`,
+      height: `${pic.offsetHeight}px`,
+    });
+  };
+  pic.addEventListener('load', placeGrid);
+  new ResizeObserver(placeGrid).observe(stage);
+  const aids = mountOverlayToolbar(viewer.querySelector('.viewer-tools'), 'references', (o) => {
+    Object.assign(pic.style, pictureStyle(o));
+    gridLayer.innerHTML = gridSvg(o.grid);
+  });
+
+  const timer = loadTimer();
+  timerSelect.value = timer.id;
+  customInput.value = timer.custom;
+  const showCustom = () => (customField.hidden = timerSelect.value !== 'custom');
+  showCustom();
+  const rememberTimer = () => {
+    showCustom();
+    saveTimer({ id: timerSelect.value, custom: Number(customInput.value) || timer.custom });
+  };
+  timerSelect.addEventListener('change', rememberTimer);
+  customInput.addEventListener('change', rememberTimer);
   const state = { categories: [], category: null, images: [], filtered: [], shown: 0, current: null, query: '', license: 'all' };
 
   // Only remember a broken link when we're online; offline, everything fails.
@@ -115,13 +190,22 @@ export function mountReferences(root) {
   function open(img) {
     if (!img) return;
     state.current = img;
-    const pic = viewer.querySelector('img');
     pic.src = safeUrl(img.image.display);
     pic.alt = img.title;
+    pic.onload = () => (failures = 0);
     pic.onerror = () => {
       markBroken(img.id);
-      open(pickRandom(state.filtered, img.id));
+      if (!session) return open(pickRandom(state.filtered, img.id));
+      // Several broken links in a row: stop rather than flash through them.
+      if (++failures > 5) {
+        endSession('Session stopped: images aren’t loading. Check your connection.');
+        viewer.hidden = true;
+        return;
+      }
+      session.next(performance.now());
+      open(session.current);
     };
+    if (session?.upcoming) new Image().src = safeUrl(session.upcoming.image.display);
     viewer.querySelector('.viewer-title').textContent = img.title;
     const by = [img.creator, img.date].filter(Boolean).join(', ');
     viewer.querySelector('.viewer-credit').innerHTML = [
@@ -132,8 +216,61 @@ export function mountReferences(root) {
     ]
       .filter(Boolean)
       .join(' · ');
+    const wasHidden = viewer.hidden;
     viewer.hidden = false;
-    viewer.querySelector('[data-v="close"]').focus();
+    if (wasHidden) viewer.querySelector(session ? '[data-v="pause"]' : '[data-browse] [data-v="close"]').focus();
+  }
+
+  function showTime() {
+    const left = session.remaining(performance.now());
+    countdown.textContent = formatTime(left);
+    countdown.classList.toggle('ending', left <= 5_000 && !session.paused);
+  }
+
+  function startSession() {
+    const ms = durationMs(timerSelect.value, customInput.value);
+    if (!ms) {
+      status.textContent = 'Enter how many minutes each image should show.';
+      customInput.focus();
+      return;
+    }
+    if (!state.filtered.length) return;
+    session = createSession(state.filtered, ms, { now: performance.now() });
+    failures = 0;
+    viewer.querySelector('[data-browse]').hidden = true;
+    viewer.querySelector('[data-session]').hidden = false;
+    viewer.querySelector('[data-v="pause"]').textContent = 'Pause';
+    viewer.hidden = true; // so open() moves focus into the session controls
+    open(session.current);
+    showTime();
+    ticker = setInterval(() => {
+      if (session.tick(performance.now())) open(session.current);
+      showTime();
+    }, 200);
+  }
+
+  function togglePause() {
+    const now = performance.now();
+    if (session.paused) session.resume(now);
+    else session.pause(now);
+    viewer.querySelector('[data-v="pause"]').textContent = session.paused ? 'Resume' : 'Pause';
+    showTime();
+  }
+
+  function skip() {
+    session.next(performance.now());
+    open(session.current);
+    showTime();
+  }
+
+  function endSession(message) {
+    clearInterval(ticker);
+    const count = session.shown;
+    session = null;
+    viewer.querySelector('[data-browse]').hidden = false;
+    viewer.querySelector('[data-session]').hidden = true;
+    countdown.classList.remove('ending');
+    status.textContent = message ?? `Session ended after ${count} ${count === 1 ? 'image' : 'images'}.`;
   }
 
   function step(delta) {
@@ -144,8 +281,10 @@ export function mountReferences(root) {
   }
 
   const close = () => {
+    if (session) endSession();
     viewer.hidden = true;
     state.current = null;
+    pic.removeAttribute('src');
   };
 
   chips.addEventListener('click', (e) => {
@@ -161,6 +300,7 @@ export function mountReferences(root) {
     applyFilters();
   });
   $('.refs-random').addEventListener('click', () => open(pickRandom(state.filtered)));
+  $('.refs-start').addEventListener('click', startSession);
   more.addEventListener('click', showMore);
   grid.addEventListener('click', (e) => {
     const t = e.target.closest('.thumb');
@@ -172,12 +312,18 @@ export function mountReferences(root) {
     else if (v === 'prev') step(-1);
     else if (v === 'next') step(1);
     else if (v === 'random') open(pickRandom(state.filtered, state.current?.id));
+    else if (v === 'pause') togglePause();
+    else if (v === 'skip') skip();
   });
   window.addEventListener('keydown', (e) => {
     if (viewer.hidden) return;
-    if (e.key === 'Escape') close();
-    else if (e.key === 'ArrowLeft') step(-1);
-    else if (e.key === 'ArrowRight') step(1);
+    const aid = overlayKey(e);
+    if (aid) aids.toggle(aid);
+    else if (e.key === 'Escape') close();
+    else if (session && e.key === ' ' && !e.target.closest('button')) togglePause();
+    else if (session && e.key === 'ArrowRight') skip();
+    else if (!session && e.key === 'ArrowLeft') step(-1);
+    else if (!session && e.key === 'ArrowRight') step(1);
     else return;
     e.preventDefault();
   });
