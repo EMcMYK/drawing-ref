@@ -135,16 +135,13 @@ export function buildPanel(root, stillLife) {
     else if (['azimuth', 'elevation', 'intensity'].includes(name)) stillLife.setLight({ [name]: v });
   });
 
-  // Keep the camera sliders in step with dragging in the scene, at most once
-  // a frame however often the camera reports a change.
-  let viewQueued = false;
+  // Bring the camera sliders up to date once the camera settles, not on
+  // every frame of a drag: changing the page while the 3D view redraws made
+  // the whole screen blink on phones.
+  let viewTimer = null;
   function refreshView() {
-    if (viewQueued) return;
-    viewQueued = true;
-    requestAnimationFrame(() => {
-      viewQueued = false;
-      writeView();
-    });
+    clearTimeout(viewTimer);
+    viewTimer = setTimeout(writeView, 150);
   }
 
   function writeView() {
