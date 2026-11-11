@@ -121,6 +121,8 @@ def category_of(r):
     head, names = head_word(r), words_of(title_of(r))
     family = norm(r.get('family'))
     for c in CATEGORIES:
+        if r['_repo'] == 'sand3d-articraft' and not c.get('articraft', True):
+            continue
         if head not in c['words'] or names & set(c.get('exclude', [])):
             continue
         if c.get('families') and r['_repo'] != 'sand3d-articraft' and family not in c['families']:

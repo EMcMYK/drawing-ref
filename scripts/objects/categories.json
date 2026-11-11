@@ -1,5 +1,5 @@
 {
- "_about": "Library categories, in order: an object goes in the first one it matches. 'words' are matched against the last word of the object's name (\"soap pump bottle\" is a bottle, \"glass display freezer\" isn't a glass). 'families' (optional) limits matches to those dataset families (Articraft rows, whose families are object names, always pass). 'exclude' words rule an object out of that category. 'chip' is the short name shown in the object browser.",
+ "_about": "Library categories, in order: an object goes in the first one it matches. 'words' are matched against the last word of the object's name (\"soap pump bottle\" is a bottle, \"glass display freezer\" isn't a glass). 'families' (optional) limits matches to those dataset families (Articraft rows, whose families are object names, always pass). 'exclude' words rule an object out of that category. 'chip' is the short name shown in the object browser. 'articraft': false leaves out Articraft models (mostly machines there).",
  "categories": [
   {
    "id": "bottles",
@@ -113,7 +113,8 @@
     "dishwasher",
     "tuning",
     "forklift"
-   ]
+   ],
+   "articraft": false
   },
   {
    "id": "vases",
@@ -288,7 +289,8 @@
     "electric",
     "power",
     "chainsaw"
-   ]
+   ],
+   "articraft": false
   },
   {
    "id": "instruments",

@@ -1,3 +1,26 @@
 # Objects left out of the library after looking at the contact sheets in
 # review/. One id per line (the "Id" column in review/<category>.md); text
 # after "#" is a note. The next build picks other objects in their place.
+faceted-cup-1b126dcc  # cups: Faceted cup
+faceted-cup-2570032e  # cups: Faceted cup
+stepped-plate-04f4a93a  # kitchen: Stepped plate
+dome-vessel-480533ff  # vases: Dome vessel
+book-vessel-48aa21e9  # vases: Book vessel
+patrol-vessel-49da2909  # vases: Patrol vessel
+backdrop-vessel-4a60bd14  # vases: Backdrop vessel
+curled-vessel-4dedfb41  # vases: Curled vessel
+dual-arm-surgical-exam-lamp-00b7ffd2  # lamps: Dual arm surgical exam lamp
+post-lamp-0ed9cd18  # lamps: Post lamp
+post-lantern-17709993  # lamps: Post lantern
+underslung-tabletop-metronome-07c8665b  # instruments: Underslung tabletop metronome
+low-wide-slot-metronome-2f458d27  # instruments: Low wide slot metronome
+weatherproof-swivel-bar-stool-01359775  # chairs: Weatherproof swivel bar stool
+crystal-throne-0240b986  # chairs: Crystal throne
+crank-box-006e9054  # boxes: Crank box
+plunger-box-0cfbeaea  # boxes: Plunger box
+electric-tilt-moonroof-cassette-bf61a78c  # tech: Electric tilt moonroof cassette
+heritage-platform-clock-03407482  # tech: Heritage platform clock
+hanging-bag-469139aa  # wear: Hanging bag
+hanging-bag-58e8943a  # wear: Hanging bag
+snack-bag-615b605a  # wear: Snack bag
+bat-hat-c689ecf9  # wear: Bat hat
