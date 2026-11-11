@@ -2,43 +2,43 @@
 
 | # | Name | Id |
 |---|---|---|
-| 1 | Compact display freezer | compact-display-freezer-0096e60c |
-| 2 | Goblet | goblet-00300703 |
-| 3 | Tumbler | tumbler-084e52dc |
-| 4 | Convenience freezer | convenience-freezer-0118d982 |
-| 5 | Mug | mug-0048ef66 |
-| 6 | Mug | mug-11c13b4d |
-| 7 | Freezer | freezer-051a5d36 |
-| 8 | Takeaway cup | takeaway-cup-1388d517 |
-| 9 | Panoramic glass elevator | panoramic-glass-elevator-0ca2e2ae |
-| 10 | Tankard | tankard-00bda7a4 |
-| 11 | Convenience chest freezer | convenience-chest-freezer-0d88ccea |
-| 12 | Tankard | tankard-00c29cef |
-| 13 | Tumbler | tumbler-1c196a7f |
-| 14 | Deep island freezer | deep-island-freezer-0fbafb52 |
-| 15 | Glass front display cabinet | glass-front-display-cabinet-1417c629 |
-| 16 | Takeaway cup | takeaway-cup-37386f5a |
-| 17 | Glass cover gas cooktop | glass-cover-gas-cooktop-14be3475 |
-| 18 | Cup | cup-0135bbfd |
-| 19 | Capped cup | capped-cup-3f032966 |
-| 20 | Frameless glass revolving door | frameless-glass-revolving-door-15968b2f |
-| 21 | Angled glass range hood | angled-glass-range-hood-1f770fdf |
-| 22 | Cup | cup-02688f64 |
-| 23 | Frozen food merchandiser | frozen-food-merchandiser-266bc580 |
-| 24 | Travel cup | travel-cup-57bc7aa4 |
-| 25 | Low profile display freezer | low-profile-display-freezer-2769ac72 |
-| 26 | Goblet | goblet-02de2319 |
-| 27 | Convenience freezer | convenience-freezer-2baddb0c |
-| 28 | Panoramic glass elevator | panoramic-glass-elevator-304ce6fd |
-| 29 | Display freezer | display-freezer-33200eff |
-| 30 | Angular cup | angular-cup-685332ab |
-| 31 | Folding opera glass | folding-opera-glass-35ed7c87 |
-| 32 | Display freezer | display-freezer-3bf22d71 |
-| 33 | Chalice | chalice-04589ca4 |
-| 34 | Curved lid display freezer | curved-lid-display-freezer-3cef9331 |
-| 35 | Citrus cup | citrus-cup-060406ba |
-| 36 | Low island freezer | low-island-freezer-3f7f7958 |
-| 37 | Low island freezer | low-island-freezer-4873f9f7 |
-| 38 | Angled glass range hood | angled-glass-range-hood-4b590557 |
-| 39 | Island display freezer | island-display-freezer-4c2d895e |
-| 40 | Island freezer | island-freezer-5e7cc213 |
+| 1 | Goblet | goblet-00300703 |
+| 2 | Tumbler | tumbler-084e52dc |
+| 3 | Mug | mug-0048ef66 |
+| 4 | Mug | mug-11c13b4d |
+| 5 | Takeaway cup | takeaway-cup-1388d517 |
+| 6 | Tankard | tankard-00bda7a4 |
+| 7 | Tankard | tankard-00c29cef |
+| 8 | Tumbler | tumbler-1c196a7f |
+| 9 | Takeaway cup | takeaway-cup-37386f5a |
+| 10 | Cup | cup-0135bbfd |
+| 11 | Capped cup | capped-cup-3f032966 |
+| 12 | Cup | cup-02688f64 |
+| 13 | Travel cup | travel-cup-57bc7aa4 |
+| 14 | Goblet | goblet-02de2319 |
+| 15 | Angular cup | angular-cup-685332ab |
+| 16 | Chalice | chalice-04589ca4 |
+| 17 | Citrus cup | citrus-cup-060406ba |
+| 18 | Teacup | teacup-088a9daa |
+| 19 | Spiked tankard | spiked-tankard-09f64022 |
+| 20 | Chalice | chalice-0c573779 |
+| 21 | Tipped cup | tipped-cup-0fe880ca |
+| 22 | Cutaway mug | cutaway-mug-109ff994 |
+| 23 | Serpent cup | serpent-cup-118f51f6 |
+| 24 | Utensil mug | utensil-mug-12c35946 |
+| 25 | Teacup | teacup-14a9a348 |
+| 26 | Beast mug | beast-mug-154a15e1 |
+| 27 | Coffee cup | coffee-cup-169d800e |
+| 28 | Faceted cup | faceted-cup-1b126dcc |
+| 29 | Cone cup | cone-cup-1e054859 |
+| 30 | Broken cup | broken-cup-218a957b |
+| 31 | Drink cup | drink-cup-24c75dbe |
+| 32 | Faceted cup | faceted-cup-2570032e |
+| 33 | Cylindrical cup | cylindrical-cup-25924e54 |
+| 34 | Skull tankard | skull-tankard-275fdf67 |
+| 35 | Sleeved cup | sleeved-cup-27d63acb |
+| 36 | Travel cup | travel-cup-2a1421e9 |
+| 37 | Domed cup | domed-cup-2bcf4bb9 |
+| 38 | Pentagonal cup | pentagonal-cup-2f5b754d |
+| 39 | Smile mug | smile-mug-30630a43 |
+| 40 | Barrel mug | barrel-mug-3360d1ef |

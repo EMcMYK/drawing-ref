@@ -24,18 +24,18 @@
 
 | Category | Candidates | Picked |
 |---|---|---|
-| Bottles and jars | 1179 | 40 |
-| Cups, mugs and glasses | 1016 | 40 |
-| Bowls, plates, pans and teapots | 1152 | 40 |
-| Vases and pottery | 556 | 40 |
-| Fruit, vegetables and bread | 615 | 40 |
-| Lamps and candles | 884 | 40 |
-| Hand tools | 1321 | 40 |
-| Musical instruments | 706 | 40 |
-| Chairs and stools | 665 | 40 |
-| Books, boxes and baskets | 1175 | 40 |
-| Old tech: radios, cameras, phones, clocks | 832 | 40 |
-| Shoes, hats and bags | 197 | 40 |
+| Bottles and jars | 1118 | 40 |
+| Cups, mugs and glasses | 929 | 40 |
+| Bowls, plates, pans and teapots | 871 | 40 |
+| Vases and pottery | 540 | 40 |
+| Fruit, vegetables and bread | 570 | 40 |
+| Lamps and candles | 693 | 40 |
+| Hand tools | 1213 | 40 |
+| Musical instruments | 547 | 40 |
+| Chairs and stools | 305 | 40 |
+| Books, boxes and baskets | 677 | 40 |
+| Old tech: radios, cameras, phones, clocks | 585 | 40 |
+| Shoes, hats and bags | 109 | 40 |
 
 ## Top families
 
@@ -102,7 +102,7 @@
 
 ## Skipped while converting
 
-- spare, not used: 104
-- too many parts: 21
+- spare, not used: 82
+- too many parts: 8
 
-**480 converted, 8.19 MB total, median 13 KB per object.**
+**480 converted, 9.30 MB total, median 15 KB per object.**

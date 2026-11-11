@@ -18,27 +18,27 @@
 | 14 | Desk lamp | desk-lamp-02006084 |
 | 15 | Wall arm task lamp | wall-arm-task-lamp-038f901f |
 | 16 | Articulated lamp | articulated-lamp-0286fcb8 |
-| 17 | Magnifying floor lamp | magnifying-floor-lamp-0547ec56 |
-| 18 | Lamp | lamp-0361e587 |
-| 19 | Architect desk lamp | architect-desk-lamp-0b4eb4d2 |
-| 20 | Arc floor lamp | arc-floor-lamp-0d0fe9b8 |
-| 21 | Compact screw bulb lamp | compact-screw-bulb-lamp-0e346c4a |
-| 22 | Explosion proof wall lamp | explosion-proof-wall-lamp-0ef2e6f3 |
-| 23 | Floor lamp | floor-lamp-118367d3 |
-| 24 | Piano lamp | piano-lamp-12b0a078 |
-| 25 | Wall lamp | wall-lamp-053e0b34 |
-| 26 | Counterbalance drafting floor lamp | counterbalance-drafting-floor-lamp-1426f74b |
-| 27 | Arc floor lamp | arc-floor-lamp-198abca5 |
-| 28 | Sconce | sconce-056c9a19 |
-| 29 | Task floor lamp | task-floor-lamp-1c414f7f |
-| 30 | Sconce | sconce-057682d8 |
-| 31 | Wall mounted task lamp | wall-mounted-task-lamp-1d0db9b2 |
-| 32 | Magnifier task lamp | magnifier-task-lamp-1de11fca |
-| 33 | Clip lamp | clip-lamp-05e5d5e3 |
-| 34 | Aquarium clip on led bar lamp | aquarium-clip-on-led-bar-lamp-22c2e530 |
-| 35 | Swing arm floor lamp | swing-arm-floor-lamp-25689ba6 |
-| 36 | Oil lamp | oil-lamp-0714715b |
-| 37 | Bench clamp task lamp | bench-clamp-task-lamp-257ea3ca |
-| 38 | Gallery floor lamp | gallery-floor-lamp-2897027b |
-| 39 | Floor lamp with reading boom | floor-lamp-with-reading-boom-2f19f164 |
-| 40 | Telescoping gooseneck desk lamp | telescoping-gooseneck-desk-lamp-2fd40fae |
+| 17 | Lamp | lamp-0361e587 |
+| 18 | Wall lamp | wall-lamp-053e0b34 |
+| 19 | Sconce | sconce-056c9a19 |
+| 20 | Sconce | sconce-057682d8 |
+| 21 | Clip lamp | clip-lamp-05e5d5e3 |
+| 22 | Oil lamp | oil-lamp-0714715b |
+| 23 | Floor lamp | floor-lamp-0873653f |
+| 24 | Folded lamp | folded-lamp-0b0e5fd1 |
+| 25 | Globe lamp | globe-lamp-0e16fa1e |
+| 26 | Post lamp | post-lamp-0ed9cd18 |
+| 27 | Crown lamp | crown-lamp-0f2852d7 |
+| 28 | Angular lamp | angular-lamp-1090681b |
+| 29 | Twin lamp | twin-lamp-10e952f4 |
+| 30 | Table lamp | table-lamp-11d8639b |
+| 31 | Tripod lamp | tripod-lamp-13b54b9a |
+| 32 | Sleeve lamp | sleeve-lamp-13c2dd43 |
+| 33 | Oil lamp | oil-lamp-141d0ccc |
+| 34 | Wall lantern | wall-lantern-144dc1e0 |
+| 35 | Post lantern | post-lantern-17709993 |
+| 36 | Task lamp | task-lamp-19cbce87 |
+| 37 | Scroll lamp | scroll-lamp-1adde4e9 |
+| 38 | Wall lamp | wall-lamp-1fa3da9b |
+| 39 | Pedestal lantern | pedestal-lantern-204ef56c |
+| 40 | Wall lantern | wall-lantern-212c5979 |
