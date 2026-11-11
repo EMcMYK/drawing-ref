@@ -105,35 +105,35 @@
 
 | Object | Group | Dataset | Parts | Triangles | USD | GLB | Note |
 |---|---|---|---|---|---|---|---|
-| #TreasureChestChallenge_Monster Chest | books and boxes | objaverse | 47 | 12784 | 1484 KB | 32 KB |  |
-| Bottiglia-video2 | bottles and jars | objaverse | 2 | 1130 | 169 KB | 8 KB |  |
-| Chocolate Bar - Agam Keissy | bowls and plates | objaverse | 2 | 320 | 36 KB | 4 KB |  |
-| Banco de madeira | chairs and stools | objaverse | 8 | 204 | 23 KB | 4 KB |  |
-| Oldish Radio | clocks and gadgets | objaverse | 24 | 18084 | 2864 KB | 34 KB |  |
-| Champagne Glass #8 - DUS Architects | cups and mugs | objaverse | 1 | 13794 | 2327 KB | 12 KB |  |
-| Chocolate_Corn_FBX (1) | fruit and food | objaverse | 4 | 16538 | 2786 KB | 40 KB |  |
-| USB SPEAKER GUITAR | instruments | objaverse | 7 | 7256 | 1115 KB | 10 KB |  |
-| Thu, 09 Jan 2020 18:13:04 | kettles and teapots | objaverse | 7 | 17050 | 2840 KB | 31 KB |  |
-| Lumion 4433/1T | lamps and candles | objaverse | 2 | 3004 | 472 KB | 7 KB |  |
-| Geschlossener Helm, 2. Hälfte 15. Jh. | W1922 | shoes and hats | objaverse | 1 | 16648 | 2826 KB | 108 KB |  |
-| Cutelo | tools | objaverse | 2 | 1680 | 261 KB | 5 KB |  |
-| Loft stella | vases and pots | objaverse | 1 | 980 | 164 KB | 9 KB |  |
-| crate_blue_a02 | books and boxes | simready | 6 | 31284 | 2660 KB | 96 KB |  |
-| food_processed_ketchup_c01 | bottles and jars | simready | 3 | 2644 | 434 KB | 6 KB |  |
-| food_prepared_baguette_e01 | bowls and plates | simready | 1 | 2664 | 446 KB | 6 KB |  |
+| Chest | books and boxes | objaverse | 47 | 12784 | 1484 KB | 32 KB |  |
+| Bottle | bottles and jars | objaverse | 2 | 1130 | 169 KB | 8 KB |  |
+| Scalloped plate | bowls and plates | objaverse | 2 | 320 | 36 KB | 4 KB |  |
+| Bench | chairs and stools | objaverse | 8 | 204 | 23 KB | 4 KB |  |
+| Cathedral radio | clocks and gadgets | objaverse | 24 | 18084 | 2864 KB | 34 KB |  |
+| Goblet | cups and mugs | objaverse | 1 | 13794 | 2327 KB | 12 KB |  |
+| Cat stack | fruit and food | objaverse | 4 | 16538 | 2786 KB | 40 KB |  |
+| Guitar | instruments | objaverse | 7 | 7256 | 1115 KB | 10 KB |  |
+| Teapot | kettles and teapots | objaverse | 7 | 17050 | 2840 KB | 31 KB |  |
+| Pointed lamp | lamps and candles | objaverse | 2 | 3004 | 472 KB | 7 KB |  |
+| Helmet | shoes and hats | objaverse | 1 | 16648 | 2826 KB | 108 KB |  |
+| Cleaver | tools | objaverse | 2 | 1680 | 261 KB | 5 KB |  |
+| Twist vase | vases and pots | objaverse | 1 | 980 | 164 KB | 9 KB |  |
+| Crate | books and boxes | simready | 6 | 31284 | 2660 KB | 96 KB |  |
+| Squeeze bottle | bottles and jars | simready | 3 | 2644 | 434 KB | 6 KB |  |
+| Oval dish | bowls and plates | simready | 1 | 2664 | 446 KB | 6 KB |  |
 | Pedestal bar stool | chairs and stools | articraft | 19 | 2492 | 302 KB | 14 KB |  |
 | Ultra wide rectilinear prime lens | clocks and gadgets | articraft | 23 | 9190 | 1349 KB | 43 KB |  |
-| consumable_cup_paper_a01 | cups and mugs | simready | 1 | 768 | 91 KB | 6 KB |  |
-| food_produce_banana_u01 | fruit and food | simready | 2 | 13048 | 2195 KB | 16 KB |  |
-| drum_plastic_blue_a02 | instruments | simready | 4 | 5168 | 761 KB | 22 KB |  |
-| electricalSystem_alternator_a01 | kettles and teapots | simready | 135 | 6086 | 855 KB | 56 KB |  |
-| decor_candle_c01 | lamps and candles | simready | 4 | 9098 | 1481 KB | 19 KB |  |
+| Tumbler | cups and mugs | simready | 1 | 768 | 91 KB | 6 KB |  |
+| Banana | fruit and food | simready | 2 | 13048 | 2195 KB | 16 KB |  |
+| Drum | instruments | simready | 4 | 5168 | 761 KB | 22 KB |  |
+| Crown pot | kettles and teapots | simready | 135 | 6086 | 855 KB | 56 KB |  |
+| Candlestick | lamps and candles | simready | 4 | 9098 | 1481 KB | 19 KB |  |
 | Hot shoe flash | shoes and hats | articraft | 22 | 1168 | 146 KB | 10 KB |  |
-| paint_supplies_brush_a04 | tools | simready | 3 | 2884 | 470 KB | 5 KB |  |
-| Trozzella Jonica. | vases and pots | objaverse | 4 | 4418 | 661 KB | 33 KB |  |
+| Paintbrush | tools | simready | 3 | 2884 | 470 KB | 5 KB |  |
+| Amphora | vases and pots | objaverse | 4 | 4418 | 661 KB | 33 KB |  |
 | Manual air fryer | books and boxes | articraft | 9 | 3068 | 392 KB | 16 KB |  |
 | Foaming soap pump bottle | bottles and jars | articraft | 8 | 4916 | 679 KB | 30 KB |  |
 | Survey dish yoke | bowls and plates | articraft | 23 | 14432 | 2285 KB | 29 KB |  |
-| storage_locker_double_bench_b03 | chairs and stools | simready | 8 | 228 | 24 KB | 3 KB |  |
+| Locker bench | chairs and stools | simready | 8 | 228 | 24 KB | 3 KB |  |
 
 **30 converted, 0.71 MB total, median 15 KB per object.**

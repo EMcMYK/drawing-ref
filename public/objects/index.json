@@ -4,7 +4,7 @@
  "objects": [
   {
    "id": "chest-000d30d9",
-   "name": "#TreasureChestChallenge_Monster Chest",
+   "name": "Chest",
    "group": "books and boxes",
    "family": "container",
    "tags": [
@@ -30,7 +30,7 @@
   },
   {
    "id": "bottle-0004c8a5",
-   "name": "Bottiglia-video2",
+   "name": "Bottle",
    "group": "bottles and jars",
    "family": "packaging",
    "tags": [
@@ -56,7 +56,7 @@
   },
   {
    "id": "scalloped-plate-002e3fa1",
-   "name": "Chocolate Bar - Agam Keissy",
+   "name": "Scalloped plate",
    "group": "bowls and plates",
    "family": "food and drink",
    "tags": [
@@ -84,7 +84,7 @@
   },
   {
    "id": "bench-0095e353",
-   "name": "Banco de madeira",
+   "name": "Bench",
    "group": "chairs and stools",
    "family": "garden or outdoor",
    "tags": [
@@ -111,7 +111,7 @@
   },
   {
    "id": "cathedral-radio-0088b5d2",
-   "name": "Oldish Radio",
+   "name": "Cathedral radio",
    "group": "clocks and gadgets",
    "family": "electronics",
    "tags": [
@@ -138,7 +138,7 @@
   },
   {
    "id": "goblet-00300703",
-   "name": "Champagne Glass #8 - DUS Architects",
+   "name": "Goblet",
    "group": "cups and mugs",
    "family": "tableware",
    "tags": [
@@ -164,7 +164,7 @@
   },
   {
    "id": "cat-stack-0008b589",
-   "name": "Chocolate_Corn_FBX (1)",
+   "name": "Cat stack",
    "group": "fruit and food",
    "family": "food and drink",
    "tags": [
@@ -191,7 +191,7 @@
   },
   {
    "id": "guitar-0010eaa7",
-   "name": "USB SPEAKER GUITAR",
+   "name": "Guitar",
    "group": "instruments",
    "family": "musical instrument",
    "tags": [
@@ -217,7 +217,7 @@
   },
   {
    "id": "teapot-00cf9ada",
-   "name": "Thu, 09 Jan 2020 18:13:04",
+   "name": "Teapot",
    "group": "kettles and teapots",
    "family": "tableware",
    "tags": [
@@ -243,7 +243,7 @@
   },
   {
    "id": "pointed-lamp-00b2b4ea",
-   "name": "Lumion 4433/1T",
+   "name": "Pointed lamp",
    "group": "lamps and candles",
    "family": "lighting",
    "tags": [
@@ -270,7 +270,7 @@
   },
   {
    "id": "helmet-01a0e633",
-   "name": "Geschlossener Helm, 2. H\u00e4lfte 15. Jh. | W1922",
+   "name": "Helmet",
    "group": "shoes and hats",
    "family": "weapon or armour",
    "tags": [
@@ -297,7 +297,7 @@
   },
   {
    "id": "cleaver-0006d3f7",
-   "name": "Cutelo",
+   "name": "Cleaver",
    "group": "tools",
    "family": "hand tool",
    "tags": [
@@ -323,7 +323,7 @@
   },
   {
    "id": "twist-vase-00896132",
-   "name": "Loft stella",
+   "name": "Twist vase",
    "group": "vases and pots",
    "family": "tableware",
    "tags": [
@@ -350,7 +350,7 @@
   },
   {
    "id": "crate-0014961a",
-   "name": "crate_blue_a02",
+   "name": "Crate",
    "group": "books and boxes",
    "family": "container",
    "tags": [
@@ -376,7 +376,7 @@
   },
   {
    "id": "squeeze-bottle-003493b4",
-   "name": "food_processed_ketchup_c01",
+   "name": "Squeeze bottle",
    "group": "bottles and jars",
    "family": "packaging",
    "tags": [
@@ -403,7 +403,7 @@
   },
   {
    "id": "oval-dish-0b81573e",
-   "name": "food_prepared_baguette_e01",
+   "name": "Oval dish",
    "group": "bowls and plates",
    "family": "food and drink",
    "tags": [
@@ -489,7 +489,7 @@
   },
   {
    "id": "tumbler-084e52dc",
-   "name": "consumable_cup_paper_a01",
+   "name": "Tumbler",
    "group": "cups and mugs",
    "family": "tableware",
    "tags": [
@@ -515,7 +515,7 @@
   },
   {
    "id": "banana-0057e59b",
-   "name": "food_produce_banana_u01",
+   "name": "Banana",
    "group": "fruit and food",
    "family": "food and drink",
    "tags": [
@@ -541,7 +541,7 @@
   },
   {
    "id": "drum-160c363b",
-   "name": "drum_plastic_blue_a02",
+   "name": "Drum",
    "group": "instruments",
    "family": "container",
    "tags": [
@@ -566,7 +566,7 @@
   },
   {
    "id": "crown-pot-34c9b4a5",
-   "name": "electricalSystem_alternator_a01",
+   "name": "Crown pot",
    "group": "kettles and teapots",
    "family": "machine or industrial",
    "tags": [
@@ -594,7 +594,7 @@
   },
   {
    "id": "candlestick-18aaf3f7",
-   "name": "decor_candle_c01",
+   "name": "Candlestick",
    "group": "lamps and candles",
    "family": "decor",
    "tags": [
@@ -648,7 +648,7 @@
   },
   {
    "id": "paintbrush-001f2d46",
-   "name": "paint_supplies_brush_a04",
+   "name": "Paintbrush",
    "group": "tools",
    "family": "hand tool",
    "tags": [
@@ -674,7 +674,7 @@
   },
   {
    "id": "amphora-108333a2",
-   "name": "Trozzella Jonica.",
+   "name": "Amphora",
    "group": "vases and pots",
    "family": "tableware",
    "tags": [
@@ -788,7 +788,7 @@
   },
   {
    "id": "locker-bench-2f8146b3",
-   "name": "storage_locker_double_bench_b03",
+   "name": "Locker bench",
    "group": "chairs and stools",
    "family": "furniture",
    "tags": [
