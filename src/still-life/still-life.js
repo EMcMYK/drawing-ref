@@ -474,6 +474,12 @@ export class StillLife {
     this.selectedId = null;
   }
 
+  // Take every object off the table; the light and camera stay.
+  clearAll() {
+    this.clear();
+    this.#changed();
+  }
+
   loadScene({ objects = [], light, camera, overlap } = {}) {
     this.clear();
     if (overlap !== undefined) this.overlap = overlap === true;

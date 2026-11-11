@@ -22,6 +22,9 @@ export function buildPanel(root, stillLife) {
         ${SHAPES.map((s) => html`<button type="button" data-add="${s.id}">${s.label}</button>`).join('')}
       </div>
       <p class="hint" data-count></p>
+      <div class="row">
+        <button type="button" data-act="clear" class="danger">Clear scene</button>
+      </div>
       <label class="check">
         <input type="checkbox" name="overlap" />
         <span>Let shapes pass through each other</span>
@@ -117,6 +120,9 @@ export function buildPanel(root, stillLife) {
     const { add, act, shade, light, cam, starter, single } = btn.dataset;
     if (add) stillLife.addShape(add);
     else if (act === 'objects') browser.open();
+    else if (act === 'clear') {
+      if (window.confirm('Remove all shapes and objects from the scene?')) stillLife.clearAll();
+    }
     else if (shade) stillLife.updateSelected({ shade });
     else if (light) stillLife.applyLightPreset(light);
     else if (cam) stillLife.setCameraPreset(cam);
@@ -240,6 +246,7 @@ export function buildPanel(root, stillLife) {
     input('intensity').value = intensity;
     out('intensity').textContent = intensity.toFixed(2);
     const n = stillLife.objects.length;
+    q('[data-act="clear"]').disabled = n === 0;
     q('[data-count]').textContent = `${n} of ${LIMITS.maxObjects} shapes. Click a shape to select it; drag to move or stack.`;
     root.querySelectorAll('[data-add]').forEach((b) => (b.disabled = n >= LIMITS.maxObjects));
     input('overlap').checked = stillLife.overlap;

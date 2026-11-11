@@ -175,7 +175,10 @@ export function createObjectBrowser({ canAdd, add }) {
       renderChips();
       renderGrid();
       if (!dialog.open) dialog.showModal();
-      $('.ob-search').focus();
+      // Only jump to the search box with a mouse: on phones it would pop up
+      // the keyboard and zoom the page.
+      if (window.matchMedia?.('(pointer: fine)').matches) $('.ob-search').focus();
+      else $('.ob-close').focus({ preventScroll: true });
     },
     get element() {
       return dialog;

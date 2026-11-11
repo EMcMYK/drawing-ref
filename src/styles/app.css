@@ -634,6 +634,7 @@ button.danger {
 
 .ob-search {
   font: inherit;
+  font-size: 16px; /* under 16px, phones zoom in when it's tapped */
   color: var(--text);
   background: var(--surface);
   border: 1px solid var(--border);
