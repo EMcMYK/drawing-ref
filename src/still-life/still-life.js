@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
-import { TABLE, clampToTable, findFreeSpot, moveTo, settle } from './layout.js';
+import { TABLE, clampToTable, findFreeSpot, moveTo, settle, stackedOn } from './layout.js';
 import {
   CAMERA_PRESETS,
   LIGHT_PRESETS,
@@ -13,7 +13,10 @@ import {
 } from './model.js';
 import { geometryFor, shadeColor, tipAngle } from './shapes.js';
 
+// The light moves on a dome this far from the middle of the table; the dome
+// grows when objects reach further, so the light never ends up inside one.
 const LIGHT_RADIUS = 4.5;
+const LIGHT_CLEARANCE = 1.2;
 // Where the camera may go: within a circle round the middle of the table,
 // the same distance from every side, and between the table top and the
 // ceiling. The studio wall stands a little outside that circle.
@@ -52,6 +55,7 @@ export class StillLife {
     this.mirrored = false;
 
     this.rotating = false; // free-rotate mode for the selected object
+    this.lightRadius = LIGHT_RADIUS;
     this.#initRenderer();
     this.#initScene();
     // Before #initPointer, so the rings see a press before the scene does.
@@ -237,17 +241,20 @@ export class StillLife {
     this.doneButton = done;
   }
 
-  // Keep the lift arrow just to the right of the rings (so it stays on
-  // screen when the object is high), at the same on-screen size, using the
-  // same sum TransformControls uses to size its rings.
+  // Keep the lift arrow beside the rings (so it stays on screen when the
+  // object is high), at the same on-screen size, using the same sum
+  // TransformControls uses to size its rings.
   #placeLiftHandle() {
     const p = this.proxy.position;
     const cam = this.camera;
     const factor = p.distanceTo(cam.position) * Math.min((1.9 * Math.tan((Math.PI * cam.fov) / 360)) / cam.zoom, 7);
     const scale = (factor * this.gizmo.size) / 4;
     this.liftHandle.scale.setScalar(scale);
+    // Put it on whichever side of the rings has more room on screen, so the
+    // edge of the view (or the panel beside it) doesn't hide it.
     const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cam.quaternion).setY(0).normalize();
-    if (this.mirrored) right.negate();
+    const screenX = p.clone().project(cam).x * (this.mirrored ? -1 : 1);
+    if (screenX > 0 !== this.mirrored) right.negate();
     this.liftHandle.position.copy(p).addScaledVector(right, 0.85 * scale);
   }
 
@@ -378,12 +385,13 @@ export class StillLife {
       }
       aim(e);
       if (drag.kind === 'light') {
+        domeSphere.radius = this.lightRadius;
         // Aim at the dome; if the ray misses it, use the nearest point on it.
         if (!raycaster.ray.intersectSphere(domeSphere, hit)) {
           raycaster.ray.closestPointToPoint(domeSphere.center, hit);
-          hit.setLength(LIGHT_RADIUS);
+          hit.setLength(this.lightRadius);
         }
-        const elevation = THREE.MathUtils.radToDeg(Math.asin(THREE.MathUtils.clamp(hit.y / LIGHT_RADIUS, -1, 1)));
+        const elevation = THREE.MathUtils.radToDeg(Math.asin(THREE.MathUtils.clamp(hit.y / this.lightRadius, -1, 1)));
         const azimuth = THREE.MathUtils.radToDeg(Math.atan2(hit.x, hit.z));
         this.setLight({ azimuth, elevation });
       } else if (drag.kind === 'lift') {
@@ -533,7 +541,7 @@ export class StillLife {
     // them sits on top of the raised object.
     const lift = obj.lift ?? 0;
     group.position.set(obj.x, obj.y + lift, obj.z);
-    return { id: obj.id, x: obj.x, z: obj.z, y: obj.y, halfX: size.x / 2, halfZ: size.z / 2, height: size.y + lift };
+    return { id: obj.id, x: obj.x, z: obj.z, y: obj.y, lift, halfX: size.x / 2, halfZ: size.z / 2, height: size.y };
   }
 
   #boxes() {
@@ -601,6 +609,11 @@ export class StillLife {
   updateSelected(patch) {
     const o = this.selected;
     if (!o) return;
+    // Lifting an object carries everything stacked on it.
+    if ('lift' in patch && !this.overlap) {
+      const dy = patch.lift - (o.lift ?? 0);
+      for (const id of stackedOn(this.#boxes(), o.id)) this.#find(id).y += dy;
+    }
     Object.assign(o, patch);
     this.#resettle(o.id);
     if (this.rotating && !this.gizmo.dragging) this.#placeProxy();
@@ -710,7 +723,7 @@ export class StillLife {
       Math.cos(el) * Math.sin(az),
       Math.sin(el),
       Math.cos(el) * Math.cos(az)
-    ).multiplyScalar(LIGHT_RADIUS);
+    ).multiplyScalar(this.lightRadius);
     this.spot.position.copy(pos);
     this.spot.intensity = intensity * 2.2;
     this.handle.position.copy(pos);
@@ -790,7 +803,29 @@ export class StillLife {
     return blob;
   }
 
+  // Grow (or shrink back) the light's dome to clear the furthest point of
+  // any object, e.g. a tall stack or something lifted high.
+  #fitLightDome() {
+    let reach = 0;
+    const box = new THREE.Box3();
+    const corner = new THREE.Vector3();
+    for (const view of this.views.values()) {
+      view.group.updateMatrixWorld(true);
+      box.setFromObject(view.mesh, true);
+      for (let i = 0; i < 8; i++) {
+        corner.set(i & 1 ? box.max.x : box.min.x, i & 2 ? box.max.y : box.min.y, i & 4 ? box.max.z : box.min.z);
+        reach = Math.max(reach, corner.length());
+      }
+    }
+    const radius = Math.max(LIGHT_RADIUS, reach + LIGHT_CLEARANCE);
+    if (Math.abs(radius - this.lightRadius) > 0.01) {
+      this.lightRadius = radius;
+      this.#applyLight();
+    }
+  }
+
   #changed() {
+    this.#fitLightDome();
     this.onChange(this);
   }
 }
