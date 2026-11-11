@@ -2,6 +2,8 @@
 import { CAMERA_PRESETS, LIGHT_PRESETS, LIMITS, STARTER_SCENES, VIEW_LIMITS, singleShape } from './model.js';
 import { SHADES, SHAPES } from './shapes.js';
 import { downloadBlob, pngFilename } from './persist.js';
+import { creditLine, isLibraryShape, loadCatalog, objectInfo } from './objects.js';
+import { createObjectBrowser } from './object-browser.js';
 
 const html = String.raw;
 
@@ -20,18 +22,32 @@ export function buildPanel(root, stillLife) {
         ${SHAPES.map((s) => html`<button type="button" data-add="${s.id}">${s.label}</button>`).join('')}
       </div>
       <p class="hint" data-count></p>
+      <div class="row">
+        <button type="button" data-act="clear" class="danger">Clear scene</button>
+      </div>
       <label class="check">
         <input type="checkbox" name="overlap" />
         <span>Let shapes pass through each other</span>
       </label>
     </section>
 
+    <section class="group" data-objects hidden>
+      <h2>Add an object</h2>
+      <button type="button" data-act="objects">Browse objects</button>
+      <p class="hint" data-object-count></p>
+    </section>
+
     <section class="group" data-selected hidden>
       <h2>Selected shape</h2>
+      <p class="hint credit" data-credit hidden></p>
       ${slider('turn', 'Turn', [0, 359], 1)}
       <div class="row">
+        <button type="button" data-act="rotate">Rotate freely</button>
         <button type="button" data-act="tip">Tip over</button>
+        <button type="button" data-act="upright">Stand upright</button>
       </div>
+      <p class="hint" data-rotate-hint></p>
+      ${slider('lift', 'Lift off the table', LIMITS.lift, 0.05)}
       ${slider('size', 'Size', LIMITS.size, 0.05)}
       ${slider('height', 'Height', LIMITS.height, 0.05)}
       <div class="field">
@@ -91,6 +107,10 @@ export function buildPanel(root, stillLife) {
     <section class="group">
       <button type="button" class="primary" data-act="png">Save PNG</button>
       <p class="hint">Saves exactly what you see, at high resolution. Nothing is uploaded.</p>
+      <div class="credits" data-credits hidden>
+        <p class="hint">Objects in this scene (CC BY 4.0: credit them if you share the picture):</p>
+        <ul></ul>
+      </div>
     </section>
   `;
 
@@ -103,12 +123,18 @@ export function buildPanel(root, stillLife) {
     if (!btn) return;
     const { add, act, shade, light, cam, starter, single } = btn.dataset;
     if (add) stillLife.addShape(add);
+    else if (act === 'objects') browser.open();
+    else if (act === 'clear') {
+      if (window.confirm('Remove all shapes and objects from the scene?')) stillLife.clearAll();
+    }
     else if (shade) stillLife.updateSelected({ shade });
     else if (light) stillLife.applyLightPreset(light);
     else if (cam) stillLife.setCameraPreset(cam);
     else if (starter) stillLife.loadScene({ objects: STARTER_SCENES[starter].build() });
     else if (single) stillLife.loadScene({ objects: singleShape(single) });
     else if (act === 'tip') stillLife.tipSelected();
+    else if (act === 'rotate') stillLife.setRotating(!stillLife.rotating);
+    else if (act === 'upright') stillLife.resetRotation();
     else if (act === 'dup') stillLife.duplicateSelected();
     else if (act === 'del') stillLife.deleteSelected();
     else if (act === 'random') stillLife.randomize();
@@ -123,6 +149,55 @@ export function buildPanel(root, stillLife) {
     }
   });
 
+  // ---- object library ----
+
+  const browser = createObjectBrowser({
+    canAdd: () => stillLife.objects.length < LIMITS.maxObjects,
+    add: (shape) => stillLife.addShape(shape),
+  });
+  loadCatalog().then((list) => {
+    q('[data-objects]').hidden = !list.length;
+    q('[data-object-count]').textContent = `${list.length} objects to pick from, with search and categories.`;
+  });
+
+  function link(text, href) {
+    if (!href || !/^https:\/\//.test(href)) return document.createTextNode(text);
+    const a = document.createElement('a');
+    a.href = href;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.textContent = text;
+    return a;
+  }
+
+  function creditNodes(info) {
+    const parts = [link(info.name, info.sourceUrl), document.createTextNode(' · ')];
+    parts.push(link(info.license?.name ?? 'CC BY 4.0', info.license?.url));
+    parts.push(document.createTextNode(` · ${info.credit}`));
+    return parts;
+  }
+
+  function showCredits() {
+    const sel = stillLife.selected;
+    const info = sel && objectInfo(sel.shape);
+    const credit = q('[data-credit]');
+    credit.hidden = !info;
+    if (info) credit.replaceChildren(...creditNodes(info));
+    const used = [...new Set(stillLife.objects.map((o) => o.shape).filter(isLibraryShape))]
+      .map(objectInfo)
+      .filter(Boolean);
+    const box = q('[data-credits]');
+    box.hidden = !used.length;
+    box.querySelector('ul').replaceChildren(
+      ...used.map((o) => {
+        const li = document.createElement('li');
+        li.title = creditLine(o);
+        li.append(...creditNodes(o));
+        return li;
+      })
+    );
+  }
+
   root.addEventListener('input', (e) => {
     const { name, value } = e.target;
     const v = Number(value);
@@ -131,7 +206,7 @@ export function buildPanel(root, stillLife) {
     else if (name === 'camAzimuth') stillLife.setView({ azimuth: v });
     else if (name === 'camElevation') stillLife.setView({ elevation: v });
     else if (name === 'camDistance') stillLife.setView({ distance: v });
-    else if (name === 'size' || name === 'height') stillLife.updateSelected({ [name]: v });
+    else if (name === 'size' || name === 'height' || name === 'lift') stillLife.updateSelected({ [name]: v });
     else if (['azimuth', 'elevation', 'intensity'].includes(name)) stillLife.setLight({ [name]: v });
   });
 
@@ -163,6 +238,14 @@ export function buildPanel(root, stillLife) {
         input(name).value = sel[name];
         out(name).textContent = `${sel[name].toFixed(2)}×`;
       }
+      const rot = q('[data-act="rotate"]');
+      rot.textContent = stillLife.rotating ? 'Done rotating' : 'Rotate freely';
+      rot.setAttribute('aria-pressed', String(stillLife.rotating));
+      q('[data-rotate-hint]').textContent = stillLife.rotating
+        ? 'Drag a red, green or blue ring to turn it. Drag the yellow arrow to raise or lower it. Tap empty space or Done to go back to moving.'
+        : 'Tip: tap a selected shape again to rotate it freely.';
+      input('lift').value = sel.lift ?? 0;
+      out('lift').textContent = (sel.lift ?? 0) ? (sel.lift ?? 0).toFixed(2) : 'on the table';
       input('turn').value = sel.rotY;
       out('turn').textContent = `${Math.round(sel.rotY)}°`;
       root.querySelectorAll('[data-shade]').forEach((b) =>
@@ -177,9 +260,11 @@ export function buildPanel(root, stillLife) {
     input('intensity').value = intensity;
     out('intensity').textContent = intensity.toFixed(2);
     const n = stillLife.objects.length;
+    q('[data-act="clear"]').disabled = n === 0;
     q('[data-count]').textContent = `${n} of ${LIMITS.maxObjects} shapes. Click a shape to select it; drag to move or stack.`;
     root.querySelectorAll('[data-add]').forEach((b) => (b.disabled = n >= LIMITS.maxObjects));
     input('overlap').checked = stillLife.overlap;
+    showCredits();
     writeView();
   }
   return { refresh, refreshView };

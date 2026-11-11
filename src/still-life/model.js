@@ -7,6 +7,7 @@ export const LIMITS = {
   height: [0.5, 2.5],
   intensity: [0, 3],
   elevation: [5, 89],
+  lift: [0, 3], // how far an object floats above where it would rest
 };
 
 export const LIGHT_PRESETS = {
@@ -42,6 +43,9 @@ export function newObject(shape, overrides = {}) {
     z: 0,
     y: 0,
     rotY: 0,
+    rotX: 0, // free rotation (degrees), from the rotate rings
+    rotZ: 0,
+    lift: 0,
     tipped: false,
     size: 1,
     height: 1,
@@ -58,12 +62,15 @@ const clamp = (v, [lo, hi]) => Math.min(hi, Math.max(lo, v));
 const num = (v, fallback) => (Number.isFinite(v) ? v : fallback);
 const shapeIds = new Set(SHAPES.map((s) => s.id));
 const shadeIds = new Set(SHADES.map((s) => s.id));
+// Library objects are saved as "obj:<id>" (see objects.js).
+const LIBRARY_SHAPE = /^obj:[a-z0-9-]{1,80}$/;
+const validShape = (shape) => shapeIds.has(shape) || LIBRARY_SHAPE.test(shape);
 
 // Turn untrusted saved data back into a valid scene, dropping anything broken.
 export function sanitizeScene(raw) {
   if (!raw || typeof raw !== 'object') return null;
   const objects = (Array.isArray(raw.objects) ? raw.objects : [])
-    .filter((o) => o && shapeIds.has(o.shape))
+    .filter((o) => o && validShape(o.shape))
     .slice(0, LIMITS.maxObjects)
     .map((o) =>
       newObject(o.shape, {
@@ -71,6 +78,9 @@ export function sanitizeScene(raw) {
         z: num(o.z, 0),
         y: num(o.y, 0),
         rotY: num(o.rotY, 0),
+        rotX: num(o.rotX, 0),
+        rotZ: num(o.rotZ, 0),
+        lift: clamp(num(o.lift, 0), LIMITS.lift),
         tipped: o.tipped === true,
         size: clamp(num(o.size, 1), LIMITS.size),
         height: clamp(num(o.height, 1), LIMITS.height),

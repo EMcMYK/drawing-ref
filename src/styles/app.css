@@ -533,3 +533,238 @@ button.danger {
 .countdown.ending {
   color: #f0b27a;
 }
+
+/* ---- 3D object library ---- */
+
+.object-card {
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  min-width: 0;
+}
+
+.object-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.object-card span {
+  width: 100%;
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.object-card.loading {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.credit,
+.credits li {
+  overflow-wrap: anywhere;
+}
+
+.credits ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.credit a,
+.credits a {
+  color: inherit;
+}
+
+/* ---- object browser pop-over ---- */
+
+.object-browser {
+  width: min(1100px, calc(100vw - 32px));
+  height: min(820px, calc(100dvh - 32px));
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+.object-browser[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.object-browser::backdrop {
+  background: rgba(20, 19, 18, 0.55);
+}
+
+.ob-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 0;
+}
+
+.ob-head h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.ob-close {
+  width: auto;
+  min-width: 36px;
+}
+
+.ob-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 16px 0;
+}
+
+.ob-search {
+  font: inherit;
+  font-size: 16px; /* under 16px, phones zoom in when it's tapped */
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 6px 10px;
+  min-height: 34px;
+}
+
+.ob-status {
+  margin: 8px 16px 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.ob-grid {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-auto-rows: min-content;
+  gap: 8px;
+  padding: 4px 16px 16px;
+}
+
+.ob-more {
+  margin: 0 16px 16px;
+  width: auto;
+}
+
+.ob-confirm {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(20, 19, 18, 0.45);
+  padding: 16px;
+}
+
+.ob-confirm[hidden] {
+  display: none;
+}
+
+.ob-confirm-card {
+  width: min(340px, 100%);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+
+.ob-confirm-card img {
+  display: block;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 8px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: var(--radius);
+}
+
+.ob-confirm-card h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.ob-confirm-credit,
+.ob-confirm-error {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.ob-confirm-credit a {
+  color: inherit;
+}
+
+.ob-confirm-error {
+  color: var(--danger);
+}
+
+.ob-confirm-card .row {
+  justify-content: flex-end;
+}
+
+@media (max-width: 600px) {
+  .object-browser {
+    width: 100vw;
+    height: 100dvh;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .ob-grid {
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  }
+
+  .ob-bar .chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .ob-bar .chip {
+    flex: none;
+  }
+}
+
+/* ---- free-rotate mode ---- */
+
+.rotate-done,
+.rotate-done.primary {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  width: auto;
+  min-height: 44px;
+  padding: 8px 18px;
+  z-index: 3;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.rotate-done[hidden] {
+  display: none;
+}
+
+[data-act='rotate'][aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}

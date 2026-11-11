@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { TABLE, clampToTable, findFreeSpot, moveTo, settle } from './layout.js';
+import { TransformControls } from 'three/addons/controls/TransformControls.js';
+import { TABLE, clampToTable, findFreeSpot, moveTo, settle, stackedOn } from './layout.js';
 import {
   CAMERA_PRESETS,
   LIGHT_PRESETS,
@@ -12,7 +13,10 @@ import {
 } from './model.js';
 import { geometryFor, shadeColor, tipAngle } from './shapes.js';
 
+// The light moves on a dome this far from the middle of the table; the dome
+// grows when objects reach further, so the light never ends up inside one.
 const LIGHT_RADIUS = 4.5;
+const LIGHT_CLEARANCE = 1.2;
 // Where the camera may go: within a circle round the middle of the table,
 // the same distance from every side, and between the table top and the
 // ceiling. The studio wall stands a little outside that circle.
@@ -50,8 +54,12 @@ export class StillLife {
     this.coarse = window.matchMedia('(pointer: coarse)').matches;
     this.mirrored = false;
 
+    this.rotating = false; // free-rotate mode for the selected object
+    this.lightRadius = LIGHT_RADIUS;
     this.#initRenderer();
     this.#initScene();
+    // Before #initPointer, so the rings see a press before the scene does.
+    this.#initGizmo();
     this.#initPointer();
     this.#initKeys();
 
@@ -168,6 +176,149 @@ export class StillLife {
     this.helpers = [this.handle, this.beam];
   }
 
+  // Free rotation: three rings (X, Y, Z) around the selected object. They
+  // turn a stand-in placed at the object's centre; its turn is copied to the
+  // object, which then settles back onto the table or the shape below.
+  #initGizmo() {
+    const proxy = new THREE.Object3D();
+    this.scene.add(proxy);
+    const gizmo = new TransformControls(this.camera, this.renderer.domElement);
+    gizmo.setMode('rotate');
+    gizmo.setSpace('world');
+    gizmo.setSize(this.coarse ? 1.3 : 1);
+    gizmo.enabled = false;
+    // Mirror the pointer too when the view is flipped (see setMirrored).
+    const getPointer = gizmo._getPointer;
+    gizmo._getPointer = (e) => {
+      const p = getPointer(e);
+      if (this.mirrored) p.x = -p.x;
+      return p;
+    };
+    gizmo.addEventListener('dragging-changed', (e) => {
+      this.controls.enabled = !e.value;
+      if (!e.value) this.#changed();
+    });
+    gizmo.addEventListener('objectChange', () => this.#applyGizmo());
+    const helper = gizmo.getHelper();
+    helper.visible = false;
+    this.scene.add(helper);
+    // Keep only the red, green and blue rings: drop the yellow view ring
+    // and the gray free-spin ball (TransformControls internals; three.js is
+    // pinned in package.json). The yellow arrow below takes their place.
+    for (const group of [gizmo._gizmo.gizmo.rotate, gizmo._gizmo.picker.rotate]) {
+      for (const child of [...group.children]) if (child.name === 'E' || child.name === 'XYZE') group.remove(child);
+    }
+
+    // The lift arrow: a yellow up/down arrow above the rings. Drag it to
+    // raise the object off the table, or lower it back down.
+    const yellow = new THREE.MeshBasicMaterial({ color: 0xffc533, depthTest: false, transparent: true });
+    const lift = new THREE.Group();
+    const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.34, 12), yellow);
+    const up = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.16, 16).translate(0, 0.25, 0), yellow);
+    const down = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.16, 16).rotateX(Math.PI).translate(0, -0.25, 0), yellow);
+    // A bigger, invisible grab area so it's easy to hit with a finger.
+    const grab = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.7, 8), new THREE.MeshBasicMaterial({ visible: false }));
+    lift.add(shaft, up, down, grab);
+    lift.renderOrder = 999;
+    lift.traverse((m) => (m.renderOrder = 999));
+    lift.visible = false;
+    grab.userData.isLift = true;
+    this.scene.add(lift);
+    this.liftHandle = lift;
+    this.liftGrab = grab;
+    this.gizmo = gizmo;
+    this.gizmoHelper = helper;
+    this.proxy = proxy;
+
+    // A Done button over the view while rotating.
+    const done = document.createElement('button');
+    done.type = 'button';
+    done.className = 'rotate-done primary';
+    done.textContent = 'Done rotating';
+    done.hidden = true;
+    done.addEventListener('click', () => this.setRotating(false));
+    this.container.appendChild(done);
+    this.doneButton = done;
+  }
+
+  // Keep the lift arrow beside the rings (so it stays on screen when the
+  // object is high), at the same on-screen size, using the same sum
+  // TransformControls uses to size its rings.
+  #placeLiftHandle() {
+    const p = this.proxy.position;
+    const cam = this.camera;
+    const factor = p.distanceTo(cam.position) * Math.min((1.9 * Math.tan((Math.PI * cam.fov) / 360)) / cam.zoom, 7);
+    const scale = (factor * this.gizmo.size) / 4;
+    this.liftHandle.scale.setScalar(scale);
+    // Put it on whichever side of the rings has more room on screen, so the
+    // edge of the view (or the panel beside it) doesn't hide it.
+    const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cam.quaternion).setY(0).normalize();
+    const screenX = p.clone().project(cam).x * (this.mirrored ? -1 : 1);
+    if (screenX > 0 !== this.mirrored) right.negate();
+    this.liftHandle.position.copy(p).addScaledVector(right, 0.85 * scale);
+  }
+
+  #rotationOf(obj) {
+    const tip = obj.tipped ? tipAngle(obj.shape, obj.size, obj.height) : 0;
+    return new THREE.Euler(deg(obj.rotX ?? 0), deg(obj.rotY), tip + deg(obj.rotZ ?? 0), 'YXZ');
+  }
+
+  // Put the rings' stand-in at the object's centre, turned like the object.
+  #placeProxy() {
+    const o = this.selected;
+    const view = o && this.views.get(o.id);
+    if (!view) return;
+    view.group.updateMatrixWorld(true); // #syncView leaves it stale
+    const box = new THREE.Box3().setFromObject(view.mesh, true);
+    box.getCenter(this.proxy.position);
+    this.proxy.quaternion.setFromEuler(this.#rotationOf(o));
+    this.proxy.updateMatrixWorld();
+  }
+
+  #applyGizmo() {
+    const o = this.selected;
+    if (!o) return;
+    const e = new THREE.Euler().setFromQuaternion(this.proxy.quaternion, 'YXZ');
+    const tip = o.tipped ? tipAngle(o.shape, o.size, o.height) : 0;
+    const d = (r) => THREE.MathUtils.radToDeg(r);
+    const wrap = (v) => ((Math.round(v) % 360) + 360) % 360;
+    o.rotX = d(e.x);
+    o.rotY = wrap(d(e.y));
+    o.rotZ = d(e.z - tip);
+    this.#resettle(o.id);
+    // Follow the object if it settled somewhere else, without turning the
+    // stand-in back (that would fight the drag).
+    const view = this.views.get(o.id);
+    view.group.updateMatrixWorld(true);
+    new THREE.Box3().setFromObject(view.mesh, true).getCenter(this.proxy.position);
+    this.onChange(this);
+  }
+
+  // Turn free rotation on or off for the selected object.
+  setRotating(on) {
+    const want = !!on && !!this.selected;
+    this.rotating = want;
+    if (want) {
+      this.#placeProxy();
+      this.gizmo.attach(this.proxy);
+    } else {
+      this.gizmo.detach();
+    }
+    this.gizmo.enabled = want;
+    this.gizmoHelper.visible = want;
+    this.liftHandle.visible = want;
+    this.doneButton.hidden = !want;
+    this.#changed();
+  }
+
+  // Back to standing upright: no free rotation and not tipped over.
+  resetRotation() {
+    const o = this.selected;
+    if (!o) return;
+    this.updateSelected({ rotX: 0, rotZ: 0, tipped: false });
+    if (this.rotating) this.#placeProxy();
+  }
+
   #initPointer() {
     const el = this.renderer.domElement;
     const raycaster = new THREE.Raycaster();
@@ -186,15 +337,35 @@ export class StillLife {
 
     el.addEventListener('pointerdown', (e) => {
       if (!e.isPrimary) return;
-      down = { x: e.clientX, y: e.clientY };
       aim(e);
+      if (this.rotating && raycaster.intersectObject(this.liftGrab, false).length) {
+        // Drag the lift arrow: follow the pointer up and down on an upright
+        // plane through the object that faces the camera.
+        const o = this.selected;
+        const normal = this.camera.getWorldDirection(new THREE.Vector3()).setY(0).normalize();
+        const plane = new THREE.Plane().setFromNormalAndCoplanarPoint(normal, this.proxy.position);
+        if (!raycaster.ray.intersectPlane(plane, hit)) return;
+        drag = { kind: 'lift', id: o.id, plane, startY: hit.y, startLift: o.lift ?? 0 };
+        down = { x: e.clientX, y: e.clientY, ring: true };
+        this.controls.enabled = false;
+        el.setPointerCapture(e.pointerId);
+        e.preventDefault();
+        return;
+      }
+      down = { x: e.clientX, y: e.clientY, ring: this.rotating && this.gizmo.axis !== null };
+      if (down.ring) return; // the rings handle this press
       const meshes = [this.handle, ...[...this.views.values()].map((v) => v.mesh)];
       const first = raycaster.intersectObjects(meshes, false)[0];
+      down.hitId = first && !first.object.userData.isHandle ? first.object.userData.id : null;
       if (!first) return;
+      // While rotating, the object stays put: a press on it can only be a
+      // tap (handled in end), and drags orbit the camera.
+      if (this.rotating && !first.object.userData.isHandle) return;
       if (first.object.userData.isHandle) {
         drag = { kind: 'light' };
       } else {
         const id = first.object.userData.id;
+        down.wasSelected = id === this.selectedId;
         this.select(id);
         const obj = this.#find(id);
         // Drag across a level plane at the height where the shape was
@@ -214,22 +385,35 @@ export class StillLife {
       }
       aim(e);
       if (drag.kind === 'light') {
+        domeSphere.radius = this.lightRadius;
         // Aim at the dome; if the ray misses it, use the nearest point on it.
         if (!raycaster.ray.intersectSphere(domeSphere, hit)) {
           raycaster.ray.closestPointToPoint(domeSphere.center, hit);
-          hit.setLength(LIGHT_RADIUS);
+          hit.setLength(this.lightRadius);
         }
-        const elevation = THREE.MathUtils.radToDeg(Math.asin(THREE.MathUtils.clamp(hit.y / LIGHT_RADIUS, -1, 1)));
+        const elevation = THREE.MathUtils.radToDeg(Math.asin(THREE.MathUtils.clamp(hit.y / this.lightRadius, -1, 1)));
         const azimuth = THREE.MathUtils.radToDeg(Math.atan2(hit.x, hit.z));
         this.setLight({ azimuth, elevation });
+      } else if (drag.kind === 'lift') {
+        if (raycaster.ray.intersectPlane(drag.plane, hit)) {
+          const lift = THREE.MathUtils.clamp(drag.startLift + hit.y - drag.startY, ...LIMITS.lift);
+          this.updateSelected({ lift: Math.round(lift * 100) / 100 });
+        }
       } else if (raycaster.ray.intersectPlane(drag.plane, hit)) {
         this.#moveObject(drag.id, hit.x + drag.dx, hit.z + drag.dz);
       }
     });
 
     const end = (e) => {
-      const tap = down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6;
-      if (!drag && tap) this.select(null); // tapped empty space
+      const tap = down && !down.ring && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6;
+      if (tap && this.rotating) {
+        // Tap the object again, or empty space, to go back to moving things.
+        if (down.hitId && down.hitId !== this.selectedId) this.select(down.hitId);
+        this.setRotating(false);
+        if (!down.hitId) this.select(null);
+      } else if (tap && drag?.kind === 'object' && down.wasSelected) {
+        this.setRotating(true); // tap a selected object to rotate it freely
+      } else if (!drag && tap) this.select(null); // tapped empty space
       if (drag) this.#changed();
       drag = null;
       down = null;
@@ -253,7 +437,7 @@ export class StillLife {
       if (e.key === 'q' || e.key === 'Q') this.rotateSelected(-15);
       else if (e.key === 'e' || e.key === 'E') this.rotateSelected(15);
       else if (e.key === 'Delete' || e.key === 'Backspace') this.deleteSelected();
-      else if (e.key === 'Escape') this.select(null);
+      else if (e.key === 'Escape') this.rotating ? this.setRotating(false) : this.select(null);
       else return;
       e.preventDefault();
     });
@@ -295,6 +479,7 @@ export class StillLife {
 
   #frame() {
     this.controls.update();
+    if (this.rotating) this.#placeLiftHandle();
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -342,8 +527,7 @@ export class StillLife {
     mesh.scale.set(obj.size, obj.size * obj.height, obj.size);
     mesh.material.color.setHex(shadeColor(obj.shade));
     outline.visible = obj.id === this.selectedId;
-    const tip = obj.tipped ? tipAngle(obj.shape, obj.size, obj.height) : 0;
-    pivot.rotation.set(0, deg(obj.rotY), tip, 'YXZ');
+    pivot.rotation.copy(this.#rotationOf(obj));
     pivot.position.set(0, 0, 0);
     group.position.set(0, 0, 0);
     mesh.remove(outline); // measure the shape itself, not its outline
@@ -353,8 +537,11 @@ export class StillLife {
     const center = box.getCenter(new THREE.Vector3());
     pivot.position.set(-center.x, -box.min.y, -center.z);
     const size = box.getSize(new THREE.Vector3());
-    group.position.set(obj.x, obj.y, obj.z);
-    return { id: obj.id, x: obj.x, z: obj.z, y: obj.y, halfX: size.x / 2, halfZ: size.z / 2, height: size.y };
+    // Lifted objects float above where they'd rest; anything stacked on
+    // them sits on top of the raised object.
+    const lift = obj.lift ?? 0;
+    group.position.set(obj.x, obj.y + lift, obj.z);
+    return { id: obj.id, x: obj.x, z: obj.z, y: obj.y, lift, halfX: size.x / 2, halfZ: size.z / 2, height: size.y };
   }
 
   #boxes() {
@@ -405,7 +592,12 @@ export class StillLife {
   }
 
   select(id) {
-    this.selectedId = id && this.#find(id) ? id : null;
+    const next = id && this.#find(id) ? id : null;
+    if (this.rotating && next !== this.selectedId) {
+      this.selectedId = next;
+      this.setRotating(false);
+    }
+    this.selectedId = next;
     for (const [oid, view] of this.views) view.outline.visible = oid === this.selectedId;
     this.#changed();
   }
@@ -417,8 +609,14 @@ export class StillLife {
   updateSelected(patch) {
     const o = this.selected;
     if (!o) return;
+    // Lifting an object carries everything stacked on it.
+    if ('lift' in patch && !this.overlap) {
+      const dy = patch.lift - (o.lift ?? 0);
+      for (const id of stackedOn(this.#boxes(), o.id)) this.#find(id).y += dy;
+    }
     Object.assign(o, patch);
     this.#resettle(o.id);
+    if (this.rotating && !this.gizmo.dragging) this.#placeProxy();
     this.#changed();
   }
 
@@ -452,6 +650,7 @@ export class StillLife {
   deleteSelected() {
     const o = this.selected;
     if (!o) return;
+    if (this.rotating) this.setRotating(false);
     this.#removeView(o.id);
     this.objects = this.objects.filter((x) => x.id !== o.id);
     this.selectedId = null;
@@ -469,9 +668,16 @@ export class StillLife {
   }
 
   clear() {
+    if (this.rotating) this.setRotating(false);
     for (const id of [...this.views.keys()]) this.#removeView(id);
     this.objects = [];
     this.selectedId = null;
+  }
+
+  // Take every object off the table; the light and camera stay.
+  clearAll() {
+    this.clear();
+    this.#changed();
   }
 
   loadScene({ objects = [], light, camera, overlap } = {}) {
@@ -517,7 +723,7 @@ export class StillLife {
       Math.cos(el) * Math.sin(az),
       Math.sin(el),
       Math.cos(el) * Math.cos(az)
-    ).multiplyScalar(LIGHT_RADIUS);
+    ).multiplyScalar(this.lightRadius);
     this.spot.position.copy(pos);
     this.spot.intensity = intensity * 2.2;
     this.handle.position.copy(pos);
@@ -584,7 +790,7 @@ export class StillLife {
   async toPng() {
     const prevRatio = this.renderer.getPixelRatio();
     const ratio = Math.max(2, Math.min(window.devicePixelRatio, 3));
-    const hidden = [...this.helpers, ...[...this.views.values()].map((v) => v.outline)];
+    const hidden = [...this.helpers, this.gizmoHelper, this.liftHandle, ...[...this.views.values()].map((v) => v.outline)];
     const wasVisible = hidden.map((o) => o.visible);
     hidden.forEach((o) => (o.visible = false));
     this.renderer.setPixelRatio(ratio);
@@ -597,7 +803,29 @@ export class StillLife {
     return blob;
   }
 
+  // Grow (or shrink back) the light's dome to clear the furthest point of
+  // any object, e.g. a tall stack or something lifted high.
+  #fitLightDome() {
+    let reach = 0;
+    const box = new THREE.Box3();
+    const corner = new THREE.Vector3();
+    for (const view of this.views.values()) {
+      view.group.updateMatrixWorld(true);
+      box.setFromObject(view.mesh, true);
+      for (let i = 0; i < 8; i++) {
+        corner.set(i & 1 ? box.max.x : box.min.x, i & 2 ? box.max.y : box.min.y, i & 4 ? box.max.z : box.min.z);
+        reach = Math.max(reach, corner.length());
+      }
+    }
+    const radius = Math.max(LIGHT_RADIUS, reach + LIGHT_CLEARANCE);
+    if (Math.abs(radius - this.lightRadius) > 0.01) {
+      this.lightRadius = radius;
+      this.#applyLight();
+    }
+  }
+
   #changed() {
+    this.#fitLightDome();
     this.onChange(this);
   }
 }

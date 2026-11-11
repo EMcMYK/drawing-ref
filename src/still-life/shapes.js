@@ -49,7 +49,14 @@ export const SHADES = [
 
 const geometryCache = new Map();
 
+// Library objects (see objects.js) are loaded from files and registered here,
+// so the scene treats them like the built-in shapes.
+export function registerGeometry(shape, geometry) {
+  geometryCache.set(shape, geometry);
+}
+
 export function geometryFor(shape) {
+  if (geometryCache.has(shape)) return geometryCache.get(shape);
   if (!BUILDERS[shape]) throw new Error(`Unknown shape: ${shape}`);
   if (!geometryCache.has(shape)) geometryCache.set(shape, BUILDERS[shape]());
   return geometryCache.get(shape);

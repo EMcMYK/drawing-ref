@@ -1,11 +1,15 @@
 // Pure layout logic for the still-life table: keeping objects on the table,
 // stopping them overlapping, and stacking one on another.
 // Each "box" is an object's footprint and height as seen from above:
-// { id, x, z, halfX, halfZ, height, y }.
+// { id, x, z, halfX, halfZ, height, y, lift }. `y` is where it rests;
+// `lift` (optional) raises it further, so it spans y + lift to top(box).
 
 export const TABLE = { halfX: 4, halfZ: 2.5 };
 
 const GAP = 0.02;
+
+const bottom = (b) => b.y + (b.lift ?? 0);
+export const top = (b) => bottom(b) + b.height;
 
 export function clampToTable(box) {
   const maxX = Math.max(0, TABLE.halfX - box.halfX);
@@ -38,7 +42,7 @@ export function supportAt(boxes, x, z, excludeId) {
   for (const b of boxes) {
     if (b.id === excludeId) continue;
     if (!containsPoint(b, x, z, Math.min(b.halfX, b.halfZ) * 0.15)) continue;
-    if (!best || b.y + b.height > best.y + best.height) best = b;
+    if (!best || top(b) > top(best)) best = b;
   }
   return best;
 }
@@ -51,9 +55,7 @@ export function resolveOverlaps(box, boxes) {
     let pushed = false;
     for (const other of boxes) {
       if (other.id === moved.id) continue;
-      const sameLevel =
-        moved.y < other.y + other.height - GAP &&
-        other.y < moved.y + moved.height - GAP;
+      const sameLevel = bottom(moved) < top(other) - GAP && bottom(other) < top(moved) - GAP;
       if (!sameLevel || !overlaps(moved, other)) continue;
       const dx = moved.x - other.x;
       const dz = moved.z - other.z;
@@ -76,7 +78,7 @@ export function settle(boxes) {
   const placed = [];
   for (const box of order) {
     const support = supportAt(placed, box.x, box.z, box.id);
-    placed.push({ ...box, y: support ? support.y + support.height : 0 });
+    placed.push({ ...box, y: support ? top(support) : 0 });
   }
   const byId = new Map(placed.map((b) => [b.id, b]));
   return boxes.map((b) => byId.get(b.id));
@@ -96,9 +98,18 @@ export function moveTo(boxes, id, x, z, { overlap = false } = {}) {
   const above = new Set(stackedOn(boxes, id));
   const others = boxes.filter((b) => b.id !== id && !above.has(b.id));
   let next = clampToTable({ ...target, x, z });
-  const support = supportAt(others, next.x, next.z, id);
-  next.y = support ? support.y + support.height : 0;
-  if (!support) next = resolveOverlaps(next, others);
+  let support = supportAt(others, next.x, next.z, id);
+  next.y = support ? top(support) : 0;
+  // Slide clear of anything at the same level: on the table, or beside
+  // other things resting on the same object. If that pushes it off its
+  // support, it drops to whatever is under it now.
+  const besides = others.filter((b) => b !== support);
+  next = resolveOverlaps(next, besides);
+  if (support && !supportAt([support], next.x, next.z, id)) {
+    support = supportAt(others, next.x, next.z, id);
+    next.y = support ? top(support) : 0;
+    next = resolveOverlaps(next, others.filter((b) => b !== support));
+  }
   // Anything stacked on the moved object travels with it.
   const dx = next.x - target.x;
   const dz = next.z - target.z;
@@ -120,7 +131,7 @@ export function stackedOn(boxes, id) {
     const base = queue.shift();
     for (const b of boxes) {
       if (b.id === base.id || result.includes(b.id)) continue;
-      const resting = Math.abs(b.y - (base.y + base.height)) < 0.01;
+      const resting = Math.abs(b.y - top(base)) < 0.01;
       if (resting && containsPoint(base, b.x, b.z)) {
         result.push(b.id);
         queue.push(b);
@@ -143,7 +154,7 @@ export function findFreeSpot(boxes, box) {
   for (const [x, z] of candidates) {
     const trial = clampToTable({ ...box, x, z, y: 0 });
     const clear = boxes.every(
-      (o) => o.y > GAP || !overlaps({ ...trial, halfX: trial.halfX + GAP, halfZ: trial.halfZ + GAP }, o)
+      (o) => bottom(o) > GAP || !overlaps({ ...trial, halfX: trial.halfX + GAP, halfZ: trial.halfZ + GAP }, o)
     );
     if (clear) return { x: trial.x, z: trial.z };
   }
