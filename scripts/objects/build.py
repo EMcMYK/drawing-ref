@@ -2,16 +2,19 @@
 
 Runs in GitHub Actions (Hugging Face isn't reachable from everywhere):
 
-    python -I scripts/objects/build.py --count 30 --out public/objects
+    python -I scripts/objects/build.py --per-category 40 --out public/objects
 
 1. Scan: reads only the metadata columns of all five datasets and writes a
    license report (every row, not a preview) to objects-summary.md.
-2. Pick: chooses still-life objects by keyword, spread over the groups below,
-   keeping only rows whose licenses we accept.
+2. Pick: sorts objects into the categories in categories.json by name,
+   keeping only rows whose licenses we accept and that aren't listed in
+   exclude.txt, and takes up to --per-category from each.
 3. Convert: downloads each pick's USD file and turns it into a small gray GLB
    (usd_to_glb.py under Blender, then meshopt compression), plus a thumbnail
    from the dataset's render.
-4. Writes <out>/index.json with license and credit for every object.
+4. Writes <out>/index.json with license and credit for every object, and a
+   contact sheet per category (numbered thumbnails) to --review for checking
+   the picks by eye.
 
 No Python from the datasets is executed: the USD files are imported as data.
 """
@@ -27,12 +30,13 @@ import statistics
 import subprocess
 import sys
 import tempfile
+from concurrent.futures import ThreadPoolExecutor
 
 import pyarrow as pa
 import pyarrow.compute as pc
 import pyarrow.parquet as pq
 from huggingface_hub import HfFileSystem, hf_hub_download
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OWNER = 'Sandflow'
@@ -50,25 +54,16 @@ OK_SOURCE = {'cc-by-4.0', 'cc-by-3.0', 'cc0-1.0', 'cc0', 'apache-2.0', 'public-d
 
 LICENSE_URL = 'https://creativecommons.org/licenses/by/4.0/'
 
-# Still-life groups: label -> words matched against family and entry names.
-GROUPS = {
-    'cups and mugs': ['mug', 'cup', 'teacup', 'tumbler', 'goblet', 'glass'],
-    'bottles and jars': ['bottle', 'jar', 'flask', 'jug', 'pitcher', 'carafe', 'decanter'],
-    'bowls and plates': ['bowl', 'plate', 'dish', 'saucer', 'platter'],
-    'vases and pots': ['vase', 'urn', 'planter', 'flowerpot', 'amphora'],
-    'kettles and teapots': ['kettle', 'teapot', 'coffeepot', 'saucepan', 'pan', 'pot'],
-    'lamps and candles': ['lamp', 'candle', 'candlestick', 'lantern'],
-    'books and boxes': ['book', 'box', 'chest', 'crate', 'basket'],
-    'fruit and food': ['apple', 'pear', 'banana', 'orange', 'lemon', 'fruit', 'bread', 'pumpkin', 'food'],
-    'tools': ['hammer', 'wrench', 'pliers', 'scissors', 'screwdriver', 'saw', 'axe', 'tool'],
-    'chairs and stools': ['chair', 'stool', 'bench'],
-    'shoes and hats': ['shoe', 'boot', 'sneaker', 'hat', 'helmet'],
-    'instruments': ['guitar', 'violin', 'trumpet', 'drum', 'metronome', 'horn'],
-    'clocks and gadgets': ['clock', 'camera', 'telephone', 'phone', 'radio', 'lighter', 'globe'],
-}
+CATEGORIES = json.load(open(os.path.join(HERE, 'categories.json')))['categories']
+# Objects ruled out after looking at them (one id per line; "#" starts a
+# comment). Use the object's id from index.json or its dataset asset_id.
+EXCLUDE_FILE = os.path.join(HERE, 'exclude.txt')
 
 MIN_BYTES, MAX_BYTES = 8_000, 3_000_000  # skip near-empty and very heavy USD files
-MAX_GLB = 1_000_000  # bytes, after compression
+MAX_GLB = 400_000  # bytes, after compression
+MAX_TRIANGLES = 60_000
+MAX_PARTS = 80  # many tiny parts usually means a messy model
+SAME_NAME = 2  # at most this many objects with the same name per category
 
 
 def norm(s):
@@ -104,11 +99,25 @@ def license_ok(r):
             and norm(r.get('license_status')) == 'ok')
 
 
-def group_of(r):
-    w = words_of(r.get('family'), r.get('entry'))
-    for label, keys in GROUPS.items():
-        if w & set(keys):
-            return label
+def load_excluded():
+    try:
+        with open(EXCLUDE_FILE) as f:
+            return {l.split('#')[0].strip() for l in f} - {''}
+    except FileNotFoundError:
+        return set()
+
+
+def category_of(r):
+    names = words_of(r.get('entry'))
+    if r['_repo'] == 'sand3d-articraft':
+        names |= words_of(r.get('family'))
+    family = norm(r.get('family'))
+    for c in CATEGORIES:
+        if not names & set(c['words']) or names & set(c.get('exclude', [])):
+            continue
+        if c.get('families') and r['_repo'] != 'sand3d-articraft' and family not in c['families']:
+            continue
+        return c
     return None
 
 
@@ -116,37 +125,35 @@ def stable(r):
     return hashlib.sha256(str(r.get('id')).encode()).hexdigest()
 
 
-def pick(rows, count):
-    by_group = collections.defaultdict(list)
+def candidates(rows, excluded):
+    """Every usable object per category, in a stable, varied order."""
+    by_cat = collections.defaultdict(list)
     for r in rows:
-        if r['_repo'] not in PICK_FROM or not license_ok(r):
+        if r['_repo'] not in PICK_FROM or not license_ok(r) or not r.get('entry'):
             continue
-        size = r.get('usda_bytes') or 0
-        if not (MIN_BYTES <= size <= MAX_BYTES):
+        if not (MIN_BYTES <= (r.get('usda_bytes') or 0) <= MAX_BYTES):
             continue
-        g = group_of(r)
-        if g:
-            by_group[g].append(r)
-    for g in by_group:
-        # Rigid objects first (joints are dropped anyway), then a stable shuffle.
-        by_group[g].sort(key=lambda r: ((r.get('n_joints') or 0) > 0, stable(r)))
-    # Round-robin over groups, alternating datasets, so the test set is varied.
-    chosen, seen = [], set()
-    pools = {g: list(v) for g, v in sorted(by_group.items())}
-    while len(chosen) < count and any(pools.values()):
-        for g, pool in pools.items():
-            if not pool or len(chosen) >= count:
-                continue
-            used = {c['_repo'] for c in chosen if c['_group'] == g}
-            i = next((k for k, r in enumerate(pool) if r['_repo'] not in used), 0)
-            r = pool.pop(i)
-            key = (norm(r.get('entry')) or norm(r.get('family')), g)
-            if key in seen and len(pool) > 0:
-                continue
-            seen.add(key)
-            r['_group'] = g
-            chosen.append(r)
-    return chosen, {g: len(v) for g, v in by_group.items()}
+        r['_slug'] = slug(r)
+        if {r['_slug'], str(r.get('asset_id')), str(r.get('id'))} & excluded:
+            continue
+        c = category_of(r)
+        if c:
+            r['_cat'] = c
+            by_cat[c['id']].append(r)
+    for cid, pool in by_cat.items():
+        # Rigid objects first (joints are dropped anyway), then a stable
+        # shuffle, then deal from each dataset in turn for variety.
+        pool.sort(key=lambda r: ((r.get('n_joints') or 0) > 0, stable(r)))
+        per_repo = collections.defaultdict(list)
+        for r in pool:
+            per_repo[r['_repo']].append(r)
+        dealt = []
+        while any(per_repo.values()):
+            for repo in sorted(per_repo):
+                if per_repo[repo]:
+                    dealt.append(per_repo[repo].pop(0))
+        by_cat[cid] = dealt
+    return by_cat
 
 
 def first_url(text):
@@ -194,6 +201,7 @@ def thumbnails(chosen, out_dir):
                     r = next(x for x in rs if x['id'] == row['id'])
                     im = Image.open(io.BytesIO(data)).convert('RGB')
                     im.thumbnail((160, 160))
+                    r['_image'] = im
                     name = f"{r['_slug']}.webp"
                     im.save(os.path.join(out_dir, 'thumbs', name), 'WEBP', quality=80)
                     r['_thumb'] = f'thumbs/{name}'
@@ -212,12 +220,94 @@ def convert(r, out_dir, work):
                     '--compress', 'meshopt', '--texture-compress', 'false',
                     '--simplify-error', '0.0005'],
                    check=True, capture_output=True, timeout=300)
-    info['rawBytes'] = os.path.getsize(raw)
+    os.remove(raw)
     info['bytes'] = os.path.getsize(dst)
+    if info['bytes'] > MAX_GLB:
+        info['note'] = 'too big'
+    elif info.get('triangles', 0) > MAX_TRIANGLES:
+        info['note'] = 'too many triangles'
+    elif info.get('parts', 0) > MAX_PARTS:
+        info['note'] = 'too many parts'
+    if info.get('note'):
+        os.remove(dst)
     return info
 
 
-def summary(all_rows, chosen, pool_sizes, results, out):
+def try_convert(r, out_dir, work):
+    try:
+        return convert(r, out_dir, work)
+    except Exception as e:  # keep going; the report lists failures
+        msg = str(e).strip().splitlines()[-1][:80] if str(e).strip() else type(e).__name__
+        return {'note': f'failed: {msg}'}
+
+
+def convert_categories(pools, per_category, out_dir, workers):
+    """Convert objects category by category until each has per_category
+    good ones (or runs out), never more than SAME_NAME with one name."""
+    results, picked = {}, collections.defaultdict(list)
+    queues = {cid: list(pool) for cid, pool in pools.items()}
+    names = collections.defaultdict(collections.Counter)
+    with tempfile.TemporaryDirectory() as work, ThreadPoolExecutor(workers) as ex:
+        while True:
+            batch = []
+            for cid, q in queues.items():
+                want = per_category - len(picked[cid])
+                if want <= 0:
+                    continue
+                want += max(2, want // 4)  # a few spares for failures
+                while q and want:
+                    r = q.pop(0)
+                    name = title_of(r).lower()
+                    if names[cid][name] >= SAME_NAME:
+                        continue
+                    names[cid][name] += 1
+                    batch.append(r)
+                    want -= 1
+            if not batch:
+                break
+            print(f'converting {len(batch)} objects...', flush=True)
+            for r, info in zip(batch, ex.map(lambda r: try_convert(r, out_dir, work), batch)):
+                results[r['id']] = info
+                cid = r['_cat']['id']
+                if info.get('note'):
+                    names[cid][title_of(r).lower()] -= 1
+                elif len(picked[cid]) < per_category:
+                    picked[cid].append(r)
+                else:  # more than needed: a spare that wasn't used
+                    os.remove(os.path.join(out_dir, 'models', r['_slug'] + '.glb'))
+                    info['note'] = 'spare, not used'
+    return results, picked
+
+
+def contact_sheets(picked, review_dir):
+    """One image per category: numbered thumbnails with names, plus a list
+    of numbers and ids for adding bad picks to exclude.txt."""
+    shutil.rmtree(review_dir, ignore_errors=True)
+    os.makedirs(review_dir)
+    font = ImageFont.load_default(size=13)
+    cols, cell, label = 8, 168, 34  # 160 px thumbs with a gap
+    for c in CATEGORIES:
+        rs = picked.get(c['id'], [])
+        if not rs:
+            continue
+        rows = -(-len(rs) // cols)
+        sheet = Image.new('RGB', (cols * cell, rows * (cell + label)), 'white')
+        draw = ImageDraw.Draw(sheet)
+        lines = [f"# {c['label']} ({len(rs)})", '', '| # | Name | Id |', '|---|---|---|']
+        for i, r in enumerate(rs):
+            x, y = (i % cols) * cell, (i // cols) * (cell + label)
+            im = r.get('_image')
+            if im:
+                sheet.paste(im, (x + (cell - im.width) // 2, y + (cell - im.height) // 2))
+            draw.text((x + 4, y + cell + 2), f'{i + 1}. {title_of(r)}'[:24], fill='black', font=font)
+            draw.text((x + 4, y + cell + 17), r['_repo'].replace('sand3d-', ''), fill='gray', font=font)
+            lines.append(f"| {i + 1} | {title_of(r)} | {r['_slug']} |")
+        sheet.save(os.path.join(review_dir, f"{c['id']}.webp"), 'WEBP', quality=82)
+        with open(os.path.join(review_dir, f"{c['id']}.md"), 'w') as f:
+            f.write('\n'.join(lines) + '\n')
+
+
+def summary(all_rows, pools, picked, results, out):
     lines = ['# 3D object library build', '']
     lines += ['## License scan (every row)', '', '| Dataset | Rows | license | source_license | license_status | Accepted |',
               '|---|---|---|---|---|---|']
@@ -233,22 +323,17 @@ def summary(all_rows, chosen, pool_sizes, results, out):
             p90 = s[int(len(s) * 0.9) - 1] if len(s) > 1 else s[0]
             lines.append(f'| {repo} | {statistics.median(s)/1e3:.0f} KB | {p90/1e3:.0f} KB | '
                          f'{sum(x <= MAX_BYTES for x in s)} |')
-    lines += ['', '## Still-life candidates per group', '', '| Group | Candidates |', '|---|---|']
-    lines += [f'| {g} | {n} |' for g, n in sorted(pool_sizes.items())]
+    lines += ['', '## Categories', '', '| Category | Candidates | Picked |', '|---|---|---|']
+    lines += [f"| {c['label']} | {len(pools.get(c['id'], []))} | {len(picked.get(c['id'], []))} |" for c in CATEGORIES]
     lines += ['', '## Top families', '']
     fam = collections.Counter(f"{r['_repo'].replace('sand3d-', '')}: {r.get('family')}" for r in all_rows
                               if r['_repo'] in PICK_FROM and r.get('family'))
     lines += [f'- {k} ({n})' for k, n in fam.most_common(60)]
-    lines += ['', '## Converted', '', '| Object | Group | Dataset | Parts | Triangles | USD | GLB | Note |',
-              '|---|---|---|---|---|---|---|---|']
-    for r in chosen:
-        if r['id'] not in results:
-            continue  # spare, not needed
-        res = results[r['id']]
-        glb = f"{res['bytes']/1e3:.0f} KB" if 'bytes' in res else ''
-        lines.append(f"| {title_of(r)} | {r['_group']} | {r['_repo'].replace('sand3d-', '')} | "
-                     f"{res.get('parts', '')} | {res.get('triangles', '')} | "
-                     f"{(r.get('usda_bytes') or 0)/1e3:.0f} KB | {glb} | {res.get('note', '')} |")
+    notes = collections.Counter(x['note'].split(':')[0] for x in results.values() if x.get('note'))
+    lines += ['', '## Skipped while converting', '']
+    lines += [f'- {k}: {n}' for k, n in notes.most_common()] or ['- none']
+    failed = [x['note'] for x in results.values() if x.get('note', '').startswith('failed')]
+    lines += [f'  - {n}' for n, _ in collections.Counter(failed).most_common(8)]
     ok = [x for x in results.values() if 'bytes' in x and not x.get('note')]
     if ok:
         total = sum(x['bytes'] for x in ok)
@@ -260,9 +345,11 @@ def summary(all_rows, chosen, pool_sizes, results, out):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--count', type=int, default=30)
+    ap.add_argument('--per-category', type=int, default=40)
     ap.add_argument('--out', default='public/objects')
+    ap.add_argument('--review', default='objects-review')
     ap.add_argument('--summary', default='objects-summary.md')
+    ap.add_argument('--workers', type=int, default=os.cpu_count() or 2)
     args = ap.parse_args()
 
     fs = HfFileSystem()
@@ -272,43 +359,31 @@ def main():
         print(f'{repo}: {len(rows)} rows', flush=True)
         all_rows += rows
 
-    chosen, pool_sizes = pick(all_rows, int(args.count * 1.5))  # spares for failed conversions
-    for r in chosen:
-        r['_slug'] = slug(r)
+    pools = candidates(all_rows, load_excluded())
+    for c in CATEGORIES:
+        print(f"{c['id']}: {len(pools.get(c['id'], []))} candidates", flush=True)
 
     out = args.out
     shutil.rmtree(out, ignore_errors=True)
     os.makedirs(os.path.join(out, 'models'))
     os.makedirs(os.path.join(out, 'thumbs'))
 
-    results, objects = {}, []
-    with tempfile.TemporaryDirectory() as work:
-        for r in chosen:
-            if len(objects) >= args.count:
-                break
-            try:
-                info = convert(r, out, work)
-            except Exception as e:  # keep going; the report lists failures
-                results[r['id']] = {'note': f'failed: {str(e).splitlines()[-1][:80] if str(e) else type(e).__name__}'}
-                continue
-            if info['bytes'] > MAX_GLB:
-                os.remove(os.path.join(out, 'models', r['_slug'] + '.glb'))
-                results[r['id']] = {**info, 'note': 'too big, skipped'}
-                continue
-            results[r['id']] = info
-            objects.append(r)
+    results, picked = convert_categories(pools, args.per_category, out, args.workers)
+    objects = [r for c in CATEGORIES for r in picked.get(c['id'], [])]
     thumbnails(objects, out)
+    contact_sheets(picked, args.review)
 
+    stop = {'and', 'the', 'with', 'for', 'old'}
     index = {
         'version': 1,
         'source': 'Sand3D (Sandflow) on Hugging Face',
         'objects': [{
             'id': r['_slug'],
             'name': title_of(r),
-            'group': r['_group'],
+            'group': r['_cat']['chip'],
             'family': r.get('family') or '',
-            'tags': sorted(w for w in words_of(r['_group'], r.get('family'), r.get('entry'))
-                           if len(w) > 2 and w not in {'and', 'the', 'with', 'for'}),
+            'tags': sorted(w for w in words_of(r['_cat']['label'], r.get('family'), r.get('entry'))
+                           if len(w) > 2 and w not in stop),
             'model': f"models/{r['_slug']}.glb",
             'thumb': r.get('_thumb'),
             'triangles': results[r['id']]['triangles'],
@@ -323,7 +398,7 @@ def main():
     }
     with open(os.path.join(out, 'index.json'), 'w') as f:
         json.dump(index, f, indent=1)
-    summary(all_rows, chosen, pool_sizes, results, args.summary)
+    summary(all_rows, pools, picked, results, args.summary)
     print(f'{len(objects)} objects written to {out}')
 
 

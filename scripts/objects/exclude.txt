@@ -1,0 +1,3 @@
+# Objects left out of the library after looking at the contact sheets in
+# review/. One id per line (the "Id" column in review/<category>.md); text
+# after "#" is a note. The next build picks other objects in their place.

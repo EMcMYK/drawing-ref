@@ -1,10 +1,12 @@
 name: Build 3D object library
 
 # Scans the Sand3D datasets on Hugging Face (license check of every row),
-# picks still-life objects and converts them to small gray GLB files in
+# sorts objects into the categories in scripts/objects/categories.json and converts them to small gray GLB files in
 # public/objects/. On pull requests it converts a small sample as a check;
 # run it by hand ("Run workflow") to build and commit the library to the
-# branch it ran on.
+# branch it ran on, with a contact sheet per category in
+# scripts/objects/review/ for checking the picks (bad ones go in
+# scripts/objects/exclude.txt, then run it again).
 on:
   pull_request:
     paths:
@@ -12,10 +14,10 @@ on:
       - '.github/workflows/build-objects.yml'
   workflow_dispatch:
     inputs:
-      count:
-        description: 'How many objects to convert'
+      per_category:
+        description: 'How many objects per category'
         required: false
-        default: '30'
+        default: '40'
 
 permissions:
   contents: write
@@ -27,7 +29,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4
         with:
@@ -47,15 +49,18 @@ jobs:
       - name: Python packages
         run: pip install "bpy==5.2.*" "huggingface_hub>=1,<3" "pyarrow>=18" "pillow>=11"
 
+      - name: Fetch the GLB compressor once (builds run in parallel)
+        run: npx -y @gltf-transform/cli@4.5.1 --version
+
       - name: Build objects (sample)
         if: github.event_name == 'pull_request'
-        run: python -I scripts/objects/build.py --count 5 --out sample-objects
+        run: python -I scripts/objects/build.py --per-category 1 --out sample-objects --review sample-review
 
       - name: Build objects
         if: github.event_name == 'workflow_dispatch'
         env:
-          COUNT: ${{ inputs.count }}
-        run: python -I scripts/objects/build.py --count "$COUNT"
+          PER_CATEGORY: ${{ inputs.per_category }}
+        run: python -I scripts/objects/build.py --per-category "$PER_CATEGORY" --review scripts/objects/review
 
       - name: Summary
         if: always()
@@ -67,7 +72,9 @@ jobs:
           name: objects
           path: |
             sample-objects/
+            sample-review/
             public/objects/
+            scripts/objects/review/
             objects-summary.md
           if-no-files-found: ignore
 
@@ -77,7 +84,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           cp objects-summary.md public/objects/SUMMARY.md
-          git add public/objects
+          git add public/objects scripts/objects/review
           if git diff --cached --quiet; then
             echo "No changes to the objects."
           else
