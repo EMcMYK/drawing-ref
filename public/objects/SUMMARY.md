@@ -20,23 +20,22 @@
 | sand3d-cad | 69 KB | 303 KB | 24468 |
 | sand3d-automate | 93 KB | 791 KB | 3113 |
 
-## Still-life candidates per group
+## Categories
 
-| Group | Candidates |
-|---|---|
-| books and boxes | 1463 |
-| bottles and jars | 810 |
-| bowls and plates | 1087 |
-| chairs and stools | 901 |
-| clocks and gadgets | 661 |
-| cups and mugs | 902 |
-| fruit and food | 1836 |
-| instruments | 885 |
-| kettles and teapots | 405 |
-| lamps and candles | 909 |
-| shoes and hats | 76 |
-| tools | 3920 |
-| vases and pots | 58 |
+| Category | Candidates | Picked |
+|---|---|---|
+| Bottles and jars | 1179 | 40 |
+| Cups, mugs and glasses | 1016 | 40 |
+| Bowls, plates, pans and teapots | 1152 | 40 |
+| Vases and pottery | 556 | 40 |
+| Fruit, vegetables and bread | 615 | 40 |
+| Lamps and candles | 884 | 40 |
+| Hand tools | 1321 | 40 |
+| Musical instruments | 706 | 40 |
+| Chairs and stools | 665 | 40 |
+| Books, boxes and baskets | 1175 | 40 |
+| Old tech: radios, cameras, phones, clocks | 832 | 40 |
+| Shoes, hats and bags | 197 | 40 |
 
 ## Top families
 
@@ -101,39 +100,9 @@
 - simready: stationery (60)
 - articraft: swivel_bar_stool (60)
 
-## Converted
+## Skipped while converting
 
-| Object | Group | Dataset | Parts | Triangles | USD | GLB | Note |
-|---|---|---|---|---|---|---|---|
-| Chest | books and boxes | objaverse | 47 | 12784 | 1484 KB | 32 KB |  |
-| Bottle | bottles and jars | objaverse | 2 | 1130 | 169 KB | 8 KB |  |
-| Scalloped plate | bowls and plates | objaverse | 2 | 320 | 36 KB | 4 KB |  |
-| Bench | chairs and stools | objaverse | 8 | 204 | 23 KB | 4 KB |  |
-| Cathedral radio | clocks and gadgets | objaverse | 24 | 18084 | 2864 KB | 34 KB |  |
-| Goblet | cups and mugs | objaverse | 1 | 13794 | 2327 KB | 12 KB |  |
-| Cat stack | fruit and food | objaverse | 4 | 16538 | 2786 KB | 40 KB |  |
-| Guitar | instruments | objaverse | 7 | 7256 | 1115 KB | 10 KB |  |
-| Teapot | kettles and teapots | objaverse | 7 | 17050 | 2840 KB | 31 KB |  |
-| Pointed lamp | lamps and candles | objaverse | 2 | 3004 | 472 KB | 7 KB |  |
-| Helmet | shoes and hats | objaverse | 1 | 16648 | 2826 KB | 108 KB |  |
-| Cleaver | tools | objaverse | 2 | 1680 | 261 KB | 5 KB |  |
-| Twist vase | vases and pots | objaverse | 1 | 980 | 164 KB | 9 KB |  |
-| Crate | books and boxes | simready | 6 | 31284 | 2660 KB | 96 KB |  |
-| Squeeze bottle | bottles and jars | simready | 3 | 2644 | 434 KB | 6 KB |  |
-| Oval dish | bowls and plates | simready | 1 | 2664 | 446 KB | 6 KB |  |
-| Pedestal bar stool | chairs and stools | articraft | 19 | 2492 | 302 KB | 14 KB |  |
-| Ultra wide rectilinear prime lens | clocks and gadgets | articraft | 23 | 9190 | 1349 KB | 43 KB |  |
-| Tumbler | cups and mugs | simready | 1 | 768 | 91 KB | 6 KB |  |
-| Banana | fruit and food | simready | 2 | 13048 | 2195 KB | 16 KB |  |
-| Drum | instruments | simready | 4 | 5168 | 761 KB | 22 KB |  |
-| Crown pot | kettles and teapots | simready | 135 | 6086 | 855 KB | 56 KB |  |
-| Candlestick | lamps and candles | simready | 4 | 9098 | 1481 KB | 19 KB |  |
-| Hot shoe flash | shoes and hats | articraft | 22 | 1168 | 146 KB | 10 KB |  |
-| Paintbrush | tools | simready | 3 | 2884 | 470 KB | 5 KB |  |
-| Amphora | vases and pots | objaverse | 4 | 4418 | 661 KB | 33 KB |  |
-| Manual air fryer | books and boxes | articraft | 9 | 3068 | 392 KB | 16 KB |  |
-| Foaming soap pump bottle | bottles and jars | articraft | 8 | 4916 | 679 KB | 30 KB |  |
-| Survey dish yoke | bowls and plates | articraft | 23 | 14432 | 2285 KB | 29 KB |  |
-| Locker bench | chairs and stools | simready | 8 | 228 | 24 KB | 3 KB |  |
+- spare, not used: 104
+- too many parts: 21
 
-**30 converted, 0.71 MB total, median 15 KB per object.**
+**480 converted, 8.19 MB total, median 13 KB per object.**
