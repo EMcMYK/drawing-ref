@@ -42,8 +42,11 @@ export function buildPanel(root, stillLife) {
       <p class="hint credit" data-credit hidden></p>
       ${slider('turn', 'Turn', [0, 359], 1)}
       <div class="row">
+        <button type="button" data-act="rotate">Rotate freely</button>
         <button type="button" data-act="tip">Tip over</button>
+        <button type="button" data-act="upright">Stand upright</button>
       </div>
+      <p class="hint" data-rotate-hint></p>
       ${slider('size', 'Size', LIMITS.size, 0.05)}
       ${slider('height', 'Height', LIMITS.height, 0.05)}
       <div class="field">
@@ -129,6 +132,8 @@ export function buildPanel(root, stillLife) {
     else if (starter) stillLife.loadScene({ objects: STARTER_SCENES[starter].build() });
     else if (single) stillLife.loadScene({ objects: singleShape(single) });
     else if (act === 'tip') stillLife.tipSelected();
+    else if (act === 'rotate') stillLife.setRotating(!stillLife.rotating);
+    else if (act === 'upright') stillLife.resetRotation();
     else if (act === 'dup') stillLife.duplicateSelected();
     else if (act === 'del') stillLife.deleteSelected();
     else if (act === 'random') stillLife.randomize();
@@ -232,6 +237,12 @@ export function buildPanel(root, stillLife) {
         input(name).value = sel[name];
         out(name).textContent = `${sel[name].toFixed(2)}×`;
       }
+      const rot = q('[data-act="rotate"]');
+      rot.textContent = stillLife.rotating ? 'Done rotating' : 'Rotate freely';
+      rot.setAttribute('aria-pressed', String(stillLife.rotating));
+      q('[data-rotate-hint]').textContent = stillLife.rotating
+        ? 'Drag the red, green or blue ring to turn it on that axis. Tap empty space or Done to go back to moving.'
+        : 'Tip: tap a selected shape again to rotate it freely.';
       input('turn').value = sel.rotY;
       out('turn').textContent = `${Math.round(sel.rotY)}°`;
       root.querySelectorAll('[data-shade]').forEach((b) =>

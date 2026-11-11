@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { TABLE, clampToTable, findFreeSpot, moveTo, settle } from './layout.js';
 import {
   CAMERA_PRESETS,
@@ -50,8 +51,11 @@ export class StillLife {
     this.coarse = window.matchMedia('(pointer: coarse)').matches;
     this.mirrored = false;
 
+    this.rotating = false; // free-rotate mode for the selected object
     this.#initRenderer();
     this.#initScene();
+    // Before #initPointer, so the rings see a press before the scene does.
+    this.#initGizmo();
     this.#initPointer();
     this.#initKeys();
 
@@ -168,6 +172,105 @@ export class StillLife {
     this.helpers = [this.handle, this.beam];
   }
 
+  // Free rotation: three rings (X, Y, Z) around the selected object. They
+  // turn a stand-in placed at the object's centre; its turn is copied to the
+  // object, which then settles back onto the table or the shape below.
+  #initGizmo() {
+    const proxy = new THREE.Object3D();
+    this.scene.add(proxy);
+    const gizmo = new TransformControls(this.camera, this.renderer.domElement);
+    gizmo.setMode('rotate');
+    gizmo.setSpace('world');
+    gizmo.setSize(this.coarse ? 1.3 : 1);
+    gizmo.enabled = false;
+    // Mirror the pointer too when the view is flipped (see setMirrored).
+    const getPointer = gizmo._getPointer;
+    gizmo._getPointer = (e) => {
+      const p = getPointer(e);
+      if (this.mirrored) p.x = -p.x;
+      return p;
+    };
+    gizmo.addEventListener('dragging-changed', (e) => {
+      this.controls.enabled = !e.value;
+      if (!e.value) this.#changed();
+    });
+    gizmo.addEventListener('objectChange', () => this.#applyGizmo());
+    const helper = gizmo.getHelper();
+    helper.visible = false;
+    this.scene.add(helper);
+    this.gizmo = gizmo;
+    this.gizmoHelper = helper;
+    this.proxy = proxy;
+
+    // A Done button over the view while rotating.
+    const done = document.createElement('button');
+    done.type = 'button';
+    done.className = 'rotate-done primary';
+    done.textContent = 'Done rotating';
+    done.hidden = true;
+    done.addEventListener('click', () => this.setRotating(false));
+    this.container.appendChild(done);
+    this.doneButton = done;
+  }
+
+  #rotationOf(obj) {
+    const tip = obj.tipped ? tipAngle(obj.shape, obj.size, obj.height) : 0;
+    return new THREE.Euler(deg(obj.rotX ?? 0), deg(obj.rotY), tip + deg(obj.rotZ ?? 0), 'YXZ');
+  }
+
+  // Put the rings' stand-in at the object's centre, turned like the object.
+  #placeProxy() {
+    const o = this.selected;
+    const view = o && this.views.get(o.id);
+    if (!view) return;
+    const box = new THREE.Box3().setFromObject(view.mesh, true);
+    box.getCenter(this.proxy.position);
+    this.proxy.quaternion.setFromEuler(this.#rotationOf(o));
+    this.proxy.updateMatrixWorld();
+  }
+
+  #applyGizmo() {
+    const o = this.selected;
+    if (!o) return;
+    const e = new THREE.Euler().setFromQuaternion(this.proxy.quaternion, 'YXZ');
+    const tip = o.tipped ? tipAngle(o.shape, o.size, o.height) : 0;
+    const d = (r) => THREE.MathUtils.radToDeg(r);
+    const wrap = (v) => ((Math.round(v) % 360) + 360) % 360;
+    o.rotX = d(e.x);
+    o.rotY = wrap(d(e.y));
+    o.rotZ = d(e.z - tip);
+    this.#resettle(o.id);
+    // Follow the object if it settled somewhere else, without turning the
+    // stand-in back (that would fight the drag).
+    const view = this.views.get(o.id);
+    new THREE.Box3().setFromObject(view.mesh, true).getCenter(this.proxy.position);
+    this.onChange(this);
+  }
+
+  // Turn free rotation on or off for the selected object.
+  setRotating(on) {
+    const want = !!on && !!this.selected;
+    this.rotating = want;
+    if (want) {
+      this.#placeProxy();
+      this.gizmo.attach(this.proxy);
+    } else {
+      this.gizmo.detach();
+    }
+    this.gizmo.enabled = want;
+    this.gizmoHelper.visible = want;
+    this.doneButton.hidden = !want;
+    this.#changed();
+  }
+
+  // Back to standing upright: no free rotation and not tipped over.
+  resetRotation() {
+    const o = this.selected;
+    if (!o) return;
+    this.updateSelected({ rotX: 0, rotZ: 0, tipped: false });
+    if (this.rotating) this.#placeProxy();
+  }
+
   #initPointer() {
     const el = this.renderer.domElement;
     const raycaster = new THREE.Raycaster();
@@ -186,15 +289,21 @@ export class StillLife {
 
     el.addEventListener('pointerdown', (e) => {
       if (!e.isPrimary) return;
-      down = { x: e.clientX, y: e.clientY };
+      down = { x: e.clientX, y: e.clientY, ring: this.rotating && this.gizmo.axis !== null };
+      if (down.ring) return; // the rings handle this press
       aim(e);
       const meshes = [this.handle, ...[...this.views.values()].map((v) => v.mesh)];
       const first = raycaster.intersectObjects(meshes, false)[0];
+      down.hitId = first && !first.object.userData.isHandle ? first.object.userData.id : null;
       if (!first) return;
+      // While rotating, the object stays put: a press on it can only be a
+      // tap (handled in end), and drags orbit the camera.
+      if (this.rotating && !first.object.userData.isHandle) return;
       if (first.object.userData.isHandle) {
         drag = { kind: 'light' };
       } else {
         const id = first.object.userData.id;
+        down.wasSelected = id === this.selectedId;
         this.select(id);
         const obj = this.#find(id);
         // Drag across a level plane at the height where the shape was
@@ -228,8 +337,15 @@ export class StillLife {
     });
 
     const end = (e) => {
-      const tap = down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6;
-      if (!drag && tap) this.select(null); // tapped empty space
+      const tap = down && !down.ring && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6;
+      if (tap && this.rotating) {
+        // Tap the object again, or empty space, to go back to moving things.
+        if (down.hitId && down.hitId !== this.selectedId) this.select(down.hitId);
+        this.setRotating(false);
+        if (!down.hitId) this.select(null);
+      } else if (tap && drag?.kind === 'object' && down.wasSelected) {
+        this.setRotating(true); // tap a selected object to rotate it freely
+      } else if (!drag && tap) this.select(null); // tapped empty space
       if (drag) this.#changed();
       drag = null;
       down = null;
@@ -253,7 +369,7 @@ export class StillLife {
       if (e.key === 'q' || e.key === 'Q') this.rotateSelected(-15);
       else if (e.key === 'e' || e.key === 'E') this.rotateSelected(15);
       else if (e.key === 'Delete' || e.key === 'Backspace') this.deleteSelected();
-      else if (e.key === 'Escape') this.select(null);
+      else if (e.key === 'Escape') this.rotating ? this.setRotating(false) : this.select(null);
       else return;
       e.preventDefault();
     });
@@ -342,8 +458,7 @@ export class StillLife {
     mesh.scale.set(obj.size, obj.size * obj.height, obj.size);
     mesh.material.color.setHex(shadeColor(obj.shade));
     outline.visible = obj.id === this.selectedId;
-    const tip = obj.tipped ? tipAngle(obj.shape, obj.size, obj.height) : 0;
-    pivot.rotation.set(0, deg(obj.rotY), tip, 'YXZ');
+    pivot.rotation.copy(this.#rotationOf(obj));
     pivot.position.set(0, 0, 0);
     group.position.set(0, 0, 0);
     mesh.remove(outline); // measure the shape itself, not its outline
@@ -405,7 +520,12 @@ export class StillLife {
   }
 
   select(id) {
-    this.selectedId = id && this.#find(id) ? id : null;
+    const next = id && this.#find(id) ? id : null;
+    if (this.rotating && next !== this.selectedId) {
+      this.selectedId = next;
+      this.setRotating(false);
+    }
+    this.selectedId = next;
     for (const [oid, view] of this.views) view.outline.visible = oid === this.selectedId;
     this.#changed();
   }
@@ -419,6 +539,7 @@ export class StillLife {
     if (!o) return;
     Object.assign(o, patch);
     this.#resettle(o.id);
+    if (this.rotating && !this.gizmo.dragging) this.#placeProxy();
     this.#changed();
   }
 
@@ -452,6 +573,7 @@ export class StillLife {
   deleteSelected() {
     const o = this.selected;
     if (!o) return;
+    if (this.rotating) this.setRotating(false);
     this.#removeView(o.id);
     this.objects = this.objects.filter((x) => x.id !== o.id);
     this.selectedId = null;
@@ -469,6 +591,7 @@ export class StillLife {
   }
 
   clear() {
+    if (this.rotating) this.setRotating(false);
     for (const id of [...this.views.keys()]) this.#removeView(id);
     this.objects = [];
     this.selectedId = null;
@@ -590,7 +713,7 @@ export class StillLife {
   async toPng() {
     const prevRatio = this.renderer.getPixelRatio();
     const ratio = Math.max(2, Math.min(window.devicePixelRatio, 3));
-    const hidden = [...this.helpers, ...[...this.views.values()].map((v) => v.outline)];
+    const hidden = [...this.helpers, this.gizmoHelper, ...[...this.views.values()].map((v) => v.outline)];
     const wasVisible = hidden.map((o) => o.visible);
     hidden.forEach((o) => (o.visible = false));
     this.renderer.setPixelRatio(ratio);

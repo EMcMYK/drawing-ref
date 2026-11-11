@@ -743,3 +743,28 @@ button.danger {
     flex: none;
   }
 }
+
+/* ---- free-rotate mode ---- */
+
+.rotate-done,
+.rotate-done.primary {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  width: auto;
+  min-height: 44px;
+  padding: 8px 18px;
+  z-index: 3;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.rotate-done[hidden] {
+  display: none;
+}
+
+[data-act='rotate'][aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}

@@ -42,6 +42,8 @@ export function newObject(shape, overrides = {}) {
     z: 0,
     y: 0,
     rotY: 0,
+    rotX: 0, // free rotation (degrees), from the rotate rings
+    rotZ: 0,
     tipped: false,
     size: 1,
     height: 1,
@@ -74,6 +76,8 @@ export function sanitizeScene(raw) {
         z: num(o.z, 0),
         y: num(o.y, 0),
         rotY: num(o.rotY, 0),
+        rotX: num(o.rotX, 0),
+        rotZ: num(o.rotZ, 0),
         tipped: o.tipped === true,
         size: clamp(num(o.size, 1), LIMITS.size),
         height: clamp(num(o.height, 1), LIMITS.height),

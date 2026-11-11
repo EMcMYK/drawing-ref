@@ -73,3 +73,11 @@ describe('tipAngle', () => {
     expect(tipAngle('cone', 1, 2)).toBeLessThan(tipAngle('cone'));
   });
 });
+
+describe('free rotation', () => {
+  it('keeps rotX and rotZ, defaulting old saves to 0', async () => {
+    const { sanitizeScene } = await import('../src/still-life/model.js');
+    const scene = sanitizeScene({ objects: [{ shape: 'cube', rotX: 30, rotZ: -45 }, { shape: 'cone' }] });
+    expect(scene.objects.map((o) => [o.rotX, o.rotZ])).toEqual([[30, -45], [0, 0]]);
+  });
+});
