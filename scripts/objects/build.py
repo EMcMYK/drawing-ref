@@ -64,6 +64,9 @@ MAX_GLB = 400_000  # bytes, after compression
 MAX_TRIANGLES = 60_000
 MAX_PARTS = 80  # many tiny parts usually means a messy model
 SAME_NAME = 2  # at most this many objects with the same name per category
+# Articraft models are mostly mechanisms (vises, gimbals, freezers); keep
+# them to a few per category so everyday objects lead.
+MAX_FROM = {'sand3d-articraft': 6}
 
 
 def norm(s):
@@ -107,13 +110,18 @@ def load_excluded():
         return set()
 
 
+def head_word(r):
+    """The last word of the object's name: "Glass front display freezer" is
+    a freezer, "Soap pump bottle" is a bottle."""
+    words = re.findall(r'[a-z]+', title_of(r).lower())
+    return words[-1] if words else ''
+
+
 def category_of(r):
-    names = words_of(r.get('entry'))
-    if r['_repo'] == 'sand3d-articraft':
-        names |= words_of(r.get('family'))
+    head, names = head_word(r), words_of(title_of(r))
     family = norm(r.get('family'))
     for c in CATEGORIES:
-        if not names & set(c['words']) or names & set(c.get('exclude', [])):
+        if head not in c['words'] or names & set(c.get('exclude', [])):
             continue
         if c.get('families') and r['_repo'] != 'sand3d-articraft' and family not in c['families']:
             continue
@@ -147,6 +155,8 @@ def candidates(rows, excluded):
         per_repo = collections.defaultdict(list)
         for r in pool:
             per_repo[r['_repo']].append(r)
+        for repo, most in MAX_FROM.items():
+            del per_repo[repo][most * 2:]  # twice the share, as spares
         dealt = []
         while any(per_repo.values()):
             for repo in sorted(per_repo):
@@ -247,6 +257,7 @@ def convert_categories(pools, per_category, out_dir, workers):
     results, picked = {}, collections.defaultdict(list)
     queues = {cid: list(pool) for cid, pool in pools.items()}
     names = collections.defaultdict(collections.Counter)
+    repos = collections.defaultdict(collections.Counter)
     with tempfile.TemporaryDirectory() as work, ThreadPoolExecutor(workers) as ex:
         while True:
             batch = []
@@ -260,7 +271,10 @@ def convert_categories(pools, per_category, out_dir, workers):
                     name = title_of(r).lower()
                     if names[cid][name] >= SAME_NAME:
                         continue
+                    if repos[cid][r['_repo']] >= MAX_FROM.get(r['_repo'], per_category):
+                        continue
                     names[cid][name] += 1
+                    repos[cid][r['_repo']] += 1
                     batch.append(r)
                     want -= 1
             if not batch:
@@ -271,9 +285,11 @@ def convert_categories(pools, per_category, out_dir, workers):
                 cid = r['_cat']['id']
                 if info.get('note'):
                     names[cid][title_of(r).lower()] -= 1
+                    repos[cid][r['_repo']] -= 1
                 elif len(picked[cid]) < per_category:
                     picked[cid].append(r)
                 else:  # more than needed: a spare that wasn't used
+                    repos[cid][r['_repo']] -= 1
                     os.remove(os.path.join(out_dir, 'models', r['_slug'] + '.glb'))
                     info['note'] = 'spare, not used'
     return results, picked
