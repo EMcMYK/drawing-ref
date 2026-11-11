@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
-import { TABLE, clampToTable, findFreeSpot, moveTo, settle, stackedOn } from './layout.js';
+import { TABLE, clampToTable, findFreeSpot, moveTo, settle, stackedOn, top } from './layout.js';
 import {
   CAMERA_PRESETS,
   LIGHT_PRESETS,
@@ -282,10 +282,11 @@ export class StillLife {
     const tip = o.tipped ? tipAngle(o.shape, o.size, o.height) : 0;
     const d = (r) => THREE.MathUtils.radToDeg(r);
     const wrap = (v) => ((Math.round(v) % 360) + 360) % 360;
-    o.rotX = d(e.x);
-    o.rotY = wrap(d(e.y));
-    o.rotZ = d(e.z - tip);
-    this.#resettle(o.id);
+    this.#keepingStack(o, () => {
+      o.rotX = d(e.x);
+      o.rotY = wrap(d(e.y));
+      o.rotZ = d(e.z - tip);
+    });
     // Follow the object if it settled somewhere else, without turning the
     // stand-in back (that would fight the drag).
     const view = this.views.get(o.id);
@@ -572,6 +573,19 @@ export class StillLife {
     this.#applyBoxes(boxes);
   }
 
+  // Change an object (size, turn, lift...) and keep whatever is stacked on
+  // it riding on its new top, instead of the object slipping out from
+  // under its stack. Then re-place it where it stands.
+  #keepingStack(o, change) {
+    const before = this.#boxes();
+    const above = this.overlap ? [] : stackedOn(before, o.id);
+    const oldTop = top(before.find((b) => b.id === o.id));
+    change();
+    const dy = top(this.#syncView(o)) - oldTop;
+    for (const id of above) this.#find(id).y += dy;
+    this.#resettle(o.id);
+  }
+
   // Re-place one object where it stands, e.g. after it changed size.
   #resettle(id) {
     const o = this.#find(id);
@@ -609,13 +623,7 @@ export class StillLife {
   updateSelected(patch) {
     const o = this.selected;
     if (!o) return;
-    // Lifting an object carries everything stacked on it.
-    if ('lift' in patch && !this.overlap) {
-      const dy = patch.lift - (o.lift ?? 0);
-      for (const id of stackedOn(this.#boxes(), o.id)) this.#find(id).y += dy;
-    }
-    Object.assign(o, patch);
-    this.#resettle(o.id);
+    this.#keepingStack(o, () => Object.assign(o, patch));
     if (this.rotating && !this.gizmo.dragging) this.#placeProxy();
     this.#changed();
   }

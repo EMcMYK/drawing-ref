@@ -123,3 +123,43 @@ describe('lift and shared bases', () => {
     expect(Math.abs(r.x - -0.3)).toBeGreaterThanOrEqual(0.6);
   });
 });
+
+describe('stacks keep their order', () => {
+  const box = (id, x, z, y = 0, extra = {}) => ({ id, x, z, y, halfX: 0.5, halfZ: 0.5, height: 1, ...extra });
+
+  it('a taller bottom object stays at the bottom once its stack is raised', () => {
+    // The bottom grew to height 2 and the caller moved its stack up by 1.
+    const boxes = [box('a', 0, 0, 0, { height: 2 }), box('b', 0, 0, 2), box('c', 0, 0, 3)];
+    const out = moveTo(boxes, 'a', 0, 0);
+    expect(out.map((b) => [b.id, b.y])).toEqual([['a', 0], ['b', 2], ['c', 3]]);
+  });
+
+  it('nothing jumps up onto a taller neighbour while settling', () => {
+    const boxes = [box('tall', 0, 0, 0, { height: 3 }), box('small', 0, 0, 0)];
+    const out = settle(boxes);
+    expect(out.find((b) => b.id === 'small').y).toBe(0);
+  });
+
+  it('an object moved under a floating one slides underneath it', () => {
+    const floating = box('f', 0, 0, 0, { lift: 2 });
+    const mover = box('m', 2, 0, 0);
+    const out = moveTo([floating, mover], 'm', 0, 0);
+    expect(out.find((b) => b.id === 'm')).toMatchObject({ x: 0, y: 0 });
+    expect(out.find((b) => b.id === 'f')).toMatchObject({ y: 0, lift: 2 });
+  });
+
+  it('an object too tall to fit under a floating one is pushed aside', () => {
+    const floating = box('f', 0, 0, 0, { lift: 0.5 });
+    const mover = box('m', 2, 0, 0);
+    const out = moveTo([floating, mover], 'm', 0.2, 0);
+    const m = out.find((b) => b.id === 'm');
+    expect(m.y).toBe(0);
+    expect(Math.abs(m.x)).toBeGreaterThanOrEqual(1);
+  });
+
+  it('things already resting on a floating object stay on it', () => {
+    const boxes = [box('f', 0, 0, 0, { lift: 1 }), box('top', 0, 0, 2)];
+    const out = moveTo(boxes, 'top', 0, 0);
+    expect(out.find((b) => b.id === 'top').y).toBe(2);
+  });
+});
