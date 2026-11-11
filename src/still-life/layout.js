@@ -37,10 +37,13 @@ function overlaps(a, b) {
 
 // The object directly under point (x, z) that something dropped there would
 // rest on: the tallest one whose footprint contains the point.
-export function supportAt(boxes, x, z, excludeId) {
+// `maxTop`: only things whose top is at or below this height (things fall,
+// they don't jump up).
+export function supportAt(boxes, x, z, excludeId, { maxTop = Infinity } = {}) {
   let best = null;
   for (const b of boxes) {
     if (b.id === excludeId) continue;
+    if (top(b) > maxTop + 0.01) continue;
     if (!containsPoint(b, x, z, Math.min(b.halfX, b.halfZ) * 0.15)) continue;
     if (!best || top(b) > top(best)) best = b;
   }
@@ -72,12 +75,13 @@ export function resolveOverlaps(box, boxes) {
 }
 
 // Drop every object onto whatever is under its centre, lowest first, so a
-// stack falls when the object underneath is moved away.
+// stack falls when the object underneath is moved away or gets shorter.
+// Nothing rises: an object only lands on things whose top is below it.
 export function settle(boxes) {
   const order = [...boxes].sort((a, b) => a.y - b.y);
   const placed = [];
   for (const box of order) {
-    const support = supportAt(placed, box.x, box.z, box.id);
+    const support = supportAt(placed, box.x, box.z, box.id, { maxTop: box.y });
     placed.push({ ...box, y: support ? top(support) : 0 });
   }
   const byId = new Map(placed.map((b) => [b.id, b]));
@@ -98,7 +102,10 @@ export function moveTo(boxes, id, x, z, { overlap = false } = {}) {
   const above = new Set(stackedOn(boxes, id));
   const others = boxes.filter((b) => b.id !== id && !above.has(b.id));
   let next = clampToTable({ ...target, x, z });
-  let support = supportAt(others, next.x, next.z, id);
+  // Floating (lifted) objects only hold what already rests on them; anything
+  // else slides underneath, or is pushed aside if it doesn't fit.
+  const supports = others.filter((b) => (b.lift ?? 0) <= 0.01 || Math.abs(top(b) - target.y) < 0.01);
+  let support = supportAt(supports, next.x, next.z, id);
   next.y = support ? top(support) : 0;
   // Slide clear of anything at the same level: on the table, or beside
   // other things resting on the same object. If that pushes it off its
@@ -106,7 +113,7 @@ export function moveTo(boxes, id, x, z, { overlap = false } = {}) {
   const besides = others.filter((b) => b !== support);
   next = resolveOverlaps(next, besides);
   if (support && !supportAt([support], next.x, next.z, id)) {
-    support = supportAt(others, next.x, next.z, id);
+    support = supportAt(supports, next.x, next.z, id);
     next.y = support ? top(support) : 0;
     next = resolveOverlaps(next, others.filter((b) => b !== support));
   }
