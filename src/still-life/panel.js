@@ -47,6 +47,7 @@ export function buildPanel(root, stillLife) {
         <button type="button" data-act="upright">Stand upright</button>
       </div>
       <p class="hint" data-rotate-hint></p>
+      ${slider('lift', 'Lift off the table', LIMITS.lift, 0.05)}
       ${slider('size', 'Size', LIMITS.size, 0.05)}
       ${slider('height', 'Height', LIMITS.height, 0.05)}
       <div class="field">
@@ -205,7 +206,7 @@ export function buildPanel(root, stillLife) {
     else if (name === 'camAzimuth') stillLife.setView({ azimuth: v });
     else if (name === 'camElevation') stillLife.setView({ elevation: v });
     else if (name === 'camDistance') stillLife.setView({ distance: v });
-    else if (name === 'size' || name === 'height') stillLife.updateSelected({ [name]: v });
+    else if (name === 'size' || name === 'height' || name === 'lift') stillLife.updateSelected({ [name]: v });
     else if (['azimuth', 'elevation', 'intensity'].includes(name)) stillLife.setLight({ [name]: v });
   });
 
@@ -241,8 +242,10 @@ export function buildPanel(root, stillLife) {
       rot.textContent = stillLife.rotating ? 'Done rotating' : 'Rotate freely';
       rot.setAttribute('aria-pressed', String(stillLife.rotating));
       q('[data-rotate-hint]').textContent = stillLife.rotating
-        ? 'Drag the red, green or blue ring to turn it on that axis. Tap empty space or Done to go back to moving.'
+        ? 'Drag a red, green or blue ring to turn it. Drag the yellow arrow to raise or lower it. Tap empty space or Done to go back to moving.'
         : 'Tip: tap a selected shape again to rotate it freely.';
+      input('lift').value = sel.lift ?? 0;
+      out('lift').textContent = (sel.lift ?? 0) ? (sel.lift ?? 0).toFixed(2) : 'on the table';
       input('turn').value = sel.rotY;
       out('turn').textContent = `${Math.round(sel.rotY)}°`;
       root.querySelectorAll('[data-shade]').forEach((b) =>

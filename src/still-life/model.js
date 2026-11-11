@@ -7,6 +7,7 @@ export const LIMITS = {
   height: [0.5, 2.5],
   intensity: [0, 3],
   elevation: [5, 89],
+  lift: [0, 3], // how far an object floats above where it would rest
 };
 
 export const LIGHT_PRESETS = {
@@ -44,6 +45,7 @@ export function newObject(shape, overrides = {}) {
     rotY: 0,
     rotX: 0, // free rotation (degrees), from the rotate rings
     rotZ: 0,
+    lift: 0,
     tipped: false,
     size: 1,
     height: 1,
@@ -78,6 +80,7 @@ export function sanitizeScene(raw) {
         rotY: num(o.rotY, 0),
         rotX: num(o.rotX, 0),
         rotZ: num(o.rotZ, 0),
+        lift: clamp(num(o.lift, 0), LIMITS.lift),
         tipped: o.tipped === true,
         size: clamp(num(o.size, 1), LIMITS.size),
         height: clamp(num(o.height, 1), LIMITS.height),

@@ -198,6 +198,30 @@ export class StillLife {
     const helper = gizmo.getHelper();
     helper.visible = false;
     this.scene.add(helper);
+    // Keep only the red, green and blue rings: drop the yellow view ring
+    // and the gray free-spin ball (TransformControls internals; three.js is
+    // pinned in package.json). The yellow arrow below takes their place.
+    for (const group of [gizmo._gizmo.gizmo.rotate, gizmo._gizmo.picker.rotate]) {
+      for (const child of [...group.children]) if (child.name === 'E' || child.name === 'XYZE') group.remove(child);
+    }
+
+    // The lift arrow: a yellow up/down arrow above the rings. Drag it to
+    // raise the object off the table, or lower it back down.
+    const yellow = new THREE.MeshBasicMaterial({ color: 0xffc533, depthTest: false, transparent: true });
+    const lift = new THREE.Group();
+    const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.34, 12), yellow);
+    const up = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.16, 16).translate(0, 0.25, 0), yellow);
+    const down = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.16, 16).rotateX(Math.PI).translate(0, -0.25, 0), yellow);
+    // A bigger, invisible grab area so it's easy to hit with a finger.
+    const grab = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.7, 8), new THREE.MeshBasicMaterial({ visible: false }));
+    lift.add(shaft, up, down, grab);
+    lift.renderOrder = 999;
+    lift.traverse((m) => (m.renderOrder = 999));
+    lift.visible = false;
+    grab.userData.isLift = true;
+    this.scene.add(lift);
+    this.liftHandle = lift;
+    this.liftGrab = grab;
     this.gizmo = gizmo;
     this.gizmoHelper = helper;
     this.proxy = proxy;
@@ -213,6 +237,20 @@ export class StillLife {
     this.doneButton = done;
   }
 
+  // Keep the lift arrow just to the right of the rings (so it stays on
+  // screen when the object is high), at the same on-screen size, using the
+  // same sum TransformControls uses to size its rings.
+  #placeLiftHandle() {
+    const p = this.proxy.position;
+    const cam = this.camera;
+    const factor = p.distanceTo(cam.position) * Math.min((1.9 * Math.tan((Math.PI * cam.fov) / 360)) / cam.zoom, 7);
+    const scale = (factor * this.gizmo.size) / 4;
+    this.liftHandle.scale.setScalar(scale);
+    const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cam.quaternion).setY(0).normalize();
+    if (this.mirrored) right.negate();
+    this.liftHandle.position.copy(p).addScaledVector(right, 0.85 * scale);
+  }
+
   #rotationOf(obj) {
     const tip = obj.tipped ? tipAngle(obj.shape, obj.size, obj.height) : 0;
     return new THREE.Euler(deg(obj.rotX ?? 0), deg(obj.rotY), tip + deg(obj.rotZ ?? 0), 'YXZ');
@@ -223,6 +261,7 @@ export class StillLife {
     const o = this.selected;
     const view = o && this.views.get(o.id);
     if (!view) return;
+    view.group.updateMatrixWorld(true); // #syncView leaves it stale
     const box = new THREE.Box3().setFromObject(view.mesh, true);
     box.getCenter(this.proxy.position);
     this.proxy.quaternion.setFromEuler(this.#rotationOf(o));
@@ -243,6 +282,7 @@ export class StillLife {
     // Follow the object if it settled somewhere else, without turning the
     // stand-in back (that would fight the drag).
     const view = this.views.get(o.id);
+    view.group.updateMatrixWorld(true);
     new THREE.Box3().setFromObject(view.mesh, true).getCenter(this.proxy.position);
     this.onChange(this);
   }
@@ -259,6 +299,7 @@ export class StillLife {
     }
     this.gizmo.enabled = want;
     this.gizmoHelper.visible = want;
+    this.liftHandle.visible = want;
     this.doneButton.hidden = !want;
     this.#changed();
   }
@@ -289,9 +330,23 @@ export class StillLife {
 
     el.addEventListener('pointerdown', (e) => {
       if (!e.isPrimary) return;
+      aim(e);
+      if (this.rotating && raycaster.intersectObject(this.liftGrab, false).length) {
+        // Drag the lift arrow: follow the pointer up and down on an upright
+        // plane through the object that faces the camera.
+        const o = this.selected;
+        const normal = this.camera.getWorldDirection(new THREE.Vector3()).setY(0).normalize();
+        const plane = new THREE.Plane().setFromNormalAndCoplanarPoint(normal, this.proxy.position);
+        if (!raycaster.ray.intersectPlane(plane, hit)) return;
+        drag = { kind: 'lift', id: o.id, plane, startY: hit.y, startLift: o.lift ?? 0 };
+        down = { x: e.clientX, y: e.clientY, ring: true };
+        this.controls.enabled = false;
+        el.setPointerCapture(e.pointerId);
+        e.preventDefault();
+        return;
+      }
       down = { x: e.clientX, y: e.clientY, ring: this.rotating && this.gizmo.axis !== null };
       if (down.ring) return; // the rings handle this press
-      aim(e);
       const meshes = [this.handle, ...[...this.views.values()].map((v) => v.mesh)];
       const first = raycaster.intersectObjects(meshes, false)[0];
       down.hitId = first && !first.object.userData.isHandle ? first.object.userData.id : null;
@@ -331,6 +386,11 @@ export class StillLife {
         const elevation = THREE.MathUtils.radToDeg(Math.asin(THREE.MathUtils.clamp(hit.y / LIGHT_RADIUS, -1, 1)));
         const azimuth = THREE.MathUtils.radToDeg(Math.atan2(hit.x, hit.z));
         this.setLight({ azimuth, elevation });
+      } else if (drag.kind === 'lift') {
+        if (raycaster.ray.intersectPlane(drag.plane, hit)) {
+          const lift = THREE.MathUtils.clamp(drag.startLift + hit.y - drag.startY, ...LIMITS.lift);
+          this.updateSelected({ lift: Math.round(lift * 100) / 100 });
+        }
       } else if (raycaster.ray.intersectPlane(drag.plane, hit)) {
         this.#moveObject(drag.id, hit.x + drag.dx, hit.z + drag.dz);
       }
@@ -411,6 +471,7 @@ export class StillLife {
 
   #frame() {
     this.controls.update();
+    if (this.rotating) this.#placeLiftHandle();
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -468,8 +529,11 @@ export class StillLife {
     const center = box.getCenter(new THREE.Vector3());
     pivot.position.set(-center.x, -box.min.y, -center.z);
     const size = box.getSize(new THREE.Vector3());
-    group.position.set(obj.x, obj.y, obj.z);
-    return { id: obj.id, x: obj.x, z: obj.z, y: obj.y, halfX: size.x / 2, halfZ: size.z / 2, height: size.y };
+    // Lifted objects float above where they'd rest; anything stacked on
+    // them sits on top of the raised object.
+    const lift = obj.lift ?? 0;
+    group.position.set(obj.x, obj.y + lift, obj.z);
+    return { id: obj.id, x: obj.x, z: obj.z, y: obj.y, halfX: size.x / 2, halfZ: size.z / 2, height: size.y + lift };
   }
 
   #boxes() {
@@ -713,7 +777,7 @@ export class StillLife {
   async toPng() {
     const prevRatio = this.renderer.getPixelRatio();
     const ratio = Math.max(2, Math.min(window.devicePixelRatio, 3));
-    const hidden = [...this.helpers, this.gizmoHelper, ...[...this.views.values()].map((v) => v.outline)];
+    const hidden = [...this.helpers, this.gizmoHelper, this.liftHandle, ...[...this.views.values()].map((v) => v.outline)];
     const wasVisible = hidden.map((o) => o.visible);
     hidden.forEach((o) => (o.visible = false));
     this.renderer.setPixelRatio(ratio);
