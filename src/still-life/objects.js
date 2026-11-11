@@ -45,6 +45,15 @@ export function searchObjects(list, query = '') {
   });
 }
 
+// Categories in the library with their counts, in a fixed order.
+export function groupsOf(list) {
+  const counts = new Map();
+  for (const o of list) if (o.group) counts.set(o.group, (counts.get(o.group) ?? 0) + 1);
+  return [...counts]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([id, count]) => ({ id, label: id[0].toUpperCase() + id.slice(1), count }));
+}
+
 // A short credit line, e.g. "Mug · CC BY 4.0".
 export function creditLine(o) {
   return [o.name, o.license?.name].filter(Boolean).join(' · ');

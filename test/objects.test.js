@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
-import { OBJECT_SIZE, isLibraryShape, mergeModel, searchObjects, shapeIdFor } from '../src/still-life/objects.js';
+import { OBJECT_SIZE, groupsOf, isLibraryShape, mergeModel, searchObjects, shapeIdFor } from '../src/still-life/objects.js';
 import { sanitizeScene } from '../src/still-life/model.js';
 import { geometryFor, registerGeometry } from '../src/still-life/shapes.js';
 
@@ -15,6 +15,13 @@ describe('object library', () => {
     expect(searchObjects(catalog, 'MUG').map((o) => o.id)).toEqual(['coffee-mug-1']);
     expect(searchObjects(catalog, 'lighting lamp').map((o) => o.id)).toEqual(['desk-lamp-2']);
     expect(searchObjects(catalog, 'chair')).toEqual([]);
+  });
+
+  it('lists categories with counts, in order', () => {
+    expect(groupsOf([...catalog, { id: 'x', group: 'cups and mugs' }])).toEqual([
+      { id: 'cups and mugs', label: 'Cups and mugs', count: 2 },
+      { id: 'lamps and candles', label: 'Lamps and candles', count: 1 },
+    ]);
   });
 
   it('keeps library objects in saved scenes, drops bad shape ids', () => {
