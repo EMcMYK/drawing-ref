@@ -155,12 +155,15 @@ def first_url(text):
 
 
 def title_of(r):
-    m = re.search(r'["“]([^"”]{2,80})["”]', r.get('attribution') or '')
-    if m:
-        return m.group(1).strip()
-    name = r.get('entry') or r.get('family') or 'Object'
+    # The program's entry name ("cathedral_radio") reads better than the
+    # original upload titles, which are often file names or dates.
+    name = r.get('entry') or ''
+    if not name:
+        m = re.search(r'["“]([^"”]{2,80})["”]', r.get('attribution') or '')
+        name = m.group(1) if m else (r.get('family') or 'Object')
     name = re.sub(r'[_\-]+', ' ', str(name)).strip()
-    return name[:1].upper() + name[1:]
+    name = re.sub(r'\b[a-z]\d{2}\b', '', name).strip()  # SimReady variant codes like "a01"
+    return (name[:1].upper() + name[1:]) or 'Object'
 
 
 def slug(r):
