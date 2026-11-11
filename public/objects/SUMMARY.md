@@ -25,17 +25,17 @@
 | Category | Candidates | Picked |
 |---|---|---|
 | Bottles and jars | 1118 | 40 |
-| Cups, mugs and glasses | 929 | 40 |
-| Bowls, plates, pans and teapots | 871 | 40 |
-| Vases and pottery | 540 | 40 |
+| Cups, mugs and glasses | 927 | 40 |
+| Bowls, plates, pans and teapots | 858 | 40 |
+| Vases and pottery | 535 | 40 |
 | Fruit, vegetables and bread | 570 | 40 |
-| Lamps and candles | 693 | 40 |
-| Hand tools | 1213 | 40 |
+| Lamps and candles | 691 | 40 |
+| Hand tools | 1201 | 40 |
 | Musical instruments | 547 | 40 |
-| Chairs and stools | 305 | 40 |
-| Books, boxes and baskets | 677 | 40 |
+| Chairs and stools | 304 | 40 |
+| Books, boxes and baskets | 675 | 40 |
 | Old tech: radios, cameras, phones, clocks | 585 | 40 |
-| Shoes, hats and bags | 109 | 40 |
+| Shoes, hats and bags | 105 | 40 |
 
 ## Top families
 
@@ -105,4 +105,4 @@
 - spare, not used: 82
 - too many parts: 8
 
-**480 converted, 9.30 MB total, median 15 KB per object.**
+**480 converted, 9.37 MB total, median 15 KB per object.**

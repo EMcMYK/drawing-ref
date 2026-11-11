@@ -7,9 +7,9 @@
 | 3 | Box metronome | box-metronome-06451bc3 |
 | 4 | Guitar | guitar-002c8189 |
 | 5 | Floor pendulum metronome | floor-pendulum-metronome-0663a900 |
-| 6 | Underslung tabletop metronome | underslung-tabletop-metronome-07c8665b |
-| 7 | Open frame metronome | open-frame-metronome-18343f0e |
-| 8 | Low wide slot metronome | low-wide-slot-metronome-2f458d27 |
+| 6 | Open frame metronome | open-frame-metronome-18343f0e |
+| 7 | Portable pyramid metronome | portable-pyramid-metronome-318c5fd8 |
+| 8 | Box style mechanical metronome | box-style-mechanical-metronome-435db0dd |
 | 9 | Saxophone | saxophone-01765cdf |
 | 10 | Banjo | banjo-019d6d85 |
 | 11 | Trumpet | trumpet-0411b4c4 |

@@ -1821,34 +1821,6 @@
    "assetId": "objaverse:a0f21a9806bd4387becfb4fe3c8dcf50"
   },
   {
-   "id": "faceted-cup-1b126dcc",
-   "name": "Faceted cup",
-   "group": "Cups and glasses",
-   "family": "cookware",
-   "tags": [
-    "cookware",
-    "cup",
-    "cups",
-    "faceted",
-    "glasses",
-    "mugs"
-   ],
-   "model": "models/faceted-cup-1b126dcc.glb",
-   "thumb": "thumbs/faceted-cup-1b126dcc.webp",
-   "triangles": 528,
-   "bytes": 4700,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"KITCHEN INVENTORY 3\" by multilisaveta, https://sketchfab.com/3d-models/604473f17ac44c9dbad345f710c423d2, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/604473f17ac44c9dbad345f710c423d2",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:604473f17ac44c9dbad345f710c423d2"
-  },
-  {
    "id": "cone-cup-1e054859",
    "name": "Cone cup",
    "group": "Cups and glasses",
@@ -1932,34 +1904,6 @@
    "sourceUrl": "https://sketchfab.com/3d-models/89bada2350d04d5d8005a5c0bbde6ca8",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
    "assetId": "objaverse:89bada2350d04d5d8005a5c0bbde6ca8"
-  },
-  {
-   "id": "faceted-cup-2570032e",
-   "name": "Faceted cup",
-   "group": "Cups and glasses",
-   "family": "cookware",
-   "tags": [
-    "cookware",
-    "cup",
-    "cups",
-    "faceted",
-    "glasses",
-    "mugs"
-   ],
-   "model": "models/faceted-cup-2570032e.glb",
-   "thumb": "thumbs/faceted-cup-2570032e.webp",
-   "triangles": 816,
-   "bytes": 9308,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"pot\" by paoloayos, https://sketchfab.com/3d-models/628bb27bb85e4fac84a5acd11f0e9089, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/628bb27bb85e4fac84a5acd11f0e9089",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:628bb27bb85e4fac84a5acd11f0e9089"
   },
   {
    "id": "cylindrical-cup-25924e54",
@@ -2186,37 +2130,60 @@
    "assetId": "objaverse:7be3d33ee58243a2a9240110f9118985"
   },
   {
-   "id": "ring-base-yaw-platter-0d7408b6",
-   "name": "Ring base yaw platter",
-   "group": "Kitchen",
-   "family": "single_yaw_axis_module",
+   "id": "steaming-cup-359b919d",
+   "name": "Steaming cup",
+   "group": "Cups and glasses",
+   "family": "tableware",
    "tags": [
-    "axis",
-    "base",
-    "bowls",
-    "module",
-    "pans",
-    "plates",
-    "platter",
-    "ring",
-    "single",
-    "teapots",
-    "yaw"
+    "cup",
+    "cups",
+    "glasses",
+    "mugs",
+    "steaming",
+    "tableware"
    ],
-   "model": "models/ring-base-yaw-platter-0d7408b6.glb",
-   "thumb": "thumbs/ring-base-yaw-platter-0d7408b6.webp",
-   "triangles": 4524,
-   "bytes": 16616,
+   "model": "models/steaming-cup-359b919d.glb",
+   "thumb": "thumbs/steaming-cup-359b919d.webp",
+   "triangles": 13930,
+   "bytes": 39016,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_single_yaw_axis_module_00a15bd8632742e683632799b76fac00, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_single_yaw_axis_module_00a15bd8632742e683632799b76fac00"
+   "credit": "\"Java\" by PhantomXD, https://sketchfab.com/3d-models/442de0f1b8a54966bc16466b329105af, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/442de0f1b8a54966bc16466b329105af",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:442de0f1b8a54966bc16466b329105af"
+  },
+  {
+   "id": "scroll-cup-37096cab",
+   "name": "Scroll cup",
+   "group": "Cups and glasses",
+   "family": "tableware",
+   "tags": [
+    "cup",
+    "cups",
+    "glasses",
+    "mugs",
+    "scroll",
+    "tableware"
+   ],
+   "model": "models/scroll-cup-37096cab.glb",
+   "thumb": "thumbs/scroll-cup-37096cab.webp",
+   "triangles": 6615,
+   "bytes": 14076,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC0-1.0",
+   "credit": "\"Scoop\" by WirtualneMuzeaMalopolski, https://sketchfab.com/3d-models/7c21c71c4b474d9996e7b8d61488bfbf, CC0-1.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/7c21c71c4b474d9996e7b8d61488bfbf",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:7c21c71c4b474d9996e7b8d61488bfbf"
   },
   {
    "id": "skillet-00287e10",
@@ -2275,39 +2242,6 @@
    "assetId": "simready:utensil_spoon_wooden_b01"
   },
   {
-   "id": "mountain-bike-suspension-fork-103257d4",
-   "name": "Mountain bike suspension fork",
-   "group": "Kitchen",
-   "family": "bicycle_fork_and_handlebar_assembly",
-   "tags": [
-    "assembly",
-    "bicycle",
-    "bike",
-    "bowls",
-    "fork",
-    "handlebar",
-    "mountain",
-    "pans",
-    "plates",
-    "suspension",
-    "teapots"
-   ],
-   "model": "models/mountain-bike-suspension-fork-103257d4.glb",
-   "thumb": "thumbs/mountain-bike-suspension-fork-103257d4.webp",
-   "triangles": 14030,
-   "bytes": 17376,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_bicycle_fork_and_handlebar_assembly_0002, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_bicycle_fork_and_handlebar_assembly_0002"
-  },
-  {
    "id": "dish-0032f64f",
    "name": "Dish",
    "group": "Kitchen",
@@ -2364,38 +2298,6 @@
    "assetId": "simready:kitchenware_spoon_d01"
   },
   {
-   "id": "bmx-jump-fork-18ab4275",
-   "name": "Bmx jump fork",
-   "group": "Kitchen",
-   "family": "bicycle_fork_and_handlebar_assembly",
-   "tags": [
-    "assembly",
-    "bicycle",
-    "bmx",
-    "bowls",
-    "fork",
-    "handlebar",
-    "jump",
-    "pans",
-    "plates",
-    "teapots"
-   ],
-   "model": "models/bmx-jump-fork-18ab4275.glb",
-   "thumb": "thumbs/bmx-jump-fork-18ab4275.webp",
-   "triangles": 16612,
-   "bytes": 16528,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_bicycle_fork_and_handlebar_assembly_65c7671234f34b5c9008dcf24314660e, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_bicycle_fork_and_handlebar_assembly_65c7671234f34b5c9008dcf24314660e"
-  },
-  {
    "id": "platter-00360800",
    "name": "Platter",
    "group": "Kitchen",
@@ -2422,38 +2324,6 @@
    "sourceUrl": "https://sketchfab.com/3d-models/68550fc6f81a457994ea7ee71bc9846f",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
    "assetId": "objaverse:68550fc6f81a457994ea7ee71bc9846f"
-  },
-  {
-   "id": "tracking-dish-1c8be9a0",
-   "name": "Tracking dish",
-   "group": "Kitchen",
-   "family": "parabolic_dish_on_azimuth_elevation_mount",
-   "tags": [
-    "azimuth",
-    "bowls",
-    "dish",
-    "elevation",
-    "mount",
-    "pans",
-    "parabolic",
-    "plates",
-    "teapots",
-    "tracking"
-   ],
-   "model": "models/tracking-dish-1c8be9a0.glb",
-   "thumb": "thumbs/tracking-dish-1c8be9a0.webp",
-   "triangles": 8000,
-   "bytes": 26660,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_parabolic_dish_on_azimuth_elevation_mount_ff95ab246ac04d8d92e07ad4c874a686, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_parabolic_dish_on_azimuth_elevation_mount_ff95ab246ac04d8d92e07ad4c874a686"
   },
   {
    "id": "pedestal-bowl-0053f750",
@@ -2513,38 +2383,6 @@
    "assetId": "simready:kitchenware_pan_b01"
   },
   {
-   "id": "urban-commuter-fork-28665bd3",
-   "name": "Urban commuter fork",
-   "group": "Kitchen",
-   "family": "bicycle_fork_and_handlebar_assembly",
-   "tags": [
-    "assembly",
-    "bicycle",
-    "bowls",
-    "commuter",
-    "fork",
-    "handlebar",
-    "pans",
-    "plates",
-    "teapots",
-    "urban"
-   ],
-   "model": "models/urban-commuter-fork-28665bd3.glb",
-   "thumb": "thumbs/urban-commuter-fork-28665bd3.webp",
-   "triangles": 13826,
-   "bytes": 19308,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_bicycle_fork_and_handlebar_assembly_62895c2011144373a4fef1a22ef5ed56, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_bicycle_fork_and_handlebar_assembly_62895c2011144373a4fef1a22ef5ed56"
-  },
-  {
    "id": "teapot-00cf9ada",
    "name": "Teapot",
    "group": "Kitchen",
@@ -2571,40 +2409,6 @@
    "sourceUrl": "https://sketchfab.com/3d-models/57e70a2b6e0644f0b4311269683277f6",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
    "assetId": "objaverse:57e70a2b6e0644f0b4311269683277f6"
-  },
-  {
-   "id": "wall-bracket-communication-dish-2cfefa84",
-   "name": "Wall bracket communication dish",
-   "group": "Kitchen",
-   "family": "parabolic_dish_on_azimuth_elevation_mount",
-   "tags": [
-    "azimuth",
-    "bowls",
-    "bracket",
-    "communication",
-    "dish",
-    "elevation",
-    "mount",
-    "pans",
-    "parabolic",
-    "plates",
-    "teapots",
-    "wall"
-   ],
-   "model": "models/wall-bracket-communication-dish-2cfefa84.glb",
-   "thumb": "thumbs/wall-bracket-communication-dish-2cfefa84.webp",
-   "triangles": 6074,
-   "bytes": 17736,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_parabolic_dish_on_azimuth_elevation_mount_2b902e3ce5fc4373a2baa152a81521f2, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_parabolic_dish_on_azimuth_elevation_mount_2b902e3ce5fc4373a2baa152a81521f2"
   },
   {
    "id": "bowl-011ebb81",
@@ -2802,35 +2606,6 @@
    "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/kitchenware_ladle_b01",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
    "assetId": "simready:kitchenware_ladle_b01"
-  },
-  {
-   "id": "stepped-plate-04f4a93a",
-   "name": "Stepped plate",
-   "group": "Kitchen",
-   "family": "tableware",
-   "tags": [
-    "bowls",
-    "pans",
-    "plate",
-    "plates",
-    "stepped",
-    "tableware",
-    "teapots"
-   ],
-   "model": "models/stepped-plate-04f4a93a.glb",
-   "thumb": "thumbs/stepped-plate-04f4a93a.webp",
-   "triangles": 10318,
-   "bytes": 17072,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Purple plate. Photoscan\" by wrobot, https://sketchfab.com/3d-models/5c89fe395eb84ccfaac21abe605e821d, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/5c89fe395eb84ccfaac21abe605e821d",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:5c89fe395eb84ccfaac21abe605e821d"
   },
   {
    "id": "plate-414075b3",
@@ -3031,35 +2806,6 @@
    "assetId": "simready:kitchenware_pan_o01"
   },
   {
-   "id": "frying-pan-7b940504",
-   "name": "Frying pan",
-   "group": "Kitchen",
-   "family": "cookware",
-   "tags": [
-    "bowls",
-    "cookware",
-    "frying",
-    "pan",
-    "pans",
-    "plates",
-    "teapots"
-   ],
-   "model": "models/frying-pan-7b940504.glb",
-   "thumb": "thumbs/frying-pan-7b940504.webp",
-   "triangles": 13198,
-   "bytes": 14500,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "NVIDIA SimReady assets: \"kitchenware_pan_l01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/kitchenware_pan_l01, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/kitchenware_pan_l01",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
-   "assetId": "simready:kitchenware_pan_l01"
-  },
-  {
    "id": "moka-pot-086df11c",
    "name": "Moka pot",
    "group": "Kitchen",
@@ -3089,33 +2835,33 @@
    "assetId": "objaverse:9cb0e44bf426477db805f28ffcacaee6"
   },
   {
-   "id": "serving-spoon-947a9366",
-   "name": "Serving spoon",
+   "id": "frying-pan-7b940504",
+   "name": "Frying pan",
    "group": "Kitchen",
    "family": "cookware",
    "tags": [
     "bowls",
     "cookware",
+    "frying",
+    "pan",
     "pans",
     "plates",
-    "serving",
-    "spoon",
     "teapots"
    ],
-   "model": "models/serving-spoon-947a9366.glb",
-   "thumb": "thumbs/serving-spoon-947a9366.webp",
-   "triangles": 12292,
-   "bytes": 8052,
+   "model": "models/frying-pan-7b940504.glb",
+   "thumb": "thumbs/frying-pan-7b940504.webp",
+   "triangles": 13198,
+   "bytes": 14500,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "NVIDIA SimReady assets: \"utensil_spatula_wooden_b01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/utensil_spatula_wooden_b01, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/utensil_spatula_wooden_b01",
+   "credit": "NVIDIA SimReady assets: \"kitchenware_pan_l01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/kitchenware_pan_l01, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/kitchenware_pan_l01",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
-   "assetId": "simready:utensil_spatula_wooden_b01"
+   "assetId": "simready:kitchenware_pan_l01"
   },
   {
    "id": "pot-09b57536",
@@ -3144,6 +2890,35 @@
    "sourceUrl": "https://sketchfab.com/3d-models/62658b70d76b4f499767326e98853e50",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
    "assetId": "objaverse:62658b70d76b4f499767326e98853e50"
+  },
+  {
+   "id": "serving-spoon-947a9366",
+   "name": "Serving spoon",
+   "group": "Kitchen",
+   "family": "cookware",
+   "tags": [
+    "bowls",
+    "cookware",
+    "pans",
+    "plates",
+    "serving",
+    "spoon",
+    "teapots"
+   ],
+   "model": "models/serving-spoon-947a9366.glb",
+   "thumb": "thumbs/serving-spoon-947a9366.webp",
+   "triangles": 12292,
+   "bytes": 8052,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "NVIDIA SimReady assets: \"utensil_spatula_wooden_b01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/utensil_spatula_wooden_b01, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/utensil_spatula_wooden_b01",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
+   "assetId": "simready:utensil_spatula_wooden_b01"
   },
   {
    "id": "frying-pan-9ca58ec1",
@@ -3344,6 +3119,207 @@
    "sourceUrl": "https://sketchfab.com/3d-models/8a20618232ea4099903754c177f45c4d",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
    "assetId": "objaverse:8a20618232ea4099903754c177f45c4d"
+  },
+  {
+   "id": "collar-plate-0e7b8ebf",
+   "name": "Collar plate",
+   "group": "Kitchen",
+   "family": "container",
+   "tags": [
+    "bowls",
+    "collar",
+    "container",
+    "pans",
+    "plate",
+    "plates",
+    "teapots"
+   ],
+   "model": "models/collar-plate-0e7b8ebf.glb",
+   "thumb": "thumbs/collar-plate-0e7b8ebf.webp",
+   "triangles": 652,
+   "bytes": 5720,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Suica Card Holder\" by imaterialise, https://sketchfab.com/3d-models/ece90d3edcc0465daa4e77633a02fcbe, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/ece90d3edcc0465daa4e77633a02fcbe",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:ece90d3edcc0465daa4e77633a02fcbe"
+  },
+  {
+   "id": "coffeepot-0ef58af9",
+   "name": "Coffeepot",
+   "group": "Kitchen",
+   "family": "cookware",
+   "tags": [
+    "bowls",
+    "coffeepot",
+    "cookware",
+    "pans",
+    "plates",
+    "teapots"
+   ],
+   "model": "models/coffeepot-0ef58af9.glb",
+   "thumb": "thumbs/coffeepot-0ef58af9.webp",
+   "triangles": 16406,
+   "bytes": 85024,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Kettle\" by bloooob, https://sketchfab.com/3d-models/0a1e47c63bf643fd9abdec7517dbd7e1, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/0a1e47c63bf643fd9abdec7517dbd7e1",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:0a1e47c63bf643fd9abdec7517dbd7e1"
+  },
+  {
+   "id": "covered-pan-e365e405",
+   "name": "Covered pan",
+   "group": "Kitchen",
+   "family": "container",
+   "tags": [
+    "bowls",
+    "container",
+    "covered",
+    "pan",
+    "pans",
+    "plates",
+    "teapots"
+   ],
+   "model": "models/covered-pan-e365e405.glb",
+   "thumb": "thumbs/covered-pan-e365e405.webp",
+   "triangles": 3580,
+   "bytes": 9448,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "NVIDIA SimReady assets: \"container_system_sterilising_e01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/container_system_sterilising_e01, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/container_system_sterilising_e01",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
+   "assetId": "simready:container_system_sterilising_e01"
+  },
+  {
+   "id": "serving-fork-ee1e10f1",
+   "name": "Serving fork",
+   "group": "Kitchen",
+   "family": "tableware",
+   "tags": [
+    "bowls",
+    "fork",
+    "pans",
+    "plates",
+    "serving",
+    "tableware",
+    "teapots"
+   ],
+   "model": "models/serving-fork-ee1e10f1.glb",
+   "thumb": "thumbs/serving-fork-ee1e10f1.webp",
+   "triangles": 8396,
+   "bytes": 7320,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "NVIDIA SimReady assets: \"utensil_fork_wooden_b01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/utensil_fork_wooden_b01, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/utensil_fork_wooden_b01",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
+   "assetId": "simready:utensil_fork_wooden_b01"
+  },
+  {
+   "id": "ladle-f44ec022",
+   "name": "Ladle",
+   "group": "Kitchen",
+   "family": "tableware",
+   "tags": [
+    "bowls",
+    "ladle",
+    "pans",
+    "plates",
+    "tableware",
+    "teapots"
+   ],
+   "model": "models/ladle-f44ec022.glb",
+   "thumb": "thumbs/ladle-f44ec022.webp",
+   "triangles": 14000,
+   "bytes": 11496,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "NVIDIA SimReady assets: \"kitchenware_ladle_d01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/kitchenware_ladle_d01, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/kitchenware_ladle_d01",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
+   "assetId": "simready:kitchenware_ladle_d01"
+  },
+  {
+   "id": "cup-and-spoon-11a212f8",
+   "name": "Cup and spoon",
+   "group": "Kitchen",
+   "family": "tableware",
+   "tags": [
+    "bowls",
+    "cup",
+    "pans",
+    "plates",
+    "spoon",
+    "tableware",
+    "teapots"
+   ],
+   "model": "models/cup-and-spoon-11a212f8.glb",
+   "thumb": "thumbs/cup-and-spoon-11a212f8.webp",
+   "triangles": 13112,
+   "bytes": 17296,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"cup3\" by yuntian, https://sketchfab.com/3d-models/0bb52ec746cf4fc5b4448c52bff00aea, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/0bb52ec746cf4fc5b4448c52bff00aea",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:0bb52ec746cf4fc5b4448c52bff00aea"
+  },
+  {
+   "id": "tube-plate-128717d7",
+   "name": "Tube plate",
+   "group": "Kitchen",
+   "family": "tableware",
+   "tags": [
+    "bowls",
+    "pans",
+    "plate",
+    "plates",
+    "tableware",
+    "teapots",
+    "tube"
+   ],
+   "model": "models/tube-plate-128717d7.glb",
+   "thumb": "thumbs/tube-plate-128717d7.webp",
+   "triangles": 2744,
+   "bytes": 5004,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Mug002\" by scostain, https://sketchfab.com/3d-models/437292ba2e29479c85d670885ca11ecf, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/437292ba2e29479c85d670885ca11ecf",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:437292ba2e29479c85d670885ca11ecf"
   },
   {
    "id": "twist-vase-00896132",
@@ -4204,61 +4180,6 @@
    "assetId": "objaverse:f28e8dfe6d2f4da186f402b342b3e3f1"
   },
   {
-   "id": "dome-vessel-480533ff",
-   "name": "Dome vessel",
-   "group": "Vases",
-   "family": "toy or game",
-   "tags": [
-    "dome",
-    "game",
-    "pottery",
-    "toy",
-    "vases",
-    "vessel"
-   ],
-   "model": "models/dome-vessel-480533ff.glb",
-   "thumb": "thumbs/dome-vessel-480533ff.webp",
-   "triangles": 8146,
-   "bytes": 17744,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Astromech Droid\" by Porg123, https://sketchfab.com/3d-models/32d72a025a9746bf96b204b4c63897e7, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/32d72a025a9746bf96b204b4c63897e7",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:32d72a025a9746bf96b204b4c63897e7"
-  },
-  {
-   "id": "book-vessel-48aa21e9",
-   "name": "Book vessel",
-   "group": "Vases",
-   "family": "stationery",
-   "tags": [
-    "book",
-    "pottery",
-    "stationery",
-    "vases",
-    "vessel"
-   ],
-   "model": "models/book-vessel-48aa21e9.glb",
-   "thumb": "thumbs/book-vessel-48aa21e9.webp",
-   "triangles": 2270,
-   "bytes": 10732,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Late nineteenth century brown goatskin binding\" by hsandaver, https://sketchfab.com/3d-models/66c851b56fa04549b52d30879e2ed857, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/66c851b56fa04549b52d30879e2ed857",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:66c851b56fa04549b52d30879e2ed857"
-  },
-  {
    "id": "rounded-vessel-49c0fefb",
    "name": "Rounded vessel",
    "group": "Vases",
@@ -4285,33 +4206,6 @@
    "sourceUrl": "https://sketchfab.com/3d-models/245f585be4c84043847d93dbeabff8d0",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
    "assetId": "objaverse:245f585be4c84043847d93dbeabff8d0"
-  },
-  {
-   "id": "patrol-vessel-49da2909",
-   "name": "Patrol vessel",
-   "group": "Vases",
-   "family": "watercraft",
-   "tags": [
-    "patrol",
-    "pottery",
-    "vases",
-    "vessel",
-    "watercraft"
-   ],
-   "model": "models/patrol-vessel-49da2909.glb",
-   "thumb": "thumbs/patrol-vessel-49da2909.webp",
-   "triangles": 24334,
-   "bytes": 113488,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Olympe de Gouges - DRASSM\" by lafayette50, https://sketchfab.com/3d-models/07442c2c40a9438cb9411cd6a19caadb, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/07442c2c40a9438cb9411cd6a19caadb",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:07442c2c40a9438cb9411cd6a19caadb"
   },
   {
    "id": "square-vessel-4a2bbf10",
@@ -4341,33 +4235,6 @@
    "assetId": "objaverse:0401a13ba90d4f5c8c07954abcd6922c"
   },
   {
-   "id": "backdrop-vessel-4a60bd14",
-   "name": "Backdrop vessel",
-   "group": "Vases",
-   "family": "tableware",
-   "tags": [
-    "backdrop",
-    "pottery",
-    "tableware",
-    "vases",
-    "vessel"
-   ],
-   "model": "models/backdrop-vessel-4a60bd14.glb",
-   "thumb": "thumbs/backdrop-vessel-4a60bd14.webp",
-   "triangles": 7748,
-   "bytes": 30188,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Glass pitcher\" by stafff, https://sketchfab.com/3d-models/ccf51a3783cb4889b2ff6211d2147dc6, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/ccf51a3783cb4889b2ff6211d2147dc6",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:ccf51a3783cb4889b2ff6211d2147dc6"
-  },
-  {
    "id": "boot-planter-4bb7f21d",
    "name": "Boot planter",
    "group": "Vases",
@@ -4395,31 +4262,140 @@
    "assetId": "objaverse:28e04c38b6644c7bb33ea3f44372fcb9"
   },
   {
-   "id": "curled-vessel-4dedfb41",
-   "name": "Curled vessel",
+   "id": "arcane-vessel-505a388c",
+   "name": "Arcane vessel",
    "group": "Vases",
-   "family": "electronics",
+   "family": "cookware",
    "tags": [
-    "curled",
-    "electronics",
+    "arcane",
+    "cookware",
     "pottery",
     "vases",
     "vessel"
    ],
-   "model": "models/curled-vessel-4dedfb41.glb",
-   "thumb": "thumbs/curled-vessel-4dedfb41.webp",
-   "triangles": 3956,
-   "bytes": 15616,
+   "model": "models/arcane-vessel-505a388c.glb",
+   "thumb": "thumbs/arcane-vessel-505a388c.webp",
+   "triangles": 8274,
+   "bytes": 22536,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Oculus Rift Virtual Reality Headset Model\" by cognitivevr, https://sketchfab.com/3d-models/f78f2f6fd3b04383a095f2b1cc64aae7, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/f78f2f6fd3b04383a095f2b1cc64aae7",
+   "credit": "\"Chaudron\" by lantra, https://sketchfab.com/3d-models/b18581b0c01843978ea1f7b5d06cd5fc, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/b18581b0c01843978ea1f7b5d06cd5fc",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:f78f2f6fd3b04383a095f2b1cc64aae7"
+   "assetId": "objaverse:b18581b0c01843978ea1f7b5d06cd5fc"
+  },
+  {
+   "id": "hooked-vessel-50f06032",
+   "name": "Hooked vessel",
+   "group": "Vases",
+   "family": "container",
+   "tags": [
+    "container",
+    "hooked",
+    "pottery",
+    "vases",
+    "vessel"
+   ],
+   "model": "models/hooked-vessel-50f06032.glb",
+   "thumb": "thumbs/hooked-vessel-50f06032.webp",
+   "triangles": 16700,
+   "bytes": 19916,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC0-1.0",
+   "credit": "\"Laboratory graphite flask\" by WirtualneMuzeaMalopolski, https://sketchfab.com/3d-models/2bb529bd1f1f42cf9cdfa8aff56b35f6, CC0-1.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/2bb529bd1f1f42cf9cdfa8aff56b35f6",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:2bb529bd1f1f42cf9cdfa8aff56b35f6"
+  },
+  {
+   "id": "barrel-vessel-53bd4e52",
+   "name": "Barrel vessel",
+   "group": "Vases",
+   "family": "garden or outdoor",
+   "tags": [
+    "barrel",
+    "garden",
+    "outdoor",
+    "pottery",
+    "vases",
+    "vessel"
+   ],
+   "model": "models/barrel-vessel-53bd4e52.glb",
+   "thumb": "thumbs/barrel-vessel-53bd4e52.webp",
+   "triangles": 1512,
+   "bytes": 11756,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"3D sketchbook 2 - watering pot\" by kcondley, https://sketchfab.com/3d-models/14b22f24beb34849b231f6fcd90aeee1, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/14b22f24beb34849b231f6fcd90aeee1",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:14b22f24beb34849b231f6fcd90aeee1"
+  },
+  {
+   "id": "round-vessel-53be775e",
+   "name": "Round vessel",
+   "group": "Vases",
+   "family": "watercraft",
+   "tags": [
+    "pottery",
+    "round",
+    "vases",
+    "vessel",
+    "watercraft"
+   ],
+   "model": "models/round-vessel-53be775e.glb",
+   "thumb": "thumbs/round-vessel-53be775e.webp",
+   "triangles": 9348,
+   "bytes": 37076,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Sinergia Sa7\" by cirofrancesco.urselli, https://sketchfab.com/3d-models/7620a6aa45e34d298acd4fe143425043, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/7620a6aa45e34d298acd4fe143425043",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:7620a6aa45e34d298acd4fe143425043"
+  },
+  {
+   "id": "twin-vessel-5b2bef0e",
+   "name": "Twin vessel",
+   "group": "Vases",
+   "family": "container",
+   "tags": [
+    "container",
+    "pottery",
+    "twin",
+    "vases",
+    "vessel"
+   ],
+   "model": "models/twin-vessel-5b2bef0e.glb",
+   "thumb": "thumbs/twin-vessel-5b2bef0e.webp",
+   "triangles": 4052,
+   "bytes": 24760,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Recycle Bin High res\" by laaafite, https://sketchfab.com/3d-models/ede0f1a8e3624c688eedaf9a8b68ffd9, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/ede0f1a8e3624c688eedaf9a8b68ffd9",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:ede0f1a8e3624c688eedaf9a8b68ffd9"
   },
   {
    "id": "carrot-01edc819",
@@ -5706,35 +5682,32 @@
    "assetId": "simready:lamp_table_bedside_a01"
   },
   {
-   "id": "dual-arm-surgical-exam-lamp-00b7ffd2",
-   "name": "Dual arm surgical exam lamp",
+   "id": "minimalist-task-lamp-00d45351",
+   "name": "Minimalist task lamp",
    "group": "Lamps and candles",
    "family": "articulated_task_lamp",
    "tags": [
-    "arm",
     "articulated",
     "candles",
-    "dual",
-    "exam",
     "lamp",
     "lamps",
-    "surgical",
+    "minimalist",
     "task"
    ],
-   "model": "models/dual-arm-surgical-exam-lamp-00b7ffd2.glb",
-   "thumb": "thumbs/dual-arm-surgical-exam-lamp-00b7ffd2.webp",
-   "triangles": 4352,
-   "bytes": 20156,
+   "model": "models/minimalist-task-lamp-00d45351.glb",
+   "thumb": "thumbs/minimalist-task-lamp-00d45351.webp",
+   "triangles": 568,
+   "bytes": 6760,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_articulated_task_lamp_d10a06366931437ca72efd5753970a07, CC BY 4.0; modified: rewritten as a sand3d program",
+   "credit": "Articraft Data, Matt Zhou et al., record rec_articulated_task_lamp_960a3f5d314347e4a138406845c8004b, CC BY 4.0; modified: rewritten as a sand3d program",
    "sourceUrl": null,
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_articulated_task_lamp_d10a06366931437ca72efd5753970a07"
+   "assetId": "articraft:rec_articulated_task_lamp_960a3f5d314347e4a138406845c8004b"
   },
   {
    "id": "lantern-0182adb7",
@@ -5790,32 +5763,32 @@
    "assetId": "simready:light_surgical_ceiling_arm_b01"
   },
   {
-   "id": "minimalist-task-lamp-00d45351",
-   "name": "Minimalist task lamp",
+   "id": "designer-arc-floor-lamp-030f319a",
+   "name": "Designer arc floor lamp",
    "group": "Lamps and candles",
-   "family": "articulated_task_lamp",
+   "family": "floor_lamp",
    "tags": [
-    "articulated",
+    "arc",
     "candles",
+    "designer",
+    "floor",
     "lamp",
-    "lamps",
-    "minimalist",
-    "task"
+    "lamps"
    ],
-   "model": "models/minimalist-task-lamp-00d45351.glb",
-   "thumb": "thumbs/minimalist-task-lamp-00d45351.webp",
-   "triangles": 568,
-   "bytes": 6760,
+   "model": "models/designer-arc-floor-lamp-030f319a.glb",
+   "thumb": "thumbs/designer-arc-floor-lamp-030f319a.webp",
+   "triangles": 15482,
+   "bytes": 15052,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_articulated_task_lamp_960a3f5d314347e4a138406845c8004b, CC BY 4.0; modified: rewritten as a sand3d program",
+   "credit": "Articraft Data, Matt Zhou et al., record rec_floor_lamp_f8f511fdadc04d5fba262deca79eaee2, CC BY 4.0; modified: rewritten as a sand3d program",
    "sourceUrl": null,
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_articulated_task_lamp_960a3f5d314347e4a138406845c8004b"
+   "assetId": "articraft:rec_floor_lamp_f8f511fdadc04d5fba262deca79eaee2"
   },
   {
    "id": "lantern-01fd1538",
@@ -5871,32 +5844,33 @@
    "assetId": "simready:lighting_taskLight_adjustableArmBench_a01"
   },
   {
-   "id": "designer-arc-floor-lamp-030f319a",
-   "name": "Designer arc floor lamp",
+   "id": "wall-arm-task-lamp-038f901f",
+   "name": "Wall arm task lamp",
    "group": "Lamps and candles",
-   "family": "floor_lamp",
+   "family": "articulated_task_lamp",
    "tags": [
-    "arc",
+    "arm",
+    "articulated",
     "candles",
-    "designer",
-    "floor",
     "lamp",
-    "lamps"
+    "lamps",
+    "task",
+    "wall"
    ],
-   "model": "models/designer-arc-floor-lamp-030f319a.glb",
-   "thumb": "thumbs/designer-arc-floor-lamp-030f319a.webp",
-   "triangles": 15482,
-   "bytes": 15052,
+   "model": "models/wall-arm-task-lamp-038f901f.glb",
+   "thumb": "thumbs/wall-arm-task-lamp-038f901f.webp",
+   "triangles": 1364,
+   "bytes": 7292,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_floor_lamp_f8f511fdadc04d5fba262deca79eaee2, CC BY 4.0; modified: rewritten as a sand3d program",
+   "credit": "Articraft Data, Matt Zhou et al., record rec_articulated_task_lamp_ab1296dbfee94e06875d5accfabd25b7, CC BY 4.0; modified: rewritten as a sand3d program",
    "sourceUrl": null,
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_floor_lamp_f8f511fdadc04d5fba262deca79eaee2"
+   "assetId": "articraft:rec_articulated_task_lamp_ab1296dbfee94e06875d5accfabd25b7"
   },
   {
    "id": "desk-lamp-02006084",
@@ -5926,33 +5900,33 @@
    "assetId": "objaverse:a759f6f592084e04be62a57d578b6cb6"
   },
   {
-   "id": "wall-arm-task-lamp-038f901f",
-   "name": "Wall arm task lamp",
+   "id": "magnifying-floor-lamp-0547ec56",
+   "name": "Magnifying floor lamp",
    "group": "Lamps and candles",
    "family": "articulated_task_lamp",
    "tags": [
-    "arm",
     "articulated",
     "candles",
+    "floor",
     "lamp",
     "lamps",
-    "task",
-    "wall"
+    "magnifying",
+    "task"
    ],
-   "model": "models/wall-arm-task-lamp-038f901f.glb",
-   "thumb": "thumbs/wall-arm-task-lamp-038f901f.webp",
-   "triangles": 1364,
-   "bytes": 7292,
+   "model": "models/magnifying-floor-lamp-0547ec56.glb",
+   "thumb": "thumbs/magnifying-floor-lamp-0547ec56.webp",
+   "triangles": 3024,
+   "bytes": 12176,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_articulated_task_lamp_ab1296dbfee94e06875d5accfabd25b7, CC BY 4.0; modified: rewritten as a sand3d program",
+   "credit": "Articraft Data, Matt Zhou et al., record rec_articulated_task_lamp_4224e4fd1125405e8d7d07f7bb27a9e2, CC BY 4.0; modified: rewritten as a sand3d program",
    "sourceUrl": null,
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_articulated_task_lamp_ab1296dbfee94e06875d5accfabd25b7"
+   "assetId": "articraft:rec_articulated_task_lamp_4224e4fd1125405e8d7d07f7bb27a9e2"
   },
   {
    "id": "articulated-lamp-0286fcb8",
@@ -6222,33 +6196,6 @@
    "assetId": "objaverse:09a9f95d58cf4d3fb8fe9f022e0db959"
   },
   {
-   "id": "post-lamp-0ed9cd18",
-   "name": "Post lamp",
-   "group": "Lamps and candles",
-   "family": "lighting",
-   "tags": [
-    "candles",
-    "lamp",
-    "lamps",
-    "lighting",
-    "post"
-   ],
-   "model": "models/post-lamp-0ed9cd18.glb",
-   "thumb": "thumbs/post-lamp-0ed9cd18.webp",
-   "triangles": 17040,
-   "bytes": 10304,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Streetlight Sci Fi\" by Lexxn0x3, https://sketchfab.com/3d-models/b044795234e042a496c136f6286ddb97, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/b044795234e042a496c136f6286ddb97",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:b044795234e042a496c136f6286ddb97"
-  },
-  {
    "id": "crown-lamp-0f2852d7",
    "name": "Crown lamp",
    "group": "Lamps and candles",
@@ -6465,33 +6412,6 @@
    "assetId": "objaverse:f93be18847144f1fbd87930d2070cb71"
   },
   {
-   "id": "post-lantern-17709993",
-   "name": "Post lantern",
-   "group": "Lamps and candles",
-   "family": "lighting",
-   "tags": [
-    "candles",
-    "lamps",
-    "lantern",
-    "lighting",
-    "post"
-   ],
-   "model": "models/post-lantern-17709993.glb",
-   "thumb": "thumbs/post-lantern-17709993.webp",
-   "triangles": 1592,
-   "bytes": 4104,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"LAMP POST - EASTERN GRAY\u2122 - copy\" by polycordesign, https://sketchfab.com/3d-models/d9bf32e30b12432b88395cdbb15edc6a, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/d9bf32e30b12432b88395cdbb15edc6a",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:d9bf32e30b12432b88395cdbb15edc6a"
-  },
-  {
    "id": "task-lamp-19cbce87",
    "name": "Task lamp",
    "group": "Lamps and candles",
@@ -6627,33 +6547,57 @@
    "assetId": "objaverse:384b79f0be904b9fb97905d65dc8ccfd"
   },
   {
-   "id": "machinist-vise-00cd9843",
-   "name": "Machinist vise",
-   "group": "Tools",
-   "family": "bench_vise_with_prismatic_jaw",
+   "id": "post-lantern-26036336",
+   "name": "Post lantern",
+   "group": "Lamps and candles",
+   "family": "lighting",
    "tags": [
-    "bench",
-    "hand",
-    "jaw",
-    "machinist",
-    "prismatic",
-    "tools",
-    "vise"
+    "candles",
+    "lamps",
+    "lantern",
+    "lighting",
+    "post"
    ],
-   "model": "models/machinist-vise-00cd9843.glb",
-   "thumb": "thumbs/machinist-vise-00cd9843.webp",
-   "triangles": 2332,
-   "bytes": 15516,
+   "model": "models/post-lantern-26036336.glb",
+   "thumb": "thumbs/post-lantern-26036336.webp",
+   "triangles": 11630,
+   "bytes": 16436,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_bench_vise_with_prismatic_jaw_e741405195a248838b23e5edcc86ccba, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_bench_vise_with_prismatic_jaw_e741405195a248838b23e5edcc86ccba"
+   "credit": "\"Elektrostandard Talli F GL 3002F \u0431\u0440\u0430\u0443\u043d\u0438\" by svetmagaz, https://sketchfab.com/3d-models/259049bb05f64d06939c8f663a34828f, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/259049bb05f64d06939c8f663a34828f",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:259049bb05f64d06939c8f663a34828f"
+  },
+  {
+   "id": "candlestick-2740eeed",
+   "name": "Candlestick",
+   "group": "Lamps and candles",
+   "family": "lighting",
+   "tags": [
+    "candles",
+    "candlestick",
+    "lamps",
+    "lighting"
+   ],
+   "model": "models/candlestick-2740eeed.glb",
+   "thumb": "thumbs/candlestick-2740eeed.webp",
+   "triangles": 440,
+   "bytes": 5852,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Candle\" by drop05, https://sketchfab.com/3d-models/f9ed3b934fa34ca1847994470ce5bdc6, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/f9ed3b934fa34ca1847994470ce5bdc6",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:f9ed3b934fa34ca1847994470ce5bdc6"
   },
   {
    "id": "axe-000979c7",
@@ -6708,37 +6652,6 @@
    "assetId": "simready:paint_supplies_brush_a04"
   },
   {
-   "id": "angle-lock-drill-vise-13e8c977",
-   "name": "Angle lock drill vise",
-   "group": "Tools",
-   "family": "bench_vise_with_prismatic_jaw",
-   "tags": [
-    "angle",
-    "bench",
-    "drill",
-    "hand",
-    "jaw",
-    "lock",
-    "prismatic",
-    "tools",
-    "vise"
-   ],
-   "model": "models/angle-lock-drill-vise-13e8c977.glb",
-   "thumb": "thumbs/angle-lock-drill-vise-13e8c977.webp",
-   "triangles": 2980,
-   "bytes": 17216,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_bench_vise_with_prismatic_jaw_fee8d749fb37444a9af25f5f1d07943b, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_bench_vise_with_prismatic_jaw_fee8d749fb37444a9af25f5f1d07943b"
-  },
-  {
    "id": "axe-0099f95b",
    "name": "Axe",
    "group": "Tools",
@@ -6763,36 +6676,6 @@
    "sourceUrl": "https://sketchfab.com/3d-models/6562cf4886ea42ac892fb9eddb78b6dd",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
    "assetId": "objaverse:6562cf4886ea42ac892fb9eddb78b6dd"
-  },
-  {
-   "id": "cross-slide-vise-13e8f173",
-   "name": "Cross slide vise",
-   "group": "Tools",
-   "family": "bench_vise_with_prismatic_jaw",
-   "tags": [
-    "bench",
-    "cross",
-    "hand",
-    "jaw",
-    "prismatic",
-    "slide",
-    "tools",
-    "vise"
-   ],
-   "model": "models/cross-slide-vise-13e8f173.glb",
-   "thumb": "thumbs/cross-slide-vise-13e8f173.webp",
-   "triangles": 2324,
-   "bytes": 14816,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_bench_vise_with_prismatic_jaw_e98ab08ca40b417f96ff66714781b2b8, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_bench_vise_with_prismatic_jaw_e98ab08ca40b417f96ff66714781b2b8"
   },
   {
    "id": "hatchet-010e57bb",
@@ -6847,34 +6730,6 @@
    "assetId": "simready:handTool_wrench_combination_a01"
   },
   {
-   "id": "bench-vise-1a5c49eb",
-   "name": "Bench vise",
-   "group": "Tools",
-   "family": "bench_vise_with_prismatic_jaw",
-   "tags": [
-    "bench",
-    "hand",
-    "jaw",
-    "prismatic",
-    "tools",
-    "vise"
-   ],
-   "model": "models/bench-vise-1a5c49eb.glb",
-   "thumb": "thumbs/bench-vise-1a5c49eb.webp",
-   "triangles": 1072,
-   "bytes": 8396,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_bench_vise_with_prismatic_jaw_1a96ba2adb8544e09852c8f8edb1ed88, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_bench_vise_with_prismatic_jaw_1a96ba2adb8544e09852c8f8edb1ed88"
-  },
-  {
    "id": "hammer-012bd9e1",
    "name": "Hammer",
    "group": "Tools",
@@ -6927,35 +6782,6 @@
    "assetId": "simready:handTool_screwdriver_phillips_ph1_a01"
   },
   {
-   "id": "machinist-bench-vise-1aeb0ede",
-   "name": "Machinist bench vise",
-   "group": "Tools",
-   "family": "bench_vise_with_prismatic_jaw",
-   "tags": [
-    "bench",
-    "hand",
-    "jaw",
-    "machinist",
-    "prismatic",
-    "tools",
-    "vise"
-   ],
-   "model": "models/machinist-bench-vise-1aeb0ede.glb",
-   "thumb": "thumbs/machinist-bench-vise-1aeb0ede.webp",
-   "triangles": 4576,
-   "bytes": 19724,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_bench_vise_with_prismatic_jaw_cb3f36676c2f46c2bc5201c67f13b00b, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_bench_vise_with_prismatic_jaw_cb3f36676c2f46c2bc5201c67f13b00b"
-  },
-  {
    "id": "clamp-01482098",
    "name": "Clamp",
    "group": "Tools",
@@ -7006,35 +6832,6 @@
    "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/handTool_hammer_rubberMallet_a01",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
    "assetId": "simready:handTool_hammer_rubberMallet_a01"
-  },
-  {
-   "id": "woodworking-vise-1f9ed2b7",
-   "name": "Woodworking vise",
-   "group": "Tools",
-   "family": "bench_vise_with_prismatic_jaw",
-   "tags": [
-    "bench",
-    "hand",
-    "jaw",
-    "prismatic",
-    "tools",
-    "vise",
-    "woodworking"
-   ],
-   "model": "models/woodworking-vise-1f9ed2b7.glb",
-   "thumb": "thumbs/woodworking-vise-1f9ed2b7.webp",
-   "triangles": 1728,
-   "bytes": 8196,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_bench_vise_with_prismatic_jaw_0003, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_bench_vise_with_prismatic_jaw_0003"
   },
   {
    "id": "screwdriver-0161f1ac",
@@ -7697,6 +7494,168 @@
    "assetId": "simready:powerTool_cutting_tool_a01"
   },
   {
+   "id": "mechanical-clamp-67527460",
+   "name": "Mechanical clamp",
+   "group": "Tools",
+   "family": "hand tool",
+   "tags": [
+    "clamp",
+    "hand",
+    "mechanical",
+    "tool",
+    "tools"
+   ],
+   "model": "models/mechanical-clamp-67527460.glb",
+   "thumb": "thumbs/mechanical-clamp-67527460.webp",
+   "triangles": 16494,
+   "bytes": 20744,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "NVIDIA SimReady assets: \"tireTool_bead_breaker_a01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/tireTool_bead_breaker_a01, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/tireTool_bead_breaker_a01",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
+   "assetId": "simready:tireTool_bead_breaker_a01"
+  },
+  {
+   "id": "adjustable-wrench-0a6db818",
+   "name": "Adjustable wrench",
+   "group": "Tools",
+   "family": "hand tool",
+   "tags": [
+    "adjustable",
+    "hand",
+    "tool",
+    "tools",
+    "wrench"
+   ],
+   "model": "models/adjustable-wrench-0a6db818.glb",
+   "thumb": "thumbs/adjustable-wrench-0a6db818.webp",
+   "triangles": 2208,
+   "bytes": 7804,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Crescent Wrench finished\" by Connor_A, https://sketchfab.com/3d-models/f222d8c16b3740ca98c21a5df26c8b13, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/f222d8c16b3740ca98c21a5df26c8b13",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:f222d8c16b3740ca98c21a5df26c8b13"
+  },
+  {
+   "id": "round-nose-pliers-7c361028",
+   "name": "Round nose pliers",
+   "group": "Tools",
+   "family": "hand tool",
+   "tags": [
+    "hand",
+    "nose",
+    "pliers",
+    "round",
+    "tool",
+    "tools"
+   ],
+   "model": "models/round-nose-pliers-7c361028.glb",
+   "thumb": "thumbs/round-nose-pliers-7c361028.webp",
+   "triangles": 17776,
+   "bytes": 21640,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "NVIDIA SimReady assets: \"handTool_pliers_circlip_a01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/handTool_pliers_circlip_a01, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/handTool_pliers_circlip_a01",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
+   "assetId": "simready:handTool_pliers_circlip_a01"
+  },
+  {
+   "id": "barrel-vise-94028bfb",
+   "name": "Barrel vise",
+   "group": "Tools",
+   "family": "hand tool",
+   "tags": [
+    "barrel",
+    "hand",
+    "tool",
+    "tools",
+    "vise"
+   ],
+   "model": "models/barrel-vise-94028bfb.glb",
+   "thumb": "thumbs/barrel-vise-94028bfb.webp",
+   "triangles": 10744,
+   "bytes": 21644,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "NVIDIA SimReady assets: \"equipment_machine_vise_c01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/equipment_machine_vise_c01, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/equipment_machine_vise_c01",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
+   "assetId": "simready:equipment_machine_vise_c01"
+  },
+  {
+   "id": "chisel-0afa7817",
+   "name": "Chisel",
+   "group": "Tools",
+   "family": "hand tool",
+   "tags": [
+    "chisel",
+    "hand",
+    "tool",
+    "tools"
+   ],
+   "model": "models/chisel-0afa7817.glb",
+   "thumb": "thumbs/chisel-0afa7817.webp",
+   "triangles": 7154,
+   "bytes": 9556,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Chisel_LowPoly\" by VictorBorgions, https://sketchfab.com/3d-models/83a22962b2364310aa34cb65ee8850b8, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/83a22962b2364310aa34cb65ee8850b8",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:83a22962b2364310aa34cb65ee8850b8"
+  },
+  {
+   "id": "socket-wrench-abe9ac55",
+   "name": "Socket wrench",
+   "group": "Tools",
+   "family": "hand tool",
+   "tags": [
+    "hand",
+    "socket",
+    "tool",
+    "tools",
+    "wrench"
+   ],
+   "model": "models/socket-wrench-abe9ac55.glb",
+   "thumb": "thumbs/socket-wrench-abe9ac55.webp",
+   "triangles": 21046,
+   "bytes": 46328,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "NVIDIA SimReady assets: \"handTool_wrench_dogBone_a01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/handTool_wrench_dogBone_a01, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/handTool_wrench_dogBone_a01",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
+   "assetId": "simready:handTool_wrench_dogBone_a01"
+  },
+  {
    "id": "metronome-052db792",
    "name": "Metronome",
    "group": "Instruments",
@@ -7827,33 +7786,6 @@
    "assetId": "articraft:rec_metronome_64cab00bedbc4f5d91e1991023581669"
   },
   {
-   "id": "underslung-tabletop-metronome-07c8665b",
-   "name": "Underslung tabletop metronome",
-   "group": "Instruments",
-   "family": "metronome",
-   "tags": [
-    "instruments",
-    "metronome",
-    "musical",
-    "tabletop",
-    "underslung"
-   ],
-   "model": "models/underslung-tabletop-metronome-07c8665b.glb",
-   "thumb": "thumbs/underslung-tabletop-metronome-07c8665b.webp",
-   "triangles": 2092,
-   "bytes": 12340,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_metronome_8fe709dba54e4435a3fc8ba0dc03ce56, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_metronome_8fe709dba54e4435a3fc8ba0dc03ce56"
-  },
-  {
    "id": "open-frame-metronome-18343f0e",
    "name": "Open frame metronome",
    "group": "Instruments",
@@ -7881,32 +7813,59 @@
    "assetId": "articraft:rec_metronome_c48c7edd47ad48169b3b861c31d88b18"
   },
   {
-   "id": "low-wide-slot-metronome-2f458d27",
-   "name": "Low wide slot metronome",
+   "id": "portable-pyramid-metronome-318c5fd8",
+   "name": "Portable pyramid metronome",
    "group": "Instruments",
    "family": "metronome",
    "tags": [
     "instruments",
-    "low",
     "metronome",
     "musical",
-    "slot",
-    "wide"
+    "portable",
+    "pyramid"
    ],
-   "model": "models/low-wide-slot-metronome-2f458d27.glb",
-   "thumb": "thumbs/low-wide-slot-metronome-2f458d27.webp",
-   "triangles": 822,
-   "bytes": 5888,
+   "model": "models/portable-pyramid-metronome-318c5fd8.glb",
+   "thumb": "thumbs/portable-pyramid-metronome-318c5fd8.webp",
+   "triangles": 1308,
+   "bytes": 8200,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_metronome_1eeb027d66714e628bb81bfa379b5b39, CC BY 4.0; modified: rewritten as a sand3d program",
+   "credit": "Articraft Data, Matt Zhou et al., record rec_metronome_0cafa053d68d4d6694e45bcc52b53535, CC BY 4.0; modified: rewritten as a sand3d program",
    "sourceUrl": null,
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_metronome_1eeb027d66714e628bb81bfa379b5b39"
+   "assetId": "articraft:rec_metronome_0cafa053d68d4d6694e45bcc52b53535"
+  },
+  {
+   "id": "box-style-mechanical-metronome-435db0dd",
+   "name": "Box style mechanical metronome",
+   "group": "Instruments",
+   "family": "metronome",
+   "tags": [
+    "box",
+    "instruments",
+    "mechanical",
+    "metronome",
+    "musical",
+    "style"
+   ],
+   "model": "models/box-style-mechanical-metronome-435db0dd.glb",
+   "thumb": "thumbs/box-style-mechanical-metronome-435db0dd.webp",
+   "triangles": 1140,
+   "bytes": 8460,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "Articraft Data, Matt Zhou et al., record rec_metronome_0a0008f3f10c46a297b50b0f9e4cc336, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": null,
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
+   "assetId": "articraft:rec_metronome_0a0008f3f10c46a297b50b0f9e4cc336"
   },
   {
    "id": "saxophone-01765cdf",
@@ -8968,61 +8927,6 @@
    "assetId": "objaverse:69417e526cf94b91a16761999a3d4cb8"
   },
   {
-   "id": "weatherproof-swivel-bar-stool-01359775",
-   "name": "Weatherproof swivel bar stool",
-   "group": "Chairs",
-   "family": "swivel_bar_stool",
-   "tags": [
-    "bar",
-    "chairs",
-    "stool",
-    "stools",
-    "swivel",
-    "weatherproof"
-   ],
-   "model": "models/weatherproof-swivel-bar-stool-01359775.glb",
-   "thumb": "thumbs/weatherproof-swivel-bar-stool-01359775.webp",
-   "triangles": 8498,
-   "bytes": 26916,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_swivel_bar_stool_f0553aa344774b98874451359e25ce86, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_swivel_bar_stool_f0553aa344774b98874451359e25ce86"
-  },
-  {
-   "id": "crystal-throne-0240b986",
-   "name": "Crystal throne",
-   "group": "Chairs",
-   "family": "furniture",
-   "tags": [
-    "chairs",
-    "crystal",
-    "furniture",
-    "stools",
-    "throne"
-   ],
-   "model": "models/crystal-throne-0240b986.glb",
-   "thumb": "thumbs/crystal-throne-0240b986.webp",
-   "triangles": 6236,
-   "bytes": 20112,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"crystal throne\" by WhiskeyDogg, https://sketchfab.com/3d-models/0fba0f59cfac44509ad40025f187eaa9, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/0fba0f59cfac44509ad40025f187eaa9",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:0fba0f59cfac44509ad40025f187eaa9"
-  },
-  {
    "id": "swivel-bar-stool-031e4d7b",
    "name": "Swivel bar stool",
    "group": "Chairs",
@@ -9074,6 +8978,34 @@
    "sourceUrl": "https://sketchfab.com/3d-models/4f57e720273e4c23b0a5fc149b518d0f",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
    "assetId": "objaverse:4f57e720273e4c23b0a5fc149b518d0f"
+  },
+  {
+   "id": "utility-swivel-bar-stool-064cfd8e",
+   "name": "Utility swivel bar stool",
+   "group": "Chairs",
+   "family": "swivel_bar_stool",
+   "tags": [
+    "bar",
+    "chairs",
+    "stool",
+    "stools",
+    "swivel",
+    "utility"
+   ],
+   "model": "models/utility-swivel-bar-stool-064cfd8e.glb",
+   "thumb": "thumbs/utility-swivel-bar-stool-064cfd8e.webp",
+   "triangles": 14136,
+   "bytes": 46428,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "Articraft Data, Matt Zhou et al., record rec_swivel_bar_stool_0004, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": null,
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
+   "assetId": "articraft:rec_swivel_bar_stool_0004"
   },
   {
    "id": "chair-05fe6ee9",
@@ -9825,6 +9757,33 @@
    "assetId": "objaverse:5a7a42fea95340a6b544d6d553b6f244"
   },
   {
+   "id": "swivel-chair-6a0a4aba",
+   "name": "Swivel chair",
+   "group": "Chairs",
+   "family": "furniture",
+   "tags": [
+    "chair",
+    "chairs",
+    "furniture",
+    "stools",
+    "swivel"
+   ],
+   "model": "models/swivel-chair-6a0a4aba.glb",
+   "thumb": "thumbs/swivel-chair-6a0a4aba.webp",
+   "triangles": 13208,
+   "bytes": 26452,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"2\" by jacalasta, https://sketchfab.com/3d-models/c3cfc6340ba9467885b9cf0cb3a2517e, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/c3cfc6340ba9467885b9cf0cb3a2517e",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:c3cfc6340ba9467885b9cf0cb3a2517e"
+  },
+  {
    "id": "tackle-box-00b7a659",
    "name": "Tackle box",
    "group": "Books and boxes",
@@ -9855,33 +9814,31 @@
    "assetId": "articraft:rec_tackle_box_with_simple_hinged_lid_74df80a9234048ef99be161cd83cafcb"
   },
   {
-   "id": "crank-box-006e9054",
-   "name": "Crank box",
+   "id": "book-0123aea0",
+   "name": "Book",
    "group": "Books and boxes",
-   "family": "toy or game",
+   "family": "stationery",
    "tags": [
     "baskets",
+    "book",
     "books",
-    "box",
     "boxes",
-    "crank",
-    "game",
-    "toy"
+    "stationery"
    ],
-   "model": "models/crank-box-006e9054.glb",
-   "thumb": "thumbs/crank-box-006e9054.webp",
-   "triangles": 1458,
-   "bytes": 7184,
+   "model": "models/book-0123aea0.glb",
+   "thumb": "thumbs/book-0123aea0.webp",
+   "triangles": 436,
+   "bytes": 4056,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Automata\" by cduzan, https://sketchfab.com/3d-models/7a29dfb709d44b89abe74cc5a8ef0953, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/7a29dfb709d44b89abe74cc5a8ef0953",
+   "credit": "\"Spell Book\" by jacob_betts, https://sketchfab.com/3d-models/ee28b446251a48d8846b64b1fa0c3689, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/ee28b446251a48d8846b64b1fa0c3689",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:7a29dfb709d44b89abe74cc5a8ef0953"
+   "assetId": "objaverse:ee28b446251a48d8846b64b1fa0c3689"
   },
   {
    "id": "crate-0014961a",
@@ -9942,7 +9899,7 @@
    "assetId": "articraft:rec_tackle_box_with_simple_hinged_lid_a750c95f7f1a44728f3bdbe0571c4092"
   },
   {
-   "id": "book-0123aea0",
+   "id": "book-0139c5c8",
    "name": "Book",
    "group": "Books and boxes",
    "family": "stationery",
@@ -9953,20 +9910,20 @@
     "boxes",
     "stationery"
    ],
-   "model": "models/book-0123aea0.glb",
-   "thumb": "thumbs/book-0123aea0.webp",
-   "triangles": 436,
-   "bytes": 4056,
+   "model": "models/book-0139c5c8.glb",
+   "thumb": "thumbs/book-0139c5c8.webp",
+   "triangles": 7272,
+   "bytes": 15640,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Spell Book\" by jacob_betts, https://sketchfab.com/3d-models/ee28b446251a48d8846b64b1fa0c3689, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/ee28b446251a48d8846b64b1fa0c3689",
+   "credit": "\"Old Book\" by reiM_Ru, https://sketchfab.com/3d-models/33304ead62d64efbabd179e94b9b33e1, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/33304ead62d64efbabd179e94b9b33e1",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:ee28b446251a48d8846b64b1fa0c3689"
+   "assetId": "objaverse:33304ead62d64efbabd179e94b9b33e1"
   },
   {
    "id": "banded-box-05077ad6",
@@ -10028,33 +9985,6 @@
    "assetId": "articraft:rec_sewing_box_with_simple_hinged_lid_0003"
   },
   {
-   "id": "book-0139c5c8",
-   "name": "Book",
-   "group": "Books and boxes",
-   "family": "stationery",
-   "tags": [
-    "baskets",
-    "book",
-    "books",
-    "boxes",
-    "stationery"
-   ],
-   "model": "models/book-0139c5c8.glb",
-   "thumb": "thumbs/book-0139c5c8.webp",
-   "triangles": 7272,
-   "bytes": 15640,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Old Book\" by reiM_Ru, https://sketchfab.com/3d-models/33304ead62d64efbabd179e94b9b33e1, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/33304ead62d64efbabd179e94b9b33e1",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:33304ead62d64efbabd179e94b9b33e1"
-  },
-  {
    "id": "crate-0d94de6c",
    "name": "Crate",
    "group": "Books and boxes",
@@ -10111,6 +10041,33 @@
    "sourceUrl": null,
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
    "assetId": "articraft:rec_sewing_box_with_simple_hinged_lid_abdd0d31aad040ebba9d7e90b2c683ab"
+  },
+  {
+   "id": "box-016fea74",
+   "name": "Box",
+   "group": "Books and boxes",
+   "family": "furniture",
+   "tags": [
+    "baskets",
+    "books",
+    "box",
+    "boxes",
+    "furniture"
+   ],
+   "model": "models/box-016fea74.glb",
+   "thumb": "thumbs/box-016fea74.webp",
+   "triangles": 822,
+   "bytes": 6568,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Concealed Storage Bed - California King\" by nop_ghost, https://sketchfab.com/3d-models/4f41c4a5ace04c52a02db8466fdb2708, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/4f41c4a5ace04c52a02db8466fdb2708",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:4f41c4a5ace04c52a02db8466fdb2708"
   },
   {
    "id": "panel-crate-0df0b649",
@@ -10172,31 +10129,32 @@
    "assetId": "articraft:rec_tackle_box_with_simple_hinged_lid_c671cd1275694b48bc6982a88b3dc52d"
   },
   {
-   "id": "box-016fea74",
-   "name": "Box",
+   "id": "grated-box-01d10edd",
+   "name": "Grated box",
    "group": "Books and boxes",
-   "family": "furniture",
+   "family": "container",
    "tags": [
     "baskets",
     "books",
     "box",
     "boxes",
-    "furniture"
+    "container",
+    "grated"
    ],
-   "model": "models/box-016fea74.glb",
-   "thumb": "thumbs/box-016fea74.webp",
-   "triangles": 822,
-   "bytes": 6568,
+   "model": "models/grated-box-01d10edd.glb",
+   "thumb": "thumbs/grated-box-01d10edd.webp",
+   "triangles": 712,
+   "bytes": 9336,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Concealed Storage Bed - California King\" by nop_ghost, https://sketchfab.com/3d-models/4f41c4a5ace04c52a02db8466fdb2708, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/4f41c4a5ace04c52a02db8466fdb2708",
+   "credit": "\"J05327B\" by keith007, https://sketchfab.com/3d-models/9f9271934b9e46e7a3f1a7fcc2002f85, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/9f9271934b9e46e7a3f1a7fcc2002f85",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:4f41c4a5ace04c52a02db8466fdb2708"
+   "assetId": "objaverse:9f9271934b9e46e7a3f1a7fcc2002f85"
   },
   {
    "id": "retrofit-tackle-box-1528f0dd",
@@ -10228,34 +10186,6 @@
    "sourceUrl": null,
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
    "assetId": "articraft:rec_tackle_box_with_simple_hinged_lid_0d154cebb1074f43acd0a21acf6d8d19"
-  },
-  {
-   "id": "grated-box-01d10edd",
-   "name": "Grated box",
-   "group": "Books and boxes",
-   "family": "container",
-   "tags": [
-    "baskets",
-    "books",
-    "box",
-    "boxes",
-    "container",
-    "grated"
-   ],
-   "model": "models/grated-box-01d10edd.glb",
-   "thumb": "thumbs/grated-box-01d10edd.webp",
-   "triangles": 712,
-   "bytes": 9336,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"J05327B\" by keith007, https://sketchfab.com/3d-models/9f9271934b9e46e7a3f1a7fcc2002f85, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/9f9271934b9e46e7a3f1a7fcc2002f85",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:9f9271934b9e46e7a3f1a7fcc2002f85"
   },
   {
    "id": "box-381c6a7b",
@@ -10340,34 +10270,6 @@
    "assetId": "objaverse:e2b5a56955594519b9c097840458d7dc"
   },
   {
-   "id": "banded-box-5178e28a",
-   "name": "Banded box",
-   "group": "Books and boxes",
-   "family": "packaging",
-   "tags": [
-    "banded",
-    "baskets",
-    "books",
-    "box",
-    "boxes",
-    "packaging"
-   ],
-   "model": "models/banded-box-5178e28a.glb",
-   "thumb": "thumbs/banded-box-5178e28a.webp",
-   "triangles": 3640,
-   "bytes": 4472,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "NVIDIA SimReady assets: \"box_multiDepth_a01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/box_multiDepth_a01, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/box_multiDepth_a01",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
-   "assetId": "simready:box_multiDepth_a01"
-  },
-  {
    "id": "relief-box-06614dec",
    "name": "Relief box",
    "group": "Books and boxes",
@@ -10394,6 +10296,34 @@
    "sourceUrl": "https://sketchfab.com/3d-models/623d422415644a7c922c5c8398932218",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
    "assetId": "objaverse:623d422415644a7c922c5c8398932218"
+  },
+  {
+   "id": "banded-box-5178e28a",
+   "name": "Banded box",
+   "group": "Books and boxes",
+   "family": "packaging",
+   "tags": [
+    "banded",
+    "baskets",
+    "books",
+    "box",
+    "boxes",
+    "packaging"
+   ],
+   "model": "models/banded-box-5178e28a.glb",
+   "thumb": "thumbs/banded-box-5178e28a.webp",
+   "triangles": 3640,
+   "bytes": 4472,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "NVIDIA SimReady assets: \"box_multiDepth_a01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/box_multiDepth_a01, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/box_multiDepth_a01",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
+   "assetId": "simready:box_multiDepth_a01"
   },
   {
    "id": "long-box-06fe22c1",
@@ -10424,34 +10354,6 @@
    "assetId": "objaverse:62c529f29b444465b3046af97d582a7b"
   },
   {
-   "id": "open-book-60ebaf5d",
-   "name": "Open book",
-   "group": "Books and boxes",
-   "family": "stationery",
-   "tags": [
-    "baskets",
-    "book",
-    "books",
-    "boxes",
-    "open",
-    "stationery"
-   ],
-   "model": "models/open-book-60ebaf5d.glb",
-   "thumb": "thumbs/open-book-60ebaf5d.webp",
-   "triangles": 1788,
-   "bytes": 4708,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "NVIDIA SimReady assets: \"book_open_a01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/book_open_a01, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/book_open_a01",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
-   "assetId": "simready:book_open_a01"
-  },
-  {
    "id": "open-book-07228895",
    "name": "Open book",
    "group": "Books and boxes",
@@ -10478,6 +10380,34 @@
    "sourceUrl": "https://sketchfab.com/3d-models/e9c428ceeee6415599715bfc8a145405",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
    "assetId": "objaverse:e9c428ceeee6415599715bfc8a145405"
+  },
+  {
+   "id": "open-book-60ebaf5d",
+   "name": "Open book",
+   "group": "Books and boxes",
+   "family": "stationery",
+   "tags": [
+    "baskets",
+    "book",
+    "books",
+    "boxes",
+    "open",
+    "stationery"
+   ],
+   "model": "models/open-book-60ebaf5d.glb",
+   "thumb": "thumbs/open-book-60ebaf5d.webp",
+   "triangles": 1788,
+   "bytes": 4708,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "NVIDIA SimReady assets: \"book_open_a01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/book_open_a01, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/book_open_a01",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
+   "assetId": "simready:book_open_a01"
   },
   {
    "id": "timber-crate-07fd4b3c",
@@ -10706,33 +10636,6 @@
    "assetId": "objaverse:0bb171d92dcf478db240047e433c27cf"
   },
   {
-   "id": "tin-c64fef6e",
-   "name": "Tin",
-   "group": "Books and boxes",
-   "family": "packaging",
-   "tags": [
-    "baskets",
-    "books",
-    "boxes",
-    "packaging",
-    "tin"
-   ],
-   "model": "models/tin-c64fef6e.glb",
-   "thumb": "thumbs/tin-c64fef6e.webp",
-   "triangles": 2176,
-   "bytes": 16184,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "NVIDIA SimReady assets: \"paint_container_jar_green_a01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/paint_container_jar_green_a01, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/paint_container_jar_green_a01",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
-   "assetId": "simready:paint_container_jar_green_a01"
-  },
-  {
    "id": "framed-box-0bf52c82",
    "name": "Framed box",
    "group": "Books and boxes",
@@ -10759,6 +10662,33 @@
    "sourceUrl": "https://sketchfab.com/3d-models/58b83bbd84e14b6aaba941a00ac76413",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
    "assetId": "objaverse:58b83bbd84e14b6aaba941a00ac76413"
+  },
+  {
+   "id": "tin-c64fef6e",
+   "name": "Tin",
+   "group": "Books and boxes",
+   "family": "packaging",
+   "tags": [
+    "baskets",
+    "books",
+    "boxes",
+    "packaging",
+    "tin"
+   ],
+   "model": "models/tin-c64fef6e.glb",
+   "thumb": "thumbs/tin-c64fef6e.webp",
+   "triangles": 2176,
+   "bytes": 16184,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "NVIDIA SimReady assets: \"paint_container_jar_green_a01\" by NVIDIA, https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/paint_container_jar_green_a01, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/653d91e182011f357cf1644013cc94ddf194d349/paint_container_jar_green_a01",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-simready",
+   "assetId": "simready:paint_container_jar_green_a01"
   },
   {
    "id": "covered-crate-e43dcb34",
@@ -10845,34 +10775,6 @@
    "assetId": "simready:crate_plywood_b04"
   },
   {
-   "id": "plunger-box-0cfbeaea",
-   "name": "Plunger box",
-   "group": "Books and boxes",
-   "family": "furniture",
-   "tags": [
-    "baskets",
-    "books",
-    "box",
-    "boxes",
-    "furniture",
-    "plunger"
-   ],
-   "model": "models/plunger-box-0cfbeaea.glb",
-   "thumb": "thumbs/plunger-box-0cfbeaea.webp",
-   "triangles": 1812,
-   "bytes": 8888,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"YESSIR\" by tkliew31, https://sketchfab.com/3d-models/91acacb4c7d04a8998d389b56c628b85, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/91acacb4c7d04a8998d389b56c628b85",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:91acacb4c7d04a8998d389b56c628b85"
-  },
-  {
    "id": "antique-book-0d3754dd",
    "name": "Antique book",
    "group": "Books and boxes",
@@ -10929,6 +10831,62 @@
    "assetId": "objaverse:b34cfce8c43643df8a488585c7d9d27c"
   },
   {
+   "id": "carry-box-0e45f175",
+   "name": "Carry box",
+   "group": "Books and boxes",
+   "family": "container",
+   "tags": [
+    "baskets",
+    "books",
+    "box",
+    "boxes",
+    "carry",
+    "container"
+   ],
+   "model": "models/carry-box-0e45f175.glb",
+   "thumb": "thumbs/carry-box-0e45f175.webp",
+   "triangles": 3136,
+   "bytes": 6924,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"BAKUL ROTAN PIKNIK\" by eeelabvisual, https://sketchfab.com/3d-models/7a2b13bf793d4caa8634b141a7f44f18, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/7a2b13bf793d4caa8634b141a7f44f18",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:7a2b13bf793d4caa8634b141a7f44f18"
+  },
+  {
+   "id": "antique-book-0e5941d6",
+   "name": "Antique book",
+   "group": "Books and boxes",
+   "family": "stationery",
+   "tags": [
+    "antique",
+    "baskets",
+    "book",
+    "books",
+    "boxes",
+    "stationery"
+   ],
+   "model": "models/antique-book-0e5941d6.glb",
+   "thumb": "thumbs/antique-book-0e5941d6.webp",
+   "triangles": 10448,
+   "bytes": 16616,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Msza\u0142 rzymski\" by WirtualneMuzeaMalopolski, https://sketchfab.com/3d-models/511698a59fd9464e876c5c5ae795eff3, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/511698a59fd9464e876c5c5ae795eff3",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:511698a59fd9464e876c5c5ae795eff3"
+  },
+  {
    "id": "sliding-box-318cfc80",
    "name": "Sliding box",
    "group": "Books and boxes",
@@ -10957,37 +10915,35 @@
    "assetId": "simready:needle_surgical_a01"
   },
   {
-   "id": "electric-tilt-moonroof-cassette-bf61a78c",
-   "name": "Electric tilt moonroof cassette",
+   "id": "flip-top-lighter-01c5e979",
+   "name": "Flip top lighter",
    "group": "Old tech",
-   "family": "car_sunroof_cassette",
+   "family": "zippo_lighter",
    "tags": [
     "cameras",
-    "car",
-    "cassette",
     "clocks",
-    "electric",
-    "moonroof",
+    "flip",
+    "lighter",
     "phones",
     "radios",
-    "sunroof",
     "tech",
-    "tilt"
+    "top",
+    "zippo"
    ],
-   "model": "models/electric-tilt-moonroof-cassette-bf61a78c.glb",
-   "thumb": "thumbs/electric-tilt-moonroof-cassette-bf61a78c.webp",
-   "triangles": 2176,
-   "bytes": 8124,
+   "model": "models/flip-top-lighter-01c5e979.glb",
+   "thumb": "thumbs/flip-top-lighter-01c5e979.webp",
+   "triangles": 1160,
+   "bytes": 7852,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_car_sunroof_cassette_520aa0bedbcf46449a2216fbca981e03, CC BY 4.0; modified: rewritten as a sand3d program",
+   "credit": "Articraft Data, Matt Zhou et al., record rec_zippo_lighter_0215496335c84a629660993cbecc92e0, CC BY 4.0; modified: rewritten as a sand3d program",
    "sourceUrl": null,
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_car_sunroof_cassette_520aa0bedbcf46449a2216fbca981e03"
+   "assetId": "articraft:rec_zippo_lighter_0215496335c84a629660993cbecc92e0"
   },
   {
    "id": "cathedral-radio-0088b5d2",
@@ -11051,66 +11007,6 @@
    "assetId": "simready:measurement_clock_alarm_a01"
   },
   {
-   "id": "flip-top-lighter-01c5e979",
-   "name": "Flip top lighter",
-   "group": "Old tech",
-   "family": "zippo_lighter",
-   "tags": [
-    "cameras",
-    "clocks",
-    "flip",
-    "lighter",
-    "phones",
-    "radios",
-    "tech",
-    "top",
-    "zippo"
-   ],
-   "model": "models/flip-top-lighter-01c5e979.glb",
-   "thumb": "thumbs/flip-top-lighter-01c5e979.webp",
-   "triangles": 1160,
-   "bytes": 7852,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_zippo_lighter_0215496335c84a629660993cbecc92e0, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_zippo_lighter_0215496335c84a629660993cbecc92e0"
-  },
-  {
-   "id": "cassette-00951de3",
-   "name": "Cassette",
-   "group": "Old tech",
-   "family": "electronics",
-   "tags": [
-    "cameras",
-    "cassette",
-    "clocks",
-    "electronics",
-    "phones",
-    "radios",
-    "tech"
-   ],
-   "model": "models/cassette-00951de3.glb",
-   "thumb": "thumbs/cassette-00951de3.webp",
-   "triangles": 2272,
-   "bytes": 10448,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Cassette Tape - Modeling Exercise\" by Johnson-Martin, https://sketchfab.com/3d-models/d6ec7ee9a6dc44ac9a8333d1f23b5e94, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/d6ec7ee9a6dc44ac9a8333d1f23b5e94",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:d6ec7ee9a6dc44ac9a8333d1f23b5e94"
-  },
-  {
    "id": "slim-pocket-lighter-02682cb5",
    "name": "Slim pocket lighter",
    "group": "Old tech",
@@ -11142,99 +11038,33 @@
    "assetId": "articraft:rec_zippo_lighter_16d841b23f4045779d5807f11670f771"
   },
   {
-   "id": "field-radio-00d6a423",
-   "name": "Field radio",
+   "id": "cassette-00951de3",
+   "name": "Cassette",
    "group": "Old tech",
    "family": "electronics",
    "tags": [
     "cameras",
+    "cassette",
     "clocks",
     "electronics",
-    "field",
-    "phones",
-    "radio",
-    "radios",
-    "tech"
-   ],
-   "model": "models/field-radio-00d6a423.glb",
-   "thumb": "thumbs/field-radio-00d6a423.webp",
-   "triangles": 6224,
-   "bytes": 15396,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"National NC 109 Receiver\" by josebalta, https://sketchfab.com/3d-models/c7efb3b9611747ddb4e15d164540d291, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/c7efb3b9611747ddb4e15d164540d291",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:c7efb3b9611747ddb4e15d164540d291"
-  },
-  {
-   "id": "heritage-platform-clock-03407482",
-   "name": "Heritage platform clock",
-   "group": "Old tech",
-   "family": "clock_tower_with_rotating_hour_and_minute_hands",
-   "tags": [
-    "cameras",
-    "clock",
-    "clocks",
-    "hands",
-    "heritage",
-    "hour",
-    "minute",
-    "phones",
-    "platform",
-    "radios",
-    "rotating",
-    "tech",
-    "tower"
-   ],
-   "model": "models/heritage-platform-clock-03407482.glb",
-   "thumb": "thumbs/heritage-platform-clock-03407482.webp",
-   "triangles": 10084,
-   "bytes": 20504,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "Articraft Data, Matt Zhou et al., record rec_clock_tower_with_rotating_hour_and_minute_hands_338b778f1ee0426788518ff5c317ba93, CC BY 4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": null,
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
-   "assetId": "articraft:rec_clock_tower_with_rotating_hour_and_minute_hands_338b778f1ee0426788518ff5c317ba93"
-  },
-  {
-   "id": "compass-00f1c26b",
-   "name": "Compass",
-   "group": "Old tech",
-   "family": "measuring instrument",
-   "tags": [
-    "cameras",
-    "clocks",
-    "compass",
-    "instrument",
-    "measuring",
     "phones",
     "radios",
     "tech"
    ],
-   "model": "models/compass-00f1c26b.glb",
-   "thumb": "thumbs/compass-00f1c26b.webp",
-   "triangles": 2506,
-   "bytes": 13864,
+   "model": "models/cassette-00951de3.glb",
+   "thumb": "thumbs/cassette-00951de3.webp",
+   "triangles": 2272,
+   "bytes": 10448,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "\"compass\" by heuverf, https://sketchfab.com/3d-models/b95fb9799ec94ea4b8926a1fa3381bf5, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/b95fb9799ec94ea4b8926a1fa3381bf5",
+   "credit": "\"Cassette Tape - Modeling Exercise\" by Johnson-Martin, https://sketchfab.com/3d-models/d6ec7ee9a6dc44ac9a8333d1f23b5e94, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/d6ec7ee9a6dc44ac9a8333d1f23b5e94",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:b95fb9799ec94ea4b8926a1fa3381bf5"
+   "assetId": "objaverse:d6ec7ee9a6dc44ac9a8333d1f23b5e94"
   },
   {
    "id": "metal-monocular-microscope-034cdb8c",
@@ -11269,33 +11099,34 @@
    "assetId": "articraft:rec_benchtop_monocular_laboratory_microscope_9e4df39674194d59a5f897a9bb9dc6a5"
   },
   {
-   "id": "gramophone-019f55a9",
-   "name": "Gramophone",
+   "id": "field-radio-00d6a423",
+   "name": "Field radio",
    "group": "Old tech",
    "family": "electronics",
    "tags": [
     "cameras",
     "clocks",
     "electronics",
-    "gramophone",
+    "field",
     "phones",
+    "radio",
     "radios",
     "tech"
    ],
-   "model": "models/gramophone-019f55a9.glb",
-   "thumb": "thumbs/gramophone-019f55a9.webp",
-   "triangles": 17246,
-   "bytes": 40168,
+   "model": "models/field-radio-00d6a423.glb",
+   "thumb": "thumbs/field-radio-00d6a423.webp",
+   "triangles": 6224,
+   "bytes": 15396,
    "license": {
     "code": "cc-by-4.0",
     "name": "CC BY 4.0",
     "url": "https://creativecommons.org/licenses/by/4.0/"
    },
    "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Gramophone\" by iamgleb, https://sketchfab.com/3d-models/7df6aaf6bd624e9dbc606ed126d38c64, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/7df6aaf6bd624e9dbc606ed126d38c64",
+   "credit": "\"National NC 109 Receiver\" by josebalta, https://sketchfab.com/3d-models/c7efb3b9611747ddb4e15d164540d291, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/c7efb3b9611747ddb4e15d164540d291",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:7df6aaf6bd624e9dbc606ed126d38c64"
+   "assetId": "objaverse:c7efb3b9611747ddb4e15d164540d291"
   },
   {
    "id": "microscope-048a6835",
@@ -11327,6 +11158,130 @@
    "sourceUrl": null,
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
    "assetId": "articraft:rec_benchtop_monocular_laboratory_microscope_f6035da6e4594fcf8917a3b9190fede7"
+  },
+  {
+   "id": "compass-00f1c26b",
+   "name": "Compass",
+   "group": "Old tech",
+   "family": "measuring instrument",
+   "tags": [
+    "cameras",
+    "clocks",
+    "compass",
+    "instrument",
+    "measuring",
+    "phones",
+    "radios",
+    "tech"
+   ],
+   "model": "models/compass-00f1c26b.glb",
+   "thumb": "thumbs/compass-00f1c26b.webp",
+   "triangles": 2506,
+   "bytes": 13864,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"compass\" by heuverf, https://sketchfab.com/3d-models/b95fb9799ec94ea4b8926a1fa3381bf5, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/b95fb9799ec94ea4b8926a1fa3381bf5",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:b95fb9799ec94ea4b8926a1fa3381bf5"
+  },
+  {
+   "id": "lamella-louvre-sunroof-cassette-04c429e6",
+   "name": "Lamella louvre sunroof cassette",
+   "group": "Old tech",
+   "family": "car_sunroof_cassette",
+   "tags": [
+    "cameras",
+    "car",
+    "cassette",
+    "clocks",
+    "lamella",
+    "louvre",
+    "phones",
+    "radios",
+    "sunroof",
+    "tech"
+   ],
+   "model": "models/lamella-louvre-sunroof-cassette-04c429e6.glb",
+   "thumb": "thumbs/lamella-louvre-sunroof-cassette-04c429e6.webp",
+   "triangles": 2840,
+   "bytes": 10584,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "Articraft Data, Matt Zhou et al., record rec_car_sunroof_cassette_32c0b57f1c6b438aa3dbc0b8a3745760, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": null,
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
+   "assetId": "articraft:rec_car_sunroof_cassette_32c0b57f1c6b438aa3dbc0b8a3745760"
+  },
+  {
+   "id": "gramophone-019f55a9",
+   "name": "Gramophone",
+   "group": "Old tech",
+   "family": "electronics",
+   "tags": [
+    "cameras",
+    "clocks",
+    "electronics",
+    "gramophone",
+    "phones",
+    "radios",
+    "tech"
+   ],
+   "model": "models/gramophone-019f55a9.glb",
+   "thumb": "thumbs/gramophone-019f55a9.webp",
+   "triangles": 17246,
+   "bytes": 40168,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Gramophone\" by iamgleb, https://sketchfab.com/3d-models/7df6aaf6bd624e9dbc606ed126d38c64, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/7df6aaf6bd624e9dbc606ed126d38c64",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:7df6aaf6bd624e9dbc606ed126d38c64"
+  },
+  {
+   "id": "retractable-hard-panel-sunroof-cassette-06848503",
+   "name": "Retractable hard panel sunroof cassette",
+   "group": "Old tech",
+   "family": "car_sunroof_cassette",
+   "tags": [
+    "cameras",
+    "car",
+    "cassette",
+    "clocks",
+    "hard",
+    "panel",
+    "phones",
+    "radios",
+    "retractable",
+    "sunroof",
+    "tech"
+   ],
+   "model": "models/retractable-hard-panel-sunroof-cassette-06848503.glb",
+   "thumb": "thumbs/retractable-hard-panel-sunroof-cassette-06848503.webp",
+   "triangles": 1188,
+   "bytes": 5284,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "Articraft Data, Matt Zhou et al., record rec_car_sunroof_cassette_c8665c90272644e7a451338fb9c161f8, CC BY 4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": null,
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-articraft",
+   "assetId": "articraft:rec_car_sunroof_cassette_c8665c90272644e7a451338fb9c161f8"
   },
   {
    "id": "sextant-01c2f00c",
@@ -12658,35 +12613,6 @@
    "assetId": "objaverse:373388516bfe40b480cb0785ec429ffa"
   },
   {
-   "id": "hanging-bag-469139aa",
-   "name": "Hanging bag",
-   "group": "Shoes and hats",
-   "family": "sports equipment",
-   "tags": [
-    "bag",
-    "bags",
-    "equipment",
-    "hanging",
-    "hats",
-    "shoes",
-    "sports"
-   ],
-   "model": "models/hanging-bag-469139aa.glb",
-   "thumb": "thumbs/hanging-bag-469139aa.webp",
-   "triangles": 938,
-   "bytes": 4648,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Punching bag from Poly by Google\" by ie-niels, https://sketchfab.com/3d-models/482c67c45711443ab1d91c4459d0574d, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/482c67c45711443ab1d91c4459d0574d",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:482c67c45711443ab1d91c4459d0574d"
-  },
-  {
    "id": "ankle-boot-4cdd26b3",
    "name": "Ankle boot",
    "group": "Shoes and hats",
@@ -12831,35 +12757,6 @@
    "assetId": "objaverse:bc2b553cf87142ada6a721e73d3d96b8"
   },
   {
-   "id": "hanging-bag-58e8943a",
-   "name": "Hanging bag",
-   "group": "Shoes and hats",
-   "family": "sports equipment",
-   "tags": [
-    "bag",
-    "bags",
-    "equipment",
-    "hanging",
-    "hats",
-    "shoes",
-    "sports"
-   ],
-   "model": "models/hanging-bag-58e8943a.glb",
-   "thumb": "thumbs/hanging-bag-58e8943a.webp",
-   "triangles": 2744,
-   "bytes": 17660,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Punching Bag\" by nomi6474, https://sketchfab.com/3d-models/a1bf5853e3324d5c98d5afd44060f0be, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/a1bf5853e3324d5c98d5afd44060f0be",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:a1bf5853e3324d5c98d5afd44060f0be"
-  },
-  {
    "id": "handbag-590bddbd",
    "name": "Handbag",
    "group": "Shoes and hats",
@@ -12913,34 +12810,6 @@
    "sourceUrl": "https://sketchfab.com/3d-models/9f922cbe6b654a5a8b8cfe2b8530d333",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
    "assetId": "objaverse:9f922cbe6b654a5a8b8cfe2b8530d333"
-  },
-  {
-   "id": "snack-bag-615b605a",
-   "name": "Snack bag",
-   "group": "Shoes and hats",
-   "family": "packaging",
-   "tags": [
-    "bag",
-    "bags",
-    "hats",
-    "packaging",
-    "shoes",
-    "snack"
-   ],
-   "model": "models/snack-bag-615b605a.glb",
-   "thumb": "thumbs/snack-bag-615b605a.webp",
-   "triangles": 10596,
-   "bytes": 13496,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Punga Chips Export\" by cristianflorian9, https://sketchfab.com/3d-models/a51613eaea2d430c95dc6a301b373076, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/a51613eaea2d430c95dc6a301b373076",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:a51613eaea2d430c95dc6a301b373076"
   },
   {
    "id": "handbag-653948cc",
@@ -13197,35 +13066,6 @@
    "assetId": "objaverse:c83c09f67dd64617b816ae4053ca0be1"
   },
   {
-   "id": "bat-hat-c689ecf9",
-   "name": "Bat hat",
-   "group": "Shoes and hats",
-   "family": "sports equipment",
-   "tags": [
-    "bags",
-    "bat",
-    "equipment",
-    "hat",
-    "hats",
-    "shoes",
-    "sports"
-   ],
-   "model": "models/bat-hat-c689ecf9.glb",
-   "thumb": "thumbs/bat-hat-c689ecf9.webp",
-   "triangles": 10686,
-   "bytes": 14240,
-   "license": {
-    "code": "cc-by-4.0",
-    "name": "CC BY 4.0",
-    "url": "https://creativecommons.org/licenses/by/4.0/"
-   },
-   "sourceLicense": "CC-BY-4.0",
-   "credit": "\"Talionis - Mafia\" by WittigMax, https://sketchfab.com/3d-models/15523e171cc74158ac453fe328dda8db, CC-BY-4.0; modified: rewritten as a sand3d program",
-   "sourceUrl": "https://sketchfab.com/3d-models/15523e171cc74158ac453fe328dda8db",
-   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
-   "assetId": "objaverse:15523e171cc74158ac453fe328dda8db"
-  },
-  {
    "id": "gold-helmet-c8c26acd",
    "name": "Gold helmet",
    "group": "Shoes and hats",
@@ -13255,6 +13095,35 @@
    "assetId": "objaverse:5073ee26106a467492e4943905c57ce2"
   },
   {
+   "id": "hanging-bag-d0351294",
+   "name": "Hanging bag",
+   "group": "Shoes and hats",
+   "family": "sports equipment",
+   "tags": [
+    "bag",
+    "bags",
+    "equipment",
+    "hanging",
+    "hats",
+    "shoes",
+    "sports"
+   ],
+   "model": "models/hanging-bag-d0351294.glb",
+   "thumb": "thumbs/hanging-bag-d0351294.webp",
+   "triangles": 9438,
+   "bytes": 6244,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"SACO DE BATER\" by felipedg, https://sketchfab.com/3d-models/7dac16fd1e3748eb91aab49b9064bf8b, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/7dac16fd1e3748eb91aab49b9064bf8b",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:7dac16fd1e3748eb91aab49b9064bf8b"
+  },
+  {
    "id": "top-hat-d77c39ea",
    "name": "Top hat",
    "group": "Shoes and hats",
@@ -13282,6 +13151,92 @@
    "sourceUrl": "https://sketchfab.com/3d-models/b69bb5edd5ae4e1a90c8051ec7403789",
    "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
    "assetId": "objaverse:b69bb5edd5ae4e1a90c8051ec7403789"
+  },
+  {
+   "id": "bent-hat-dac033a5",
+   "name": "Bent hat",
+   "group": "Shoes and hats",
+   "family": "toy or game",
+   "tags": [
+    "bags",
+    "bent",
+    "game",
+    "hat",
+    "hats",
+    "shoes",
+    "toy"
+   ],
+   "model": "models/bent-hat-dac033a5.glb",
+   "thumb": "thumbs/bent-hat-dac033a5.webp",
+   "triangles": 1965,
+   "bytes": 16052,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Mono Beetle\" by saskatoon.sebastian, https://sketchfab.com/3d-models/cd7894373ba8489b94ea534e66e999a8, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/cd7894373ba8489b94ea534e66e999a8",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:cd7894373ba8489b94ea534e66e999a8"
+  },
+  {
+   "id": "horned-helmet-dd8ef3be",
+   "name": "Horned helmet",
+   "group": "Shoes and hats",
+   "family": "weapon or armour",
+   "tags": [
+    "armour",
+    "bags",
+    "hats",
+    "helmet",
+    "horned",
+    "shoes",
+    "weapon"
+   ],
+   "model": "models/horned-helmet-dd8ef3be.glb",
+   "thumb": "thumbs/horned-helmet-dd8ef3be.webp",
+   "triangles": 14024,
+   "bytes": 36336,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Viking Helmet\" by PatelDev, https://sketchfab.com/3d-models/46388925effc462d9fcbea9ebdd97345, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/46388925effc462d9fcbea9ebdd97345",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:46388925effc462d9fcbea9ebdd97345"
+  },
+  {
+   "id": "snack-bag-e2f43f41",
+   "name": "Snack bag",
+   "group": "Shoes and hats",
+   "family": "packaging",
+   "tags": [
+    "bag",
+    "bags",
+    "hats",
+    "packaging",
+    "shoes",
+    "snack"
+   ],
+   "model": "models/snack-bag-e2f43f41.glb",
+   "thumb": "thumbs/snack-bag-e2f43f41.webp",
+   "triangles": 13812,
+   "bytes": 22588,
+   "license": {
+    "code": "cc-by-4.0",
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   },
+   "sourceLicense": "CC-BY-4.0",
+   "credit": "\"Doritos\" by RafaeoAchaque, https://sketchfab.com/3d-models/243a539d3c1640498536f3d60d3d884b, CC-BY-4.0; modified: rewritten as a sand3d program",
+   "sourceUrl": "https://sketchfab.com/3d-models/243a539d3c1640498536f3d60d3d884b",
+   "dataset": "https://huggingface.co/datasets/Sandflow/sand3d-objaverse",
+   "assetId": "objaverse:243a539d3c1640498536f3d60d3d884b"
   }
  ]
 }

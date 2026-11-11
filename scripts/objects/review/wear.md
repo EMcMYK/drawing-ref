@@ -20,25 +20,25 @@
 | 16 | Felt hat | felt-hat-3abb6f10 |
 | 17 | Rope bag | rope-bag-3f0b374c |
 | 18 | Cone hat | cone-hat-454ff061 |
-| 19 | Hanging bag | hanging-bag-469139aa |
-| 20 | Ankle boot | ankle-boot-4cdd26b3 |
-| 21 | Crown bag | crown-bag-51097829 |
-| 22 | Crooked hat | crooked-hat-5798c62f |
-| 23 | Bow shoe | bow-shoe-57f5fb56 |
-| 24 | Umbrella | umbrella-5824649b |
-| 25 | Hanging bag | hanging-bag-58e8943a |
-| 26 | Handbag | handbag-590bddbd |
-| 27 | Bowler | bowler-5a1f7671 |
-| 28 | Snack bag | snack-bag-615b605a |
-| 29 | Handbag | handbag-653948cc |
-| 30 | Shoulder bag | shoulder-bag-654729de |
-| 31 | Shoulder bag | shoulder-bag-655ca52f |
-| 32 | Top hat | top-hat-691d3bf2 |
-| 33 | Sandal | sandal-7c92efac |
-| 34 | Boot | boot-9ce93fff |
-| 35 | Bag | bag-a4d4de6b |
-| 36 | Dome hat | dome-hat-a5db6e3d |
-| 37 | Feathered hat | feathered-hat-b91650e8 |
-| 38 | Bat hat | bat-hat-c689ecf9 |
-| 39 | Gold helmet | gold-helmet-c8c26acd |
-| 40 | Top hat | top-hat-d77c39ea |
+| 19 | Ankle boot | ankle-boot-4cdd26b3 |
+| 20 | Crown bag | crown-bag-51097829 |
+| 21 | Crooked hat | crooked-hat-5798c62f |
+| 22 | Bow shoe | bow-shoe-57f5fb56 |
+| 23 | Umbrella | umbrella-5824649b |
+| 24 | Handbag | handbag-590bddbd |
+| 25 | Bowler | bowler-5a1f7671 |
+| 26 | Handbag | handbag-653948cc |
+| 27 | Shoulder bag | shoulder-bag-654729de |
+| 28 | Shoulder bag | shoulder-bag-655ca52f |
+| 29 | Top hat | top-hat-691d3bf2 |
+| 30 | Sandal | sandal-7c92efac |
+| 31 | Boot | boot-9ce93fff |
+| 32 | Bag | bag-a4d4de6b |
+| 33 | Dome hat | dome-hat-a5db6e3d |
+| 34 | Feathered hat | feathered-hat-b91650e8 |
+| 35 | Gold helmet | gold-helmet-c8c26acd |
+| 36 | Hanging bag | hanging-bag-d0351294 |
+| 37 | Top hat | top-hat-d77c39ea |
+| 38 | Bent hat | bent-hat-dac033a5 |
+| 39 | Horned helmet | horned-helmet-dd8ef3be |
+| 40 | Snack bag | snack-bag-e2f43f41 |
