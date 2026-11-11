@@ -3,6 +3,7 @@ import { StillLife } from './still-life/still-life.js';
 import { buildPanel } from './still-life/panel.js';
 import { loadSaved, saveSoon } from './still-life/persist.js';
 import { STARTER_SCENES } from './still-life/model.js';
+import { isLibraryShape, prepareObjects } from './still-life/objects.js';
 import { mountReferences } from './references/references.js';
 import { gridSvg, mountOverlayToolbar, overlayKey, pictureStyle } from './overlays/overlays.js';
 
@@ -49,9 +50,19 @@ window.addEventListener('keydown', (e) => {
   e.preventDefault();
 });
 
+// A saved scene can hold library objects, whose models load first; any that
+// fail to load (removed from the library, offline) are left out.
 const saved = loadSaved();
-if (saved && saved.objects.length) stillLife.loadScene(saved);
-else stillLife.loadScene({ objects: STARTER_SCENES.pair.build() });
+if (saved && saved.objects.length) {
+  const hasLibrary = saved.objects.some((o) => isLibraryShape(o.shape));
+  stillLife.loadScene({ ...saved, objects: saved.objects.filter((o) => !isLibraryShape(o.shape)) });
+  if (hasLibrary) {
+    prepareObjects(saved.objects).then((objects) => {
+      stillLife.loadScene({ ...saved, objects });
+      refresh();
+    });
+  }
+} else stillLife.loadScene({ objects: STARTER_SCENES.pair.build() });
 refresh();
 
 // Handy for debugging and browser tests.

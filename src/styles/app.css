@@ -533,3 +533,72 @@ button.danger {
 .countdown.ending {
   color: #f0b27a;
 }
+
+/* ---- 3D object library ---- */
+
+.search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 7px 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: inherit;
+  background: var(--surface);
+  color: inherit;
+}
+
+.object-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 6px;
+  max-height: 260px;
+  overflow-y: auto;
+  margin-top: 8px;
+}
+
+.object-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  min-width: 0;
+}
+
+.object-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.object-card span {
+  width: 100%;
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.object-card.loading {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.credit,
+.credits li {
+  overflow-wrap: anywhere;
+}
+
+.credits ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.credit a,
+.credits a {
+  color: inherit;
+}

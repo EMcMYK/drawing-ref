@@ -58,12 +58,15 @@ const clamp = (v, [lo, hi]) => Math.min(hi, Math.max(lo, v));
 const num = (v, fallback) => (Number.isFinite(v) ? v : fallback);
 const shapeIds = new Set(SHAPES.map((s) => s.id));
 const shadeIds = new Set(SHADES.map((s) => s.id));
+// Library objects are saved as "obj:<id>" (see objects.js).
+const LIBRARY_SHAPE = /^obj:[a-z0-9-]{1,80}$/;
+const validShape = (shape) => shapeIds.has(shape) || LIBRARY_SHAPE.test(shape);
 
 // Turn untrusted saved data back into a valid scene, dropping anything broken.
 export function sanitizeScene(raw) {
   if (!raw || typeof raw !== 'object') return null;
   const objects = (Array.isArray(raw.objects) ? raw.objects : [])
-    .filter((o) => o && shapeIds.has(o.shape))
+    .filter((o) => o && validShape(o.shape))
     .slice(0, LIMITS.maxObjects)
     .map((o) =>
       newObject(o.shape, {

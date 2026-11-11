@@ -1,0 +1,86 @@
+name: Build 3D object library
+
+# Scans the Sand3D datasets on Hugging Face (license check of every row),
+# picks still-life objects and converts them to small gray GLB files in
+# public/objects/. On pull requests it converts a small sample as a check;
+# run it by hand ("Run workflow") to build and commit the library to the
+# branch it ran on.
+on:
+  pull_request:
+    paths:
+      - 'scripts/objects/**'
+      - '.github/workflows/build-objects.yml'
+  workflow_dispatch:
+    inputs:
+      count:
+        description: 'How many objects to convert'
+        required: false
+        default: '30'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-objects-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Libraries Blender needs
+        run: sudo apt-get update -q && sudo apt-get install -yq libxi6 libxxf86vm1 libxfixes3 libxrender1 libxkbcommon0 libsm6 libgl1
+
+      - name: Python packages
+        run: pip install "bpy==5.2.*" "huggingface_hub>=1,<3" "pyarrow>=18" "pillow>=11"
+
+      - name: Build objects (sample)
+        if: github.event_name == 'pull_request'
+        run: python -I scripts/objects/build.py --count 5 --out sample-objects
+
+      - name: Build objects
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          COUNT: ${{ inputs.count }}
+        run: python -I scripts/objects/build.py --count "$COUNT"
+
+      - name: Summary
+        if: always()
+        run: cat objects-summary.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: objects
+          path: |
+            sample-objects/
+            public/objects/
+            objects-summary.md
+          if-no-files-found: ignore
+
+      - name: Commit the objects
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp objects-summary.md public/objects/SUMMARY.md
+          git add public/objects
+          if git diff --cached --quiet; then
+            echo "No changes to the objects."
+          else
+            git commit -m "Update 3D object library"
+            git push
+          fi

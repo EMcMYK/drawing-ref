@@ -2,6 +2,9 @@
 import { CAMERA_PRESETS, LIGHT_PRESETS, LIMITS, STARTER_SCENES, VIEW_LIMITS, singleShape } from './model.js';
 import { SHADES, SHAPES } from './shapes.js';
 import { downloadBlob, pngFilename } from './persist.js';
+import { creditLine, isLibraryShape, loadCatalog, loadObjectShape, objectInfo, searchObjects, shapeIdFor } from './objects.js';
+
+const MAX_RESULTS = 60;
 
 const html = String.raw;
 
@@ -26,8 +29,17 @@ export function buildPanel(root, stillLife) {
       </label>
     </section>
 
+    <section class="group" data-objects hidden>
+      <h2>Add an object</h2>
+      <input type="search" name="objectSearch" class="search" placeholder="Search: cup, vase, lamp…"
+        aria-label="Search objects" autocomplete="off" />
+      <div class="object-grid" data-object-results></div>
+      <p class="hint" data-object-count></p>
+    </section>
+
     <section class="group" data-selected hidden>
       <h2>Selected shape</h2>
+      <p class="hint credit" data-credit hidden></p>
       ${slider('turn', 'Turn', [0, 359], 1)}
       <div class="row">
         <button type="button" data-act="tip">Tip over</button>
@@ -91,6 +103,10 @@ export function buildPanel(root, stillLife) {
     <section class="group">
       <button type="button" class="primary" data-act="png">Save PNG</button>
       <p class="hint">Saves exactly what you see, at high resolution. Nothing is uploaded.</p>
+      <div class="credits" data-credits hidden>
+        <p class="hint">Objects in this scene (CC BY 4.0: credit them if you share the picture):</p>
+        <ul></ul>
+      </div>
     </section>
   `;
 
@@ -101,8 +117,9 @@ export function buildPanel(root, stillLife) {
   root.addEventListener('click', async (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
-    const { add, act, shade, light, cam, starter, single } = btn.dataset;
+    const { add, act, shade, light, cam, starter, single, object } = btn.dataset;
     if (add) stillLife.addShape(add);
+    else if (object) addObject(btn, object);
     else if (shade) stillLife.updateSelected({ shade });
     else if (light) stillLife.applyLightPreset(light);
     else if (cam) stillLife.setCameraPreset(cam);
@@ -123,10 +140,109 @@ export function buildPanel(root, stillLife) {
     }
   });
 
+  // ---- object library ----
+
+  let catalog = [];
+  loadCatalog().then((list) => {
+    catalog = list;
+    q('[data-objects]').hidden = !list.length;
+    showObjects();
+    refresh();
+  });
+
+  function showObjects() {
+    const query = input('objectSearch').value;
+    const found = searchObjects(catalog, query);
+    const grid = q('[data-object-results]');
+    grid.replaceChildren(
+      ...found.slice(0, MAX_RESULTS).map((o) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'object-card';
+        b.dataset.object = o.id;
+        b.title = o.name;
+        if (o.thumb) {
+          const img = document.createElement('img');
+          img.src = `${import.meta.env?.BASE_URL ?? '/'}objects/${o.thumb}`;
+          img.alt = '';
+          img.loading = 'lazy';
+          b.append(img);
+        }
+        const label = document.createElement('span');
+        label.textContent = o.name;
+        b.append(label);
+        return b;
+      })
+    );
+    const more = found.length > MAX_RESULTS ? ` Showing the first ${MAX_RESULTS}.` : '';
+    q('[data-object-count]').textContent = found.length
+      ? `${found.length} of ${catalog.length} objects.${more}`
+      : `Nothing matches "${query}".`;
+    syncObjectButtons();
+  }
+
+  function syncObjectButtons() {
+    const full = stillLife.objects.length >= LIMITS.maxObjects;
+    root.querySelectorAll('[data-object]').forEach((b) => (b.disabled = full || b.classList.contains('loading')));
+  }
+
+  async function addObject(btn, id) {
+    btn.classList.add('loading');
+    btn.disabled = true;
+    try {
+      const shape = await loadObjectShape(shapeIdFor(id));
+      stillLife.addShape(shape);
+    } catch {
+      btn.title = 'Could not load this object';
+    } finally {
+      btn.classList.remove('loading');
+      syncObjectButtons();
+    }
+  }
+
+  function link(text, href) {
+    if (!href || !/^https:\/\//.test(href)) return document.createTextNode(text);
+    const a = document.createElement('a');
+    a.href = href;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.textContent = text;
+    return a;
+  }
+
+  function creditNodes(info) {
+    const parts = [link(info.name, info.sourceUrl), document.createTextNode(' · ')];
+    parts.push(link(info.license?.name ?? 'CC BY 4.0', info.license?.url));
+    parts.push(document.createTextNode(` · ${info.credit}`));
+    return parts;
+  }
+
+  function showCredits() {
+    const sel = stillLife.selected;
+    const info = sel && objectInfo(sel.shape);
+    const credit = q('[data-credit]');
+    credit.hidden = !info;
+    if (info) credit.replaceChildren(...creditNodes(info));
+    const used = [...new Set(stillLife.objects.map((o) => o.shape).filter(isLibraryShape))]
+      .map(objectInfo)
+      .filter(Boolean);
+    const box = q('[data-credits]');
+    box.hidden = !used.length;
+    box.querySelector('ul').replaceChildren(
+      ...used.map((o) => {
+        const li = document.createElement('li');
+        li.title = creditLine(o);
+        li.append(...creditNodes(o));
+        return li;
+      })
+    );
+  }
+
   root.addEventListener('input', (e) => {
     const { name, value } = e.target;
     const v = Number(value);
-    if (name === 'overlap') stillLife.setOverlap(e.target.checked);
+    if (name === 'objectSearch') showObjects();
+    else if (name === 'overlap') stillLife.setOverlap(e.target.checked);
     else if (name === 'turn') stillLife.setTurn(v);
     else if (name === 'camAzimuth') stillLife.setView({ azimuth: v });
     else if (name === 'camElevation') stillLife.setView({ elevation: v });
@@ -180,6 +296,8 @@ export function buildPanel(root, stillLife) {
     q('[data-count]').textContent = `${n} of ${LIMITS.maxObjects} shapes. Click a shape to select it; drag to move or stack.`;
     root.querySelectorAll('[data-add]').forEach((b) => (b.disabled = n >= LIMITS.maxObjects));
     input('overlap').checked = stillLife.overlap;
+    syncObjectButtons();
+    showCredits();
     writeView();
   }
   return { refresh, refreshView };
