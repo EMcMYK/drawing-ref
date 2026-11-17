@@ -35,7 +35,7 @@ function toRecord(item, category) {
 }
 
 // query: { q }
-export async function fetchRecords(query, { want, accept, category, log, maxPages = 5 }) {
+export async function fetchRecords(query, { want, accept, category, log, refresh = false, maxPages = refresh ? 20 : 5 }) {
   const picked = [];
   for (let page = 1; page <= maxPages && picked.length < want; page++) {
     const params = new URLSearchParams({ q: query.q, media_type: 'image', page_size: '100', page: String(page) });

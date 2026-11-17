@@ -3,8 +3,13 @@ name: Build reference library
 # Pulls images from the approved sources' APIs, filters them, and writes
 # public/library/*.json. On pull requests it runs a small sample as a check;
 # run it by hand ("Run workflow") for the full build, which commits the
-# result to the branch it ran on.
+# result to the branch it ran on. Every day it also refreshes the live
+# library on main: it keeps what's there, adds new images (about 2% of each
+# source's usual count, so roughly 10 to 25 per category) and, past 1,000
+# per category, drops the oldest. The commit to main redeploys the site.
 on:
+  schedule:
+    - cron: '17 6 * * *'
   pull_request:
     paths:
       - 'scripts/library/**'
@@ -15,6 +20,11 @@ on:
         description: 'Only these categories (comma-separated ids), blank for all'
         required: false
         default: ''
+      refresh:
+        description: 'Refresh (keep current images, add new ones) instead of a full rebuild'
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: write
@@ -46,9 +56,17 @@ jobs:
         if: github.event_name == 'pull_request'
         run: node scripts/library/build.mjs --scale 0.05 --out sample-library
 
+      - name: Refresh library (sample)
+        if: github.event_name == 'pull_request'
+        run: node scripts/library/build.mjs --scale 0.05 --out sample-library --refresh 0.5
+
       - name: Build library (full)
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && !inputs.refresh
         run: node scripts/library/build.mjs ${{ inputs.only && format('--only {0}', inputs.only) || '' }}
+
+      - name: Refresh library (add new images)
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.refresh)
+        run: node scripts/library/build.mjs --refresh 0.02 ${{ inputs.only && format('--only {0}', inputs.only) || '' }}
 
       - name: Summary
         if: always()
@@ -65,7 +83,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Commit the library
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -73,6 +91,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to the library."
           else
-            git commit -m "Update reference library index"
+            git commit -m "${{ github.event_name == 'schedule' && 'Daily reference library refresh' || 'Update reference library index' }}"
             git push
           fi

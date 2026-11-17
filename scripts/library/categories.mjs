@@ -5,7 +5,8 @@
 // Wikidata Q34379 = musical instrument.
 // Met department IDs: 4 = Arms and Armor, 18 = Musical Instruments.
 // iNaturalist taxa: 1 Animalia, 40151 mammals, 3 birds, 26036 reptiles,
-// 20978 amphibians, 47158 insects, 47126 Plantae, 47125 flowering plants.
+// 20978 amphibians, 47158 insects, 47178 ray-finned fish, 47273 sharks and
+// rays, 47126 Plantae, 47125 flowering plants.
 
 export const CATEGORIES = [
   {
@@ -17,7 +18,10 @@ export const CATEGORIES = [
       ['inat', { taxonId: 26036 }, 100],
       ['inat', { taxonId: 20978 }, 80],
       ['inat', { taxonId: 47158 }, 120],
+      ['inat', { taxonId: 47178, tags: ['fish'] }, 160],
+      ['inat', { taxonId: 47273, tags: ['fish', 'shark'] }, 60],
       ['wikimedia', { categories: ['Category:Featured pictures of mammals', 'Category:Featured pictures of birds', 'Category:Featured pictures of reptiles', 'Category:Featured pictures of insects'] }, 200],
+      ['wikimedia', { categories: ['Category:Featured pictures of fish'], tags: ['fish'] }, 40],
     ],
   },
   {

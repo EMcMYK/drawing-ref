@@ -7,7 +7,7 @@ const BASE = 'https://commons.wikimedia.org/w/api.php';
 
 export const name = 'Wikimedia Commons';
 
-function toRecord(page, category) {
+function toRecord(page, category, tags = []) {
   const info = page.imageinfo?.[0];
   if (!info) return null;
   const meta = info.extmetadata ?? {};
@@ -24,7 +24,7 @@ function toRecord(page, category) {
     creator: artist,
     date: stripHtml(v('DateTimeOriginal')).slice(0, 10),
     objectType: '',
-    tags: [],
+    tags: [...tags],
     license,
     credit: [artist, 'Wikimedia Commons'].filter(Boolean).join(' · '),
     pageUrl: info.descriptionurl,
@@ -49,8 +49,9 @@ async function wikidataFiles(classId, limit) {
   return (res.results?.bindings ?? []).map((b) => `File:${decodeURIComponent(b.img.value.split('/').pop()).replace(/_/g, ' ')}`);
 }
 
-// query: { categories: ['Category:...'] } or { wikidata: 'Q...' }
-export async function fetchRecords(query, { want, accept, category, log, maxPages = 6 }) {
+// query: { categories: ['Category:...'], tags? } or { wikidata: 'Q...' }.
+// A refresh skips files already in the library, so it reads further down.
+export async function fetchRecords(query, { want, accept, category, log, refresh = false, maxPages = refresh ? 20 : 6 }) {
   const picked = [];
   const seenIds = new Set();
   const take = (pages) => {
@@ -58,7 +59,7 @@ export async function fetchRecords(query, { want, accept, category, log, maxPage
       if (picked.length >= want) return;
       if (seenIds.has(p.pageid)) continue;
       seenIds.add(p.pageid);
-      const r = toRecord(p, category);
+      const r = toRecord(p, category, query.tags);
       if (r && accept(r)) picked.push(r);
     }
   };
@@ -73,7 +74,10 @@ export async function fetchRecords(query, { want, accept, category, log, maxPage
   };
 
   if (query.wikidata) {
-    const titles = seededShuffle(await wikidataFiles(query.wikidata, want * 4), 3);
+    // A refresh reads a bigger, differently shuffled list to find new files.
+    const titles = refresh
+      ? seededShuffle(await wikidataFiles(query.wikidata, 4000), Date.now() % 1e6)
+      : seededShuffle(await wikidataFiles(query.wikidata, want * 4), 3);
     log(`wikidata ${query.wikidata}: ${titles.length} files`);
     for (let i = 0; i < titles.length && picked.length < want; i += 50) {
       const params = new URLSearchParams({ ...info, titles: titles.slice(i, i + 50).join('|') });

@@ -48,6 +48,17 @@ export function filterImages(images, { query = '', license = 'all', broken = new
   });
 }
 
+// A shuffled copy (Fisher-Yates), so each visit shows the library in a
+// different order.
+export function shuffle(list, rand = Math.random) {
+  const a = [...list];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 export function pickRandom(list, avoidId, rand = Math.random) {
   if (!list.length) return null;
   if (list.length === 1) return list[0];

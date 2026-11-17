@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { autoTags, mixAndCap, normalizeLicense, rejectReason } from '../scripts/library/filters.mjs';
+import { autoTags, mergeRefresh, mixAndCap, normalizeLicense, rejectReason } from '../scripts/library/filters.mjs';
 
 describe('normalizeLicense', () => {
   it.each([
@@ -83,5 +83,34 @@ describe('autoTags', () => {
   it('tags hands', () => {
     expect(autoTags({ title: 'Study of Hands', tags: [] })).toContain('hands');
     expect(autoTags({ title: 'Handle of a jug', tags: [] })).not.toContain('hands');
+  });
+});
+
+describe('mergeRefresh', () => {
+  const rec = (id, fetched) => ({ id, fetched, image: { display: `https://x/${id}.jpg` } });
+
+  it('puts new images first and keeps everything under the cap', () => {
+    const out = mergeRefresh([rec('a', '2026-10-10'), rec('b', '2026-10-10')], [rec('c', '2026-11-17')], 10);
+    expect(out.images.map((r) => r.id)).toEqual(['c', 'a', 'b']);
+    expect(out).toMatchObject({ added: 1, dropped: 0 });
+  });
+
+  it('drops the oldest images past the cap, last in the list first on a tie', () => {
+    const existing = [rec('a', '2026-10-10'), rec('b', '2026-11-10'), rec('c', '2026-10-10')];
+    const out = mergeRefresh(existing, [rec('d', '2026-11-17'), rec('e', '2026-11-17')], 3);
+    expect(out.images.map((r) => r.id)).toEqual(['d', 'e', 'b']);
+    expect(out).toMatchObject({ added: 2, dropped: 2 });
+  });
+
+  it('skips images already in the library, by id or by image link', () => {
+    const dupLink = { id: 'z', fetched: '2026-11-17', image: { display: 'https://x/a.jpg' } };
+    const out = mergeRefresh([rec('a', '2026-10-10')], [rec('a', '2026-11-17'), dupLink], 10);
+    expect(out.images.map((r) => r.id)).toEqual(['a']);
+    expect(out.added).toBe(0);
+  });
+
+  it('keeps the library as it is when nothing new came back', () => {
+    const existing = [rec('a', '2026-10-10')];
+    expect(mergeRefresh(existing, [], 10).images).toEqual(existing);
   });
 });

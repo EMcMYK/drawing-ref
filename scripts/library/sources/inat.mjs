@@ -8,7 +8,7 @@ const BASE = 'https://api.inaturalist.org/v1/observations';
 
 export const name = 'iNaturalist';
 
-function toRecord(o, photo, category) {
+function toRecord(o, photo, category, extraTags = []) {
   const license = normalizeLicense(photo.license_code);
   const sized = (size) => photo.url?.replace('/square.', `/${size}.`);
   const dims = photo.original_dimensions ?? {};
@@ -24,7 +24,7 @@ function toRecord(o, photo, category) {
     creator: o.user?.name || o.user?.login || '',
     date: (o.observed_on || '').slice(0, 4),
     objectType: '',
-    tags: [taxon.iconic_taxon_name, taxon.name].filter(Boolean),
+    tags: [...extraTags, taxon.iconic_taxon_name, taxon.name].filter(Boolean),
     license,
     credit: photo.attribution || `${o.user?.login ?? 'unknown'}, iNaturalist`,
     pageUrl: o.uri || `https://www.inaturalist.org/observations/${o.id}`,
@@ -38,10 +38,13 @@ function toRecord(o, photo, category) {
   };
 }
 
-// query: { taxonId }
-export async function fetchRecords(query, { want, accept, category, log, maxPages = 6 }) {
+// query: { taxonId, tags? }. A refresh starts at a random page of the
+// top-voted photos (the API stops at 10,000 results, so page 50 at most) so
+// each run finds photos the library doesn't have yet.
+export async function fetchRecords(query, { want, accept, category, log, maxPages = 6, refresh = false, rand = Math.random }) {
   const picked = [];
-  for (let page = 1; page <= maxPages && picked.length < want; page++) {
+  const first = refresh ? 1 + Math.floor(rand() * 25) : 1;
+  for (let page = first; page < first + maxPages && page <= 50 && picked.length < want; page++) {
     const params = new URLSearchParams({
       taxon_id: String(query.taxonId),
       photo_license: 'cc0,cc-by',
@@ -51,12 +54,12 @@ export async function fetchRecords(query, { want, accept, category, log, maxPage
       page: String(page),
     });
     const res = await getJson(`${BASE}?${params}`);
-    if (page === 1) log(`inat taxon ${query.taxonId}: ${res.total_results ?? 0} total`);
+    if (page === first) log(`inat taxon ${query.taxonId} (from page ${first}): ${res.total_results ?? 0} total`);
     for (const o of res.results ?? []) {
       // One photo per observation: the first one with an allowed license.
       const photo = (o.photos ?? []).find((p) => normalizeLicense(p.license_code));
       if (!photo) continue;
-      const r = toRecord(o, photo, category);
+      const r = toRecord(o, photo, category, query.tags);
       if (accept(r)) picked.push(r);
       if (picked.length >= want) break;
     }
