@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { creditLine, filterImages, needsCredit, pickRandom } from '../src/references/library.js';
+import { creditLine, filterImages, needsCredit, pickRandom, shuffle } from '../src/references/library.js';
 
 const img = (id, extra = {}) => ({
   id,
@@ -52,5 +52,17 @@ describe('credit', () => {
 
   it('builds a one-line credit', () => {
     expect(creditLine(img('a', { creator: 'Unknown' }))).toBe('Title a · Unknown · Cleveland Museum of Art · CC0 1.0');
+  });
+});
+
+describe('shuffle', () => {
+  it('returns the same images in a new order without changing the original', () => {
+    const list = ['a', 'b', 'c', 'd', 'e'].map((id) => img(id));
+    let s = 1;
+    const rand = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 2 ** 32);
+    const out = shuffle(list, rand);
+    expect(out.map((i) => i.id).sort()).toEqual(['a', 'b', 'c', 'd', 'e']);
+    expect(out.map((i) => i.id)).not.toEqual(['a', 'b', 'c', 'd', 'e']);
+    expect(list.map((i) => i.id)).toEqual(['a', 'b', 'c', 'd', 'e']);
   });
 });

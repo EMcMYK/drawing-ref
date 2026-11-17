@@ -25,7 +25,7 @@ function toRecord(o, category) {
 }
 
 // query: { departmentId } or { search, classification: /regex/ }
-export async function fetchRecords(query, { want, accept, category, log, maxObjects = 1500 }) {
+export async function fetchRecords(query, { want, accept, category, log, maxObjects = 1500, refresh = false }) {
   let ids = [];
   if (query.departmentId) {
     const res = await getJson(`${BASE}/objects?departmentIds=${query.departmentId}`);
@@ -36,7 +36,8 @@ export async function fetchRecords(query, { want, accept, category, log, maxObje
   }
   log(`met ${JSON.stringify(query)}: ${ids.length} ids`);
   const picked = [];
-  const pool = seededShuffle(ids, 7).slice(0, maxObjects);
+  // A refresh shuffles differently each run, so it reaches other objects.
+  const pool = seededShuffle(ids, refresh ? Date.now() % 1e6 : 7).slice(0, maxObjects);
   for (let i = 0; i < pool.length && picked.length < want; i += 40) {
     const batch = await mapLimit(pool.slice(i, i + 40), 6, async (id) => {
       try {

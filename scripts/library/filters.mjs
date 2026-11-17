@@ -107,3 +107,27 @@ export function autoTags(record) {
   if (/\bhands?\b/i.test(record.title ?? '')) tags.add('hands');
   return [...tags];
 }
+
+// A refresh adds `fresh` images in front of the `existing` ones and, past
+// the cap, drops the oldest-fetched existing images (on a tie, the ones
+// furthest down the list). Duplicates of existing images are skipped.
+export function mergeRefresh(existing, fresh, cap) {
+  const seen = new Set(existing.flatMap((r) => [r.id, r.image?.display]));
+  const added = [];
+  for (const r of fresh) {
+    if (added.length >= cap) break;
+    if (seen.has(r.id) || seen.has(r.image?.display)) continue;
+    seen.add(r.id);
+    seen.add(r.image?.display);
+    added.push(r);
+  }
+  const room = Math.max(0, cap - added.length);
+  const keep = new Set(
+    existing
+      .map((r, i) => ({ r, i }))
+      .sort((a, b) => String(b.r.fetched ?? '').localeCompare(String(a.r.fetched ?? '')) || a.i - b.i)
+      .slice(0, room)
+      .map(({ r }) => r)
+  );
+  return { images: [...added, ...existing.filter((r) => keep.has(r))], added: added.length, dropped: existing.length - keep.size };
+}

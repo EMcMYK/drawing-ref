@@ -8,6 +8,7 @@ import {
   loadIndex,
   needsCredit,
   pickRandom,
+  shuffle,
   saveBroken,
 } from './library.js';
 import { CUSTOM_LIMITS, DURATIONS, createSession, durationMs, formatTime } from './session.js';
@@ -183,7 +184,8 @@ export function mountReferences(root) {
     chips.querySelectorAll('[role="radio"]').forEach((c) => c.setAttribute('aria-checked', String(c.dataset.cat === id)));
     status.textContent = 'Loading…';
     grid.innerHTML = '';
-    state.images = await loadCategory(id);
+    // A new random order each time, so the same images don't always lead.
+    state.images = shuffle(await loadCategory(id));
     if (state.category === id) applyFilters();
   }
 
