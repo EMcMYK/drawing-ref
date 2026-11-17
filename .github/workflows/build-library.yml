@@ -3,13 +3,13 @@ name: Build reference library
 # Pulls images from the approved sources' APIs, filters them, and writes
 # public/library/*.json. On pull requests it runs a small sample as a check;
 # run it by hand ("Run workflow") for the full build, which commits the
-# result to the branch it ran on. Every Monday it also refreshes the live
-# library on main: it keeps what's there, adds new images (about a tenth of
-# each source's usual count) and, past 1,000 per category, drops the oldest.
-# The commit to main redeploys the site.
+# result to the branch it ran on. Every day it also refreshes the live
+# library on main: it keeps what's there, adds new images (about 2% of each
+# source's usual count, so roughly 10 to 25 per category) and, past 1,000
+# per category, drops the oldest. The commit to main redeploys the site.
 on:
   schedule:
-    - cron: '17 6 * * 1'
+    - cron: '17 6 * * *'
   pull_request:
     paths:
       - 'scripts/library/**'
@@ -66,7 +66,7 @@ jobs:
 
       - name: Refresh library (add new images)
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.refresh)
-        run: node scripts/library/build.mjs --refresh 0.1 ${{ inputs.only && format('--only {0}', inputs.only) || '' }}
+        run: node scripts/library/build.mjs --refresh 0.02 ${{ inputs.only && format('--only {0}', inputs.only) || '' }}
 
       - name: Summary
         if: always()
@@ -91,6 +91,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to the library."
           else
-            git commit -m "${{ github.event_name == 'schedule' && 'Weekly reference library refresh' || 'Update reference library index' }}"
+            git commit -m "${{ github.event_name == 'schedule' && 'Daily reference library refresh' || 'Update reference library index' }}"
             git push
           fi
