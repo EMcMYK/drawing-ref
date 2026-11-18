@@ -1,45 +1,45 @@
 {
-  "generated": "2026-11-17",
+  "generated": "2026-11-18",
   "categories": [
     {
       "id": "animals",
       "label": "Animals",
-      "count": 930
+      "count": 948
     },
     {
       "id": "plants",
       "label": "Plants and flowers",
-      "count": 758
+      "count": 777
     },
     {
       "id": "sculpture",
       "label": "Sculpture and figure",
-      "count": 700
+      "count": 714
     },
     {
       "id": "objects",
       "label": "Objects and vases",
-      "count": 450
+      "count": 459
     },
     {
       "id": "machines",
       "label": "Aircraft, spacecraft and machines",
-      "count": 604
+      "count": 616
     },
     {
       "id": "architecture",
       "label": "Architecture",
-      "count": 411
+      "count": 427
     },
     {
       "id": "weapons-armor",
       "label": "Weapons and armor",
-      "count": 744
+      "count": 764
     },
     {
       "id": "instruments",
       "label": "Musical instruments",
-      "count": 663
+      "count": 685
     }
   ]
 }
