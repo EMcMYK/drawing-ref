@@ -32,11 +32,12 @@ import sys
 import tempfile
 from concurrent.futures import ThreadPoolExecutor
 
+import numpy as np
 import pyarrow as pa
 import pyarrow.compute as pc
 import pyarrow.parquet as pq
 from huggingface_hub import HfFileSystem, hf_hub_download
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OWNER = 'Sandflow'
@@ -64,6 +65,13 @@ MAX_GLB = 400_000  # bytes, after compression
 MAX_TRIANGLES = 60_000
 MAX_PARTS = 80  # many tiny parts usually means a messy model
 SAME_NAME = 2  # at most this many objects with the same name per category
+PREVIEW = 200  # candidates per category whose renders are compared
+# Two renders closer than this (mean difference of outline and shading,
+# 0..1.5) count as look-alikes and only the first is kept: the looser
+# limit for objects of the same kind ("mug" and "smile mug"), the tighter
+# one for any two. Tuned on the first library: two plain mugs were 0.048
+# apart, a mug and a mug-shaped cup 0.055, a mug and a smiley mug 0.073.
+LOOKALIKE_SAME_KIND, LOOKALIKE_ANY = 0.075, 0.058
 # Articraft models are mostly mechanisms (vises, gimbals, freezers); keep
 # them to a few per category so everyday objects lead.
 MAX_FROM = {'sand3d-articraft': 6}
@@ -190,33 +198,91 @@ def slug(r):
     return f"{base or 'object'}-{stable(r)[:8]}"
 
 
-def thumbnails(chosen, out_dir):
+def load_renders(rows, workers):
+    """Read each row's render from the dataset as a 160 px image."""
     by_file = collections.defaultdict(list)
-    for r in chosen:
+    for r in rows:
         by_file[r['_file']].append(r)
-    fs = HfFileSystem()
-    for path, rs in by_file.items():
-        ids = [r['id'] for r in rs]
-        with fs.open(path, 'rb') as f:
+
+    def read(path):
+        rs = {r['id']: r for r in by_file[path]}
+        with HfFileSystem().open(path, 'rb') as f:
             pf = pq.ParquetFile(f)
             if 'render' not in pf.schema_arrow.names:
-                continue
-            # Read row group by row group so only matching renders are kept.
+                return
+            # Row group by row group, so only matching renders are kept.
             for i in range(pf.num_row_groups):
                 t = pf.read_row_group(i, columns=['id', 'render'])
-                t = t.filter(pc.is_in(t['id'], value_set=pa.array(ids)))
+                t = t.filter(pc.is_in(t['id'], value_set=pa.array(list(rs))))
                 for row in t.to_pylist():
                     img = row['render']
                     data = img.get('bytes') if isinstance(img, dict) else img
-                    if not data:
-                        continue
-                    r = next(x for x in rs if x['id'] == row['id'])
-                    im = Image.open(io.BytesIO(data)).convert('RGB')
-                    im.thumbnail((160, 160))
-                    r['_image'] = im
-                    name = f"{r['_slug']}.webp"
-                    im.save(os.path.join(out_dir, 'thumbs', name), 'WEBP', quality=80)
-                    r['_thumb'] = f'thumbs/{name}'
+                    if data:
+                        im = Image.open(io.BytesIO(data)).convert('RGB')
+                        im.thumbnail((160, 160))
+                        rs[row['id']]['_image'] = im
+
+    with ThreadPoolExecutor(workers) as ex:
+        list(ex.map(read, by_file))
+
+
+def outline(im):
+    """The object's silhouette and shading, cropped and scaled to 24 px,
+    for spotting look-alikes. The render background is plain."""
+    a = np.asarray(im).astype(np.float32)
+    mask = np.abs(a - a[0, 0]).sum(-1) > 30
+    ys, xs = np.nonzero(mask)
+    if not len(xs):
+        return None
+    box = (xs.min(), ys.min(), xs.max() + 1, ys.max() + 1)
+    side = max(box[2] - box[0], box[3] - box[1])
+    at = ((side - (box[2] - box[0])) // 2, (side - (box[3] - box[1])) // 2)
+    shape, shade = Image.new('L', (side, side)), Image.new('L', (side, side))
+    shape.paste(Image.fromarray(mask.astype(np.uint8) * 255).crop(box), at)
+    shade.paste(im.convert('L').crop(box), at)
+    small = lambda x: np.asarray(x.resize((24, 24), Image.BILINEAR)).astype(np.float32).ravel() / 255
+    return np.concatenate([small(shape), small(shade) * 0.5])
+
+
+def interest(im):
+    """How much colour and surface detail a render shows (0 for plain grey).
+    Ed asked to lean towards objects with colour or texture."""
+    a = np.asarray(im).astype(np.float32)
+    mask = np.abs(a - a[0, 0]).sum(-1) > 30
+    if mask.sum() < 50:
+        return 0.0
+    hsv = np.asarray(im.convert('HSV')).astype(np.float32) / 255
+    colour = (hsv[..., 1] * np.clip(hsv[..., 2] * 1.5, 0, 1))[mask].mean()
+    inner = np.asarray(Image.fromarray(mask.astype(np.uint8) * 255).filter(ImageFilter.MinFilter(5))) > 0
+    edges = np.asarray(im.convert('L').filter(ImageFilter.FIND_EDGES)).astype(np.float32) / 255
+    detail = edges[inner].mean() if inner.any() else 0.0
+    return float(colour + 2 * detail)
+
+
+def varied(pool):
+    """Most colourful and detailed first, skipping look-alikes of anything
+    already ahead in the queue."""
+    for r in pool:
+        im = r.get('_image')
+        r['_look'] = outline(im) if im is not None else None
+        r['_interest'] = interest(im) if im is not None else -1.0
+    kept = []
+    for r in sorted(pool, key=lambda r: -r['_interest']):
+        if r['_look'] is None:
+            continue  # no render to check it by
+        if any(np.abs(r['_look'] - k['_look']).mean()
+               < (LOOKALIKE_SAME_KIND if head_word(r) == head_word(k) else LOOKALIKE_ANY) for k in kept):
+            r['_lookalike'] = True
+            continue
+        kept.append(r)
+    return kept
+
+
+def save_thumbs(chosen, out_dir):
+    for r in chosen:
+        name = f"{r['_slug']}.webp"
+        r['_image'].save(os.path.join(out_dir, 'thumbs', name), 'WEBP', quality=80)
+        r['_thumb'] = f'thumbs/{name}'
 
 
 def convert(r, out_dir, work):
@@ -325,7 +391,7 @@ def contact_sheets(picked, review_dir):
             f.write('\n'.join(lines) + '\n')
 
 
-def summary(all_rows, pools, picked, results, out):
+def summary(all_rows, pools, queues, picked, results, out):
     lines = ['# 3D object library build', '']
     lines += ['## License scan (every row)', '', '| Dataset | Rows | license | source_license | license_status | Accepted |',
               '|---|---|---|---|---|---|']
@@ -341,8 +407,10 @@ def summary(all_rows, pools, picked, results, out):
             p90 = s[int(len(s) * 0.9) - 1] if len(s) > 1 else s[0]
             lines.append(f'| {repo} | {statistics.median(s)/1e3:.0f} KB | {p90/1e3:.0f} KB | '
                          f'{sum(x <= MAX_BYTES for x in s)} |')
-    lines += ['', '## Categories', '', '| Category | Candidates | Picked |', '|---|---|---|']
-    lines += [f"| {c['label']} | {len(pools.get(c['id'], []))} | {len(picked.get(c['id'], []))} |" for c in CATEGORIES]
+    lines += ['', '## Categories', '', f'| Category | Candidates | Distinct in first {PREVIEW} | Picked |',
+              '|---|---|---|---|']
+    lines += [f"| {c['label']} | {len(pools.get(c['id'], []))} | {len(queues.get(c['id'], []))} | "
+              f"{len(picked.get(c['id'], []))} |" for c in CATEGORIES]
     lines += ['', '## Top families', '']
     fam = collections.Counter(f"{r['_repo'].replace('sand3d-', '')}: {r.get('family')}" for r in all_rows
                               if r['_repo'] in PICK_FROM and r.get('family'))
@@ -378,17 +446,20 @@ def main():
         all_rows += rows
 
     pools = candidates(all_rows, load_excluded())
+    load_renders([r for pool in pools.values() for r in pool[:PREVIEW]], args.workers)
+    queues = {cid: varied(pool[:PREVIEW]) for cid, pool in pools.items()}
     for c in CATEGORIES:
-        print(f"{c['id']}: {len(pools.get(c['id'], []))} candidates", flush=True)
+        print(f"{c['id']}: {len(pools.get(c['id'], []))} candidates, "
+              f"{len(queues.get(c['id'], []))} distinct in the first {PREVIEW}", flush=True)
 
     out = args.out
     shutil.rmtree(out, ignore_errors=True)
     os.makedirs(os.path.join(out, 'models'))
     os.makedirs(os.path.join(out, 'thumbs'))
 
-    results, picked = convert_categories(pools, args.per_category, out, args.workers)
+    results, picked = convert_categories(queues, args.per_category, out, args.workers)
     objects = [r for c in CATEGORIES for r in picked.get(c['id'], [])]
-    thumbnails(objects, out)
+    save_thumbs(objects, out)
     contact_sheets(picked, args.review)
 
     stop = {'and', 'the', 'with', 'for', 'old'}
@@ -416,7 +487,7 @@ def main():
     }
     with open(os.path.join(out, 'index.json'), 'w') as f:
         json.dump(index, f, indent=1)
-    summary(all_rows, pools, picked, results, args.summary)
+    summary(all_rows, pools, queues, picked, results, args.summary)
     print(f'{len(objects)} objects written to {out}')
 
 

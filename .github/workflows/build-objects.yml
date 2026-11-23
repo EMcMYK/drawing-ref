@@ -47,7 +47,7 @@ jobs:
         run: sudo apt-get update -q && sudo apt-get install -yq libxi6 libxxf86vm1 libxfixes3 libxrender1 libxkbcommon0 libsm6 libgl1
 
       - name: Python packages
-        run: pip install "bpy==5.2.*" "huggingface_hub>=1,<3" "pyarrow>=18" "pillow>=11"
+        run: pip install "bpy==5.2.*" "huggingface_hub>=1,<3" "pyarrow>=18" "pillow>=11" "numpy>=2"
 
       - name: Fetch the GLB compressor once (builds run in parallel)
         run: npx -y @gltf-transform/cli@4.5.1 --version
