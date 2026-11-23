@@ -4,6 +4,7 @@ import {
   creditLine,
   filterImages,
   loadBroken,
+  loadAll,
   loadCategory,
   loadIndex,
   needsCredit,
@@ -15,6 +16,7 @@ import { CUSTOM_LIMITS, DURATIONS, createSession, durationMs, formatTime } from 
 import { gridSvg, mountOverlayToolbar, overlayKey, pictureStyle } from '../overlays/overlays.js';
 
 const PAGE = 60;
+const ALL = 'all'; // the chip that holds every category
 const TIMER_KEY = 'drawing-ref:timer:v1';
 
 function loadTimer() {
@@ -185,7 +187,8 @@ export function mountReferences(root) {
     status.textContent = 'Loading…';
     grid.innerHTML = '';
     // A new random order each time, so the same images don't always lead.
-    state.images = shuffle(await loadCategory(id));
+    const images = id === ALL ? await loadAll(state.categories.map((c) => c.id)) : await loadCategory(id);
+    state.images = shuffle(images);
     if (state.category === id) applyFilters();
   }
 
@@ -342,12 +345,13 @@ export function mountReferences(root) {
       status.textContent = "The image library hasn't been built yet.";
       return;
     }
-    chips.innerHTML = state.categories
+    const total = state.categories.reduce((n, c) => n + c.count, 0);
+    chips.innerHTML = [{ id: ALL, label: 'All', count: total }, ...state.categories]
       .map(
         (c) =>
           `<button type="button" role="radio" aria-checked="false" class="chip" data-cat="${esc(c.id)}">${esc(c.label)} <span>${c.count}</span></button>`
       )
       .join('');
-    selectCategory(state.categories[0].id);
+    selectCategory(ALL);
   };
 }

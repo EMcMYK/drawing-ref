@@ -32,6 +32,14 @@ export async function loadCategory(id, base = import.meta.env?.BASE_URL ?? '/') 
   return categoryCache.get(id);
 }
 
+// Every category together, for the "All" chip. An image that somehow sits in
+// two categories only appears once.
+export async function loadAll(ids, base) {
+  const lists = await Promise.all(ids.map((id) => loadCategory(id, base)));
+  const seen = new Set();
+  return lists.flat().filter((img) => !seen.has(img.id) && seen.add(img.id));
+}
+
 export function needsCredit(image) {
   return !NO_CREDIT.has(image.license?.code);
 }
