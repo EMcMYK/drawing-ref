@@ -1,5 +1,5 @@
 {
- "_about": "Library categories, in order: an object goes in the first one it matches. 'words' are matched against the last word of the object's name (\"soap pump bottle\" is a bottle, \"glass display freezer\" isn't a glass). 'families' (optional) limits matches to those dataset families (Articraft rows, whose families are object names, always pass). 'exclude' words rule an object out of that category. 'chip' is the short name shown in the object browser. 'articraft': false leaves out Articraft models (mostly machines there).",
+ "_about": "Library categories, in order: an object goes in the first one it matches. 'words' are matched against the last word of the object's name (\"soap pump bottle\" is a bottle, \"glass display freezer\" isn't a glass). 'families' (optional) limits matches to those dataset families (Articraft rows, whose families are object names, always pass). 'exclude' words rule an object out of that category. 'chip' is the short name shown in the object browser. 'articraft': false leaves out Articraft models (mostly machines there). Each name appears once and each kind (last word) at most twice per category, or up to 6 times for the kinds listed in 'varied', which come in many shapes.",
  "categories": [
   {
    "id": "bottles",
@@ -32,6 +32,13 @@
     "rack",
     "holder",
     "jack"
+   ],
+   "varied": [
+    "bottle",
+    "jar",
+    "jug",
+    "canister",
+    "flask"
    ]
   },
   {
@@ -68,6 +75,13 @@
     "suction",
     "measuring",
     "opera"
+   ],
+   "varied": [
+    "cup",
+    "mug",
+    "glass",
+    "goblet",
+    "tankard"
    ]
   },
   {
@@ -114,7 +128,16 @@
     "tuning",
     "forklift"
    ],
-   "articraft": false
+   "articraft": false,
+   "varied": [
+    "bowl",
+    "plate",
+    "dish",
+    "pan",
+    "pot",
+    "teapot",
+    "kettle"
+   ]
   },
   {
    "id": "vases",
@@ -141,6 +164,12 @@
     "boat",
     "ship",
     "space"
+   ],
+   "varied": [
+    "vase",
+    "vessel",
+    "urn",
+    "planter"
    ]
   },
   {
@@ -218,7 +247,8 @@
     "box",
     "sign",
     "logo"
-   ]
+   ],
+   "varied": []
   },
   {
    "id": "lamps",
@@ -247,6 +277,11 @@
     "headlamp",
     "pole",
     "stadium"
+   ],
+   "varied": [
+    "lamp",
+    "lantern",
+    "candle"
    ]
   },
   {
@@ -290,7 +325,8 @@
     "power",
     "chainsaw"
    ],
-   "articraft": false
+   "articraft": false,
+   "varied": []
   },
   {
    "id": "instruments",
@@ -336,7 +372,8 @@
    "exclude": [
     "stand",
     "case"
-   ]
+   ],
+   "varied": []
   },
   {
    "id": "chairs",
@@ -362,6 +399,10 @@
     "bus",
     "stadium",
     "massage"
+   ],
+   "varied": [
+    "chair",
+    "stool"
    ]
   },
   {
@@ -413,6 +454,12 @@
     "cooler",
     "freezer",
     "ammunition"
+   ],
+   "varied": [
+    "box",
+    "book",
+    "crate",
+    "basket"
    ]
   },
   {
@@ -465,7 +512,8 @@
     "smart",
     "dash",
     "station"
-   ]
+   ],
+   "varied": []
   },
   {
    "id": "wear",
@@ -506,6 +554,13 @@
     "trash",
     "garbage",
     "airbag"
+   ],
+   "varied": [
+    "hat",
+    "bag",
+    "boot",
+    "shoe",
+    "helmet"
    ]
   }
  ]

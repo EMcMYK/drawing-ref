@@ -64,8 +64,10 @@ MIN_BYTES, MAX_BYTES = 8_000, 3_000_000  # skip near-empty and very heavy USD fi
 MAX_GLB = 400_000  # bytes, after compression
 MAX_TRIANGLES = 60_000
 MAX_PARTS = 80  # many tiny parts usually means a messy model
-SAME_NAME = 2  # at most this many objects with the same name per category
-PREVIEW = 200  # candidates per category whose renders are compared
+SAME_NAME = 1  # objects with the same name per category
+SAME_KIND = 2  # objects of the same kind (last word of the name) per category,
+VARIED_KIND = 6  # or this many for the kinds a category lists as 'varied'
+PREVIEW = 2000  # candidates per category whose renders are compared
 # Two renders closer than this (mean difference of outline and shading,
 # 0..1.5) count as look-alikes and only the first is kept: the looser
 # limit for objects of the same kind ("mug" and "smile mug"), the tighter
@@ -326,6 +328,7 @@ def convert_categories(pools, per_category, out_dir, workers):
     queues = {cid: list(pool) for cid, pool in pools.items()}
     names = collections.defaultdict(collections.Counter)
     repos = collections.defaultdict(collections.Counter)
+    kinds = collections.defaultdict(collections.Counter)
     with tempfile.TemporaryDirectory() as work, ThreadPoolExecutor(workers) as ex:
         while True:
             batch = []
@@ -339,9 +342,13 @@ def convert_categories(pools, per_category, out_dir, workers):
                     name = title_of(r).lower()
                     if names[cid][name] >= SAME_NAME:
                         continue
+                    kind = head_word(r)
+                    if kinds[cid][kind] >= (VARIED_KIND if kind in r['_cat'].get('varied', []) else SAME_KIND):
+                        continue
                     if repos[cid][r['_repo']] >= MAX_FROM.get(r['_repo'], per_category):
                         continue
                     names[cid][name] += 1
+                    kinds[cid][kind] += 1
                     repos[cid][r['_repo']] += 1
                     batch.append(r)
                     want -= 1
@@ -353,11 +360,14 @@ def convert_categories(pools, per_category, out_dir, workers):
                 cid = r['_cat']['id']
                 if info.get('note'):
                     names[cid][title_of(r).lower()] -= 1
+                    kinds[cid][head_word(r)] -= 1
                     repos[cid][r['_repo']] -= 1
                 elif len(picked[cid]) < per_category:
                     picked[cid].append(r)
                 else:  # more than needed: a spare that wasn't used
                     repos[cid][r['_repo']] -= 1
+                    names[cid][title_of(r).lower()] -= 1
+                    kinds[cid][head_word(r)] -= 1
                     os.remove(os.path.join(out_dir, 'models', r['_slug'] + '.glb'))
                     info['note'] = 'spare, not used'
     return results, picked
@@ -407,7 +417,7 @@ def summary(all_rows, pools, queues, picked, results, out):
             p90 = s[int(len(s) * 0.9) - 1] if len(s) > 1 else s[0]
             lines.append(f'| {repo} | {statistics.median(s)/1e3:.0f} KB | {p90/1e3:.0f} KB | '
                          f'{sum(x <= MAX_BYTES for x in s)} |')
-    lines += ['', '## Categories', '', f'| Category | Candidates | Distinct in first {PREVIEW} | Picked |',
+    lines += ['', '## Categories', '', '| Category | Candidates | Distinct looks | Picked |',
               '|---|---|---|---|']
     lines += [f"| {c['label']} | {len(pools.get(c['id'], []))} | {len(queues.get(c['id'], []))} | "
               f"{len(picked.get(c['id'], []))} |" for c in CATEGORIES]
@@ -450,7 +460,7 @@ def main():
     queues = {cid: varied(pool[:PREVIEW]) for cid, pool in pools.items()}
     for c in CATEGORIES:
         print(f"{c['id']}: {len(pools.get(c['id'], []))} candidates, "
-              f"{len(queues.get(c['id'], []))} distinct in the first {PREVIEW}", flush=True)
+              f"{len(queues.get(c['id'], []))} distinct looks", flush=True)
 
     out = args.out
     shutil.rmtree(out, ignore_errors=True)

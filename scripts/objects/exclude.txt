@@ -24,3 +24,4 @@ hanging-bag-469139aa  # wear: Hanging bag
 hanging-bag-58e8943a  # wear: Hanging bag
 snack-bag-615b605a  # wear: Snack bag
 bat-hat-c689ecf9  # wear: Bat hat
+lamella-louvre-sunroof-cassette-04c429e6  # tech: Lamella louvre sunroof
