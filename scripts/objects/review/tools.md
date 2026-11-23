@@ -1,44 +1,38 @@
-# Hand tools (40)
+# Hand tools (34)
 
 | # | Name | Id |
 |---|---|---|
-| 1 | Axe | axe-000979c7 |
-| 2 | Paintbrush | paintbrush-001f2d46 |
-| 3 | Axe | axe-0099f95b |
-| 4 | Hatchet | hatchet-010e57bb |
-| 5 | Wrench | wrench-1e2f2167 |
-| 6 | Hammer | hammer-012bd9e1 |
-| 7 | Screwdriver | screwdriver-2488a478 |
-| 8 | Clamp | clamp-01482098 |
-| 9 | Mallet | mallet-255f6200 |
-| 10 | Screwdriver | screwdriver-0161f1ac |
-| 11 | Brush | brush-3c0a0d9f |
-| 12 | Wrench | wrench-0164053e |
-| 13 | Brush | brush-3de7b8a2 |
-| 14 | Claw hammer | claw-hammer-43d93781 |
-| 15 | Hammer | hammer-01e82a2f |
-| 16 | Paintbrush | paintbrush-6308c258 |
-| 17 | Ring clamp | ring-clamp-8f5d6983 |
-| 18 | Vise | vise-032888e4 |
-| 19 | Mallet | mallet-94dfe3ef |
-| 20 | Ice axe | ice-axe-04dddaa8 |
-| 21 | Collar clamp | collar-clamp-f36d77e9 |
-| 22 | Fire axe | fire-axe-0684dfd2 |
-| 23 | Scissors | scissors-01149cb4 |
-| 24 | Scissors | scissors-03421f31 |
-| 25 | Adjustable wrench | adjustable-wrench-046cd09a |
-| 26 | Flex wrench | flex-wrench-0990be44 |
-| 27 | Pliers | pliers-0ef65196 |
-| 28 | Flex wrench | flex-wrench-11e8deab |
-| 29 | Pliers | pliers-08587cac |
-| 30 | Clamp | clamp-43f028b1 |
-| 31 | Powered wrench | powered-wrench-492182ea |
-| 32 | Tap wrench | tap-wrench-4964ddb3 |
-| 33 | Chisel | chisel-096b0b2f |
-| 34 | Shears | shears-63073d02 |
-| 35 | Mechanical clamp | mechanical-clamp-67527460 |
-| 36 | Adjustable wrench | adjustable-wrench-0a6db818 |
-| 37 | Round nose pliers | round-nose-pliers-7c361028 |
-| 38 | Barrel vise | barrel-vise-94028bfb |
-| 39 | Chisel | chisel-0afa7817 |
-| 40 | Socket wrench | socket-wrench-abe9ac55 |
+| 1 | Hammer | hammer-08e6df71 |
+| 2 | Pliers | pliers-0bce009e |
+| 3 | Screwdriver | screwdriver-0166f310 |
+| 4 | Screwdriver | screwdriver-4fb8af64 |
+| 5 | Claw hammer | claw-hammer-13edd61a |
+| 6 | Axe | axe-1681adf3 |
+| 7 | Mallet | mallet-12c7e423 |
+| 8 | Pixel axe | pixel-axe-179d69fe |
+| 9 | Mallet | mallet-19f09b70 |
+| 10 | Pliers | pliers-16c57565 |
+| 11 | Axe | axe-000979c7 |
+| 12 | Hammer | hammer-16970537 |
+| 13 | Scissors | scissors-0aa10367 |
+| 14 | Vise | vise-0e87ad71 |
+| 15 | Wrench | wrench-01a038ee |
+| 16 | Hatchet | hatchet-010e57bb |
+| 17 | Scissors | scissors-58f07ed8 |
+| 18 | Wrench | wrench-1745e9ad |
+| 19 | Ball peen hammer | ball-peen-hammer-19a4af28 |
+| 20 | Hooked axe | hooked-axe-0ca108b2 |
+| 21 | Crescent axe | crescent-axe-15813bc5 |
+| 22 | Pruning shears | pruning-shears-0eb18705 |
+| 23 | Vise | vise-032888e4 |
+| 24 | Vice | vice-13ff3dd1 |
+| 25 | Shears | shears-63073d02 |
+| 26 | Clamp | clamp-43f028b1 |
+| 27 | Chisel | chisel-0afa7817 |
+| 28 | Spike hammer | spike-hammer-14c47599 |
+| 29 | Barrel vise | barrel-vise-94028bfb |
+| 30 | Ring clamp | ring-clamp-8f5d6983 |
+| 31 | Clamp | clamp-01482098 |
+| 32 | Spanner | spanner-12bd4846 |
+| 33 | Mechanical clamp | mechanical-clamp-67527460 |
+| 34 | Hatchet | hatchet-0e8650f7 |

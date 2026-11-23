@@ -2,43 +2,43 @@
 
 | # | Name | Id |
 |---|---|---|
-| 1 | Flip top lighter | flip-top-lighter-01c5e979 |
-| 2 | Cathedral radio | cathedral-radio-0088b5d2 |
-| 3 | Alarm clock | alarm-clock-4df3315f |
-| 4 | Slim pocket lighter | slim-pocket-lighter-02682cb5 |
-| 5 | Cassette | cassette-00951de3 |
-| 6 | Metal monocular microscope | metal-monocular-microscope-034cdb8c |
-| 7 | Field radio | field-radio-00d6a423 |
-| 8 | Microscope | microscope-048a6835 |
-| 9 | Compass | compass-00f1c26b |
-| 10 | Lamella louvre sunroof cassette | lamella-louvre-sunroof-cassette-04c429e6 |
-| 11 | Gramophone | gramophone-019f55a9 |
-| 12 | Retractable hard panel sunroof cassette | retractable-hard-panel-sunroof-cassette-06848503 |
-| 13 | Sextant | sextant-01c2f00c |
-| 14 | Television | television-026067ff |
-| 15 | Radio | radio-02bc233d |
-| 16 | Telescope | telescope-02ee0086 |
-| 17 | Camera | camera-03030c49 |
-| 18 | Telescope | telescope-035ae163 |
-| 19 | Radio | radio-03d5f4f8 |
-| 20 | Camera | camera-03f10692 |
-| 21 | Binoculars | binoculars-04189b84 |
-| 22 | Field radio | field-radio-04ad4366 |
-| 23 | Television | television-04ed98fb |
-| 24 | Binoculars | binoculars-074853f5 |
-| 25 | Telephone | telephone-08ba4b72 |
-| 26 | Hourglass | hourglass-0a35e4b1 |
-| 27 | Microscope | microscope-0bc87fe8 |
-| 28 | Cassette | cassette-0cfe0927 |
-| 29 | Globe | globe-0d02fcfa |
-| 30 | Phone | phone-0e50f885 |
-| 31 | Phonograph | phonograph-0e672ab0 |
-| 32 | Compass | compass-0f7ef573 |
-| 33 | Typewriter | typewriter-1145718d |
-| 34 | Phone | phone-14732329 |
-| 35 | Globe | globe-14aa8b28 |
-| 36 | Projector | projector-14d5176b |
-| 37 | Hourglass | hourglass-15c32fec |
-| 38 | Telephone | telephone-19395678 |
-| 39 | Instant camera | instant-camera-193a70b9 |
-| 40 | Jukebox | jukebox-1aab2c2c |
+| 1 | Projector | projector-3de8cd56 |
+| 2 | Cassette | cassette-47ec8ba1 |
+| 3 | Typewriter | typewriter-56c3358f |
+| 4 | Radio | radio-274499a8 |
+| 5 | Typewriter | typewriter-2a3fe4df |
+| 6 | Globe | globe-5357ef33 |
+| 7 | Telescope | telescope-44a107b4 |
+| 8 | Radio | radio-387d36ff |
+| 9 | Binoculars | binoculars-19ab6d34 |
+| 10 | Cassette | cassette-0cfe0927 |
+| 11 | Globe | globe-4ce0b645 |
+| 12 | Phone | phone-14732329 |
+| 13 | Wall camera | wall-camera-317cf0dd |
+| 14 | Telescope | telescope-2da595b5 |
+| 15 | Microscope | microscope-0bc87fe8 |
+| 16 | Microscope | microscope-251edbf1 |
+| 17 | Television | television-026067ff |
+| 18 | Compass | compass-52547ecf |
+| 19 | Hourglass | hourglass-0a35e4b1 |
+| 20 | Cathedral radio | cathedral-radio-0088b5d2 |
+| 21 | Jukebox | jukebox-1bae13ef |
+| 22 | Camera | camera-3e68b820 |
+| 23 | Binoculars | binoculars-1673da40 |
+| 24 | Sextant | sextant-01c2f00c |
+| 25 | Sextant | sextant-45d8c333 |
+| 26 | Field radio | field-radio-04ad4366 |
+| 27 | Telephone | telephone-1a2e9427 |
+| 28 | Field radio | field-radio-21fd5dc8 |
+| 29 | Camera | camera-08e5e5f0 |
+| 30 | Video astronomy telescope | video-astronomy-telescope-143022ff |
+| 31 | Television | television-04ed98fb |
+| 32 | Clinical monocular microscope | clinical-monocular-microscope-19f6914a |
+| 33 | Gramophone | gramophone-019f55a9 |
+| 34 | Compass | compass-487bbeca |
+| 35 | Bench monocular microscope | bench-monocular-microscope-10a39949 |
+| 36 | Telephone | telephone-08ba4b72 |
+| 37 | Watch | watch-511cc3c8 |
+| 38 | Hourglass | hourglass-15c32fec |
+| 39 | Projector | projector-3d425497 |
+| 40 | Lamella louvre sunroof cassette | lamella-louvre-sunroof-cassette-04c429e6 |
