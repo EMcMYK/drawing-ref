@@ -22,20 +22,20 @@
 
 ## Categories
 
-| Category | Candidates | Distinct in first 200 | Picked |
+| Category | Candidates | Distinct looks | Picked |
 |---|---|---|---|
-| Bottles and jars | 1118 | 47 | 19 |
-| Cups, mugs and glasses | 927 | 80 | 30 |
-| Bowls, plates, pans and teapots | 858 | 75 | 38 |
-| Vases and pottery | 535 | 100 | 35 |
-| Fruit, vegetables and bread | 570 | 104 | 40 |
-| Lamps and candles | 691 | 139 | 40 |
-| Hand tools | 1201 | 83 | 34 |
-| Musical instruments | 547 | 88 | 37 |
-| Chairs and stools | 304 | 178 | 40 |
-| Books, boxes and baskets | 675 | 76 | 40 |
-| Old tech: radios, cameras, phones, clocks | 585 | 140 | 40 |
-| Shoes, hats and bags | 105 | 81 | 40 |
+| Bottles and jars | 1118 | 181 | 27 |
+| Cups, mugs and glasses | 927 | 227 | 22 |
+| Bowls, plates, pans and teapots | 858 | 244 | 40 |
+| Vases and pottery | 535 | 208 | 18 |
+| Fruit, vegetables and bread | 570 | 238 | 40 |
+| Lamps and candles | 691 | 350 | 16 |
+| Hand tools | 1201 | 359 | 30 |
+| Musical instruments | 547 | 178 | 25 |
+| Chairs and stools | 304 | 259 | 16 |
+| Books, boxes and baskets | 675 | 181 | 28 |
+| Old tech: radios, cameras, phones, clocks | 585 | 346 | 34 |
+| Shoes, hats and bags | 105 | 81 | 26 |
 
 ## Top families
 
@@ -102,7 +102,7 @@
 
 ## Skipped while converting
 
-- spare, not used: 33
-- too many parts: 9
+- spare, not used: 9
+- too many parts: 3
 
-**433 converted, 8.55 MB total, median 15 KB per object.**
+**322 converted, 6.44 MB total, median 16 KB per object.**

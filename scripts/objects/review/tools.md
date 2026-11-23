@@ -1,38 +1,34 @@
-# Hand tools (34)
+# Hand tools (30)
 
 | # | Name | Id |
 |---|---|---|
-| 1 | Hammer | hammer-08e6df71 |
-| 2 | Pliers | pliers-0bce009e |
-| 3 | Screwdriver | screwdriver-0166f310 |
-| 4 | Screwdriver | screwdriver-4fb8af64 |
-| 5 | Claw hammer | claw-hammer-13edd61a |
-| 6 | Axe | axe-1681adf3 |
-| 7 | Mallet | mallet-12c7e423 |
-| 8 | Pixel axe | pixel-axe-179d69fe |
-| 9 | Mallet | mallet-19f09b70 |
-| 10 | Pliers | pliers-16c57565 |
-| 11 | Axe | axe-000979c7 |
-| 12 | Hammer | hammer-16970537 |
-| 13 | Scissors | scissors-0aa10367 |
-| 14 | Vise | vise-0e87ad71 |
-| 15 | Wrench | wrench-01a038ee |
-| 16 | Hatchet | hatchet-010e57bb |
-| 17 | Scissors | scissors-58f07ed8 |
-| 18 | Wrench | wrench-1745e9ad |
-| 19 | Ball peen hammer | ball-peen-hammer-19a4af28 |
-| 20 | Hooked axe | hooked-axe-0ca108b2 |
-| 21 | Crescent axe | crescent-axe-15813bc5 |
-| 22 | Pruning shears | pruning-shears-0eb18705 |
-| 23 | Vise | vise-032888e4 |
-| 24 | Vice | vice-13ff3dd1 |
-| 25 | Shears | shears-63073d02 |
-| 26 | Clamp | clamp-43f028b1 |
-| 27 | Chisel | chisel-0afa7817 |
-| 28 | Spike hammer | spike-hammer-14c47599 |
-| 29 | Barrel vise | barrel-vise-94028bfb |
-| 30 | Ring clamp | ring-clamp-8f5d6983 |
-| 31 | Clamp | clamp-01482098 |
-| 32 | Spanner | spanner-12bd4846 |
-| 33 | Mechanical clamp | mechanical-clamp-67527460 |
-| 34 | Hatchet | hatchet-0e8650f7 |
+| 1 | Screwdriver | screwdriver-7256cc0f |
+| 2 | Mallet | mallet-54b9391d |
+| 3 | Hammer | hammer-08e6df71 |
+| 4 | Pliers | pliers-0bce009e |
+| 5 | Vise | vise-9f48c712 |
+| 6 | Scissors | scissors-535d1d81 |
+| 7 | Wrench | wrench-e557b204 |
+| 8 | Pipe wrench | pipe-wrench-7075e2c0 |
+| 9 | Axe | axe-8551db25 |
+| 10 | Barrel axe | barrel-axe-2af58a67 |
+| 11 | Claw hammer | claw-hammer-13edd61a |
+| 12 | Hatchet | hatchet-3cac48fc |
+| 13 | Cutoff saw | cutoff-saw-d2e335d9 |
+| 14 | Paintbrush | paintbrush-f52657d8 |
+| 15 | Bar clamp | bar-clamp-52f3a865 |
+| 16 | Saw | saw-e5162240 |
+| 17 | Brush | brush-3c0a0d9f |
+| 18 | Triangular brush | triangular-brush-a30c4e08 |
+| 19 | Spring scissors | spring-scissors-73f70930 |
+| 20 | Shears | shears-c4a4b139 |
+| 21 | Barrel mallet | barrel-mallet-5d56abdd |
+| 22 | Pincers | pincers-e46f89eb |
+| 23 | Trowel | trowel-925ef8fa |
+| 24 | Clamp | clamp-23b5386e |
+| 25 | Spring shears | spring-shears-5f596a30 |
+| 26 | Spanner | spanner-6f1477db |
+| 27 | Chisel | chisel-801d7a2d |
+| 28 | Vice | vice-13ff3dd1 |
+| 29 | Awl | awl-cdb00bb1 |
+| 30 | Barrel vise | barrel-vise-94028bfb |
