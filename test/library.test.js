@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { creditLine, filterImages, needsCredit, pickRandom, shuffle } from '../src/references/library.js';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { creditLine, filterImages, loadAll, needsCredit, pickRandom, shuffle } from '../src/references/library.js';
 
 const img = (id, extra = {}) => ({
   id,
@@ -64,5 +64,19 @@ describe('shuffle', () => {
     expect(out.map((i) => i.id).sort()).toEqual(['a', 'b', 'c', 'd', 'e']);
     expect(out.map((i) => i.id)).not.toEqual(['a', 'b', 'c', 'd', 'e']);
     expect(list.map((i) => i.id)).toEqual(['a', 'b', 'c', 'd', 'e']);
+  });
+});
+
+describe('loadAll', () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('joins every category and drops repeats', async () => {
+    const files = { 'all-a': ['x', 'y'], 'all-b': ['y', 'z'] };
+    vi.stubGlobal('fetch', async (url) => {
+      const id = url.match(/library\/(.+)\.json/)[1];
+      return { ok: true, json: async () => ({ images: files[id].map((i) => img(i)) }) };
+    });
+    const all = await loadAll(['all-a', 'all-b'], '/');
+    expect(all.map((i) => i.id)).toEqual(['x', 'y', 'z']);
   });
 });
